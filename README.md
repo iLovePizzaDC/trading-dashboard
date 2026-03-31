@@ -1,1 +1,1 @@
-ignore /data folder on deployment
+for deploymnet run ./deploy.sh in project directory
