@@ -1,15 +1,11 @@
-import StopHistoryError from '@/features/stops/components/molecules/StopHistoryError';
-import StopHistoryRow from '@/features/stops/components/molecules/StopHistoryRow';
-import StopHistorySkeleton from '@/features/stops/components/molecules/StopHistorySkeleton';
-import { fetchStopHistory } from '@/shared/api/data';
-import { useFetch } from '@/shared/hooks/useFetch';
+import StopHistoryRow from '@/features/stops/components/atoms/StopHistoryRow';
+import type { StopHistory } from '@/shared/types/stops';
 
-function StopHistoryCard() {
-	const { data, loading, error } = useFetch(fetchStopHistory);
+interface IStopHistoryCard {
+	data: StopHistory;
+}
 
-	if (loading) return <StopHistorySkeleton />;
-	if (error || !data) return <StopHistoryError />;
-
+function StopHistoryCard({ data }: IStopHistoryCard) {
 	const entries = Object.entries(data).flatMap(([symbol, history]) =>
 		history.map((entry) => ({ symbol, entry })),
 	);

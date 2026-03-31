@@ -15,7 +15,7 @@ interface IEquityChart {
 	data: EquityPoint[];
 }
 
-export default function EquityChart({ data }: IEquityChart) {
+function EquityCard({ data }: IEquityChart) {
 	const startValue = data[0]?.equity ?? 0;
 	const currentValue = data[data.length - 1]?.equity ?? 0;
 	const isPos = currentValue >= startValue;
@@ -79,3 +79,5 @@ export default function EquityChart({ data }: IEquityChart) {
 		</div>
 	);
 }
+
+export default EquityCard;

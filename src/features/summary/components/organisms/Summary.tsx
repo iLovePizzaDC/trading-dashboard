@@ -4,7 +4,7 @@ import SummaryCardSkeleton from '@/features/summary/components/molecules/Summary
 import { fetchSummary } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
-export default function MetricCard() {
+function Summary() {
 	const { data, loading, error } = useFetch(fetchSummary);
 
 	if (loading) return <SummaryCardSkeleton />;
@@ -12,3 +12,5 @@ export default function MetricCard() {
 
 	return <SummaryCard data={data} />;
 }
+
+export default Summary;

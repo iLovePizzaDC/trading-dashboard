@@ -1,6 +1,6 @@
 import type { Candidate } from '@/shared/types/decisions';
 
-export default function DecisionRow({ candidate }: { candidate: Candidate }) {
+function DecisionRow({ candidate }: { candidate: Candidate }) {
 	const { symbol, momentum, passes_trend, selected, rejected_reason } = candidate;
 	const pct = momentum !== null ? (momentum * 100).toFixed(1) : null;
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
@@ -37,3 +37,5 @@ export default function DecisionRow({ candidate }: { candidate: Candidate }) {
 		</div>
 	);
 }
+
+export default DecisionRow;

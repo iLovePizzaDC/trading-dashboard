@@ -6,7 +6,7 @@ const reasonLabel: Record<string, string> = {
 	momentum_negative: 'momentum drop',
 };
 
-export default function TradeRow({ trade }: { trade: Trade }) {
+function TradeRow({ trade }: { trade: Trade }) {
 	const usd = (n: number) =>
 		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
@@ -45,3 +45,5 @@ export default function TradeRow({ trade }: { trade: Trade }) {
 		</div>
 	);
 }
+
+export default TradeRow;

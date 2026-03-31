@@ -9,7 +9,7 @@ interface IMetricItem {
 	large?: boolean;
 }
 
-export default function MetricItem({ label, value, sub, positive, featured, large }: IMetricItem) {
+function MetricItem({ label, value, sub, positive, featured, large }: IMetricItem) {
 	const valueColor =
 		positive === undefined ? 'text-foreground' : positive ? 'text-green-700' : 'text-red-700';
 
@@ -30,3 +30,5 @@ export default function MetricItem({ label, value, sub, positive, featured, larg
 		</div>
 	);
 }
+
+export default MetricItem;

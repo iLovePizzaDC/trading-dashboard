@@ -2,7 +2,7 @@ function SkeletonBox({ className }: { className?: string }) {
 	return <div className={`animate-pulse rounded-md bg-white/10 ${className}`} />;
 }
 
-export default function SummaryCardSkeleton() {
+function SummaryCardSkeleton() {
 	return (
 		<div className='space-y-2.5'>
 			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
@@ -34,3 +34,5 @@ export default function SummaryCardSkeleton() {
 		</div>
 	);
 }
+
+export default SummaryCardSkeleton;

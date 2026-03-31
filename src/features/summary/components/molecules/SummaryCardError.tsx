@@ -1,4 +1,4 @@
-export default function SummaryCardError() {
+function SummaryCardError() {
 	return (
 		<div className='space-y-2.5'>
 			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
@@ -33,3 +33,5 @@ export default function SummaryCardError() {
 		</div>
 	);
 }
+
+export default SummaryCardError;

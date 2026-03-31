@@ -1,4 +1,4 @@
-function EquityChartError() {
+function EquityError() {
 	return (
 		<div className='rounded-xl border border-red-500/20 bg-red-500/5 p-4'>
 			<div className='mb-4 flex items-baseline justify-between'>
@@ -14,4 +14,4 @@ function EquityChartError() {
 	);
 }
 
-export default EquityChartError;
+export default EquityError;

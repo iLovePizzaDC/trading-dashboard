@@ -6,7 +6,7 @@ interface ISummaryCard {
 	data: Summary;
 }
 
-export default function SummaryCard({ data }: ISummaryCard) {
+function SummaryCard({ data }: ISummaryCard) {
 	const isPos = (n: number) => n >= 0;
 	const pct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
 	const usd = (n: number) =>
@@ -75,3 +75,5 @@ export default function SummaryCard({ data }: ISummaryCard) {
 		</div>
 	);
 }
+
+export default SummaryCard;

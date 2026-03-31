@@ -1,15 +1,11 @@
-import TradeRow from '@/features/trades/components/molecules/TradeRow';
-import TradesError from '@/features/trades/components/molecules/TradesError';
-import TradesSkeleton from '@/features/trades/components/molecules/TradesSkeleton';
-import { fetchTrades } from '@/shared/api/data';
-import { useFetch } from '@/shared/hooks/useFetch';
+import TradeRow from '@/features/trades/components/atoms/TradeRow';
+import type { Trade } from '@/shared/types/trades';
 
-function TradesCard() {
-	const { data, loading, error } = useFetch(fetchTrades);
+interface ITradesCard {
+	data: Trade[];
+}
 
-	if (loading) return <TradesSkeleton />;
-	if (error || !data) return <TradesError />;
-
+function TradesCard({ data }: ITradesCard) {
 	const sorted = [...data].sort((a, b) => b.date.localeCompare(a.date));
 
 	const totalPnl = data

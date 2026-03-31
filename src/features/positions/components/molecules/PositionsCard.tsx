@@ -1,19 +1,14 @@
-import { fetchOpenStops, fetchTrades } from '@/shared/api/data';
-import { useFetch } from '@/shared/hooks/useFetch';
 import type { OpenStops } from '@/shared/types/stops';
 import type { Trade } from '@/shared/types/trades';
-import PositionRow from '../molecules/PositionRow';
-import PositionsEmpty from '../molecules/PositionsEmpty';
-import PositionsError from '../molecules/PositionsError';
-import PositionsSkeleton from '../molecules/PositionsSkeleton';
+import PositionRow from '../atoms/PositionRow';
+import PositionsEmpty from './PositionsEmpty';
 
-function PositionsCard() {
-	const { data: stops, loading: stopsLoading, error: stopsError } = useFetch(fetchOpenStops);
-	const { data: trades, loading: tradesLoading, error: tradesError } = useFetch(fetchTrades);
+interface IPositionsCard {
+	stops: OpenStops;
+	trades: Trade[];
+}
 
-	if (stopsLoading || tradesLoading) return <PositionsSkeleton />;
-	if (stopsError || tradesError || !stops || !trades) return <PositionsError />;
-
+function PositionsCard({ stops, trades }: IPositionsCard) {
 	const symbols = Object.keys(stops as OpenStops);
 	if (symbols.length === 0) return <PositionsEmpty />;
 
