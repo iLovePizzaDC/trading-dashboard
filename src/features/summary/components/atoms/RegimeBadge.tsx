@@ -4,10 +4,11 @@ interface IRegimeBadge {
 
 function RegimeBadge({ regime }: IRegimeBadge) {
 	const isBullish = regime === 'bullish';
+
 	return (
 		<span
-			className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${
-				isBullish ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+			className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+				isBullish ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
 			}`}
 		>
 			{regime}

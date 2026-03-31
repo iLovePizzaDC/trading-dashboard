@@ -37,10 +37,12 @@ function SummaryCard({ data }: ISummaryCard) {
 					sub='since inception'
 					positive={isPos(data.total_return)}
 				/>
-				<div className='rounded-lg bg-white/5 p-4'>
-					<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>regime</p>
+				<div className='flex flex-col items-center justify-center gap-2 rounded-lg bg-white/5 p-4 text-center'>
+					<p className='text-xs uppercase tracking-wider text-white/40'>regime</p>
+
 					<RegimeBadge regime={data.regime} />
-					<p className='mt-1 text-xs text-white/30'>
+
+					<p className='text-xs text-white/30'>
 						{data.regime === 'bullish' ? 'full exposure' : 'reduced exposure'}
 					</p>
 				</div>
