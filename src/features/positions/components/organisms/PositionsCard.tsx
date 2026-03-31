@@ -7,7 +7,7 @@ import PositionsEmpty from '../molecules/PositionsEmpty';
 import PositionsError from '../molecules/PositionsError';
 import PositionsSkeleton from '../molecules/PositionsSkeleton';
 
-function OpenPositions() {
+function PositionsCard() {
 	const { data: stops, loading: stopsLoading, error: stopsError } = useFetch(fetchOpenStops);
 	const { data: trades, loading: tradesLoading, error: tradesError } = useFetch(fetchTrades);
 
@@ -39,4 +39,4 @@ function OpenPositions() {
 	);
 }
 
-export default OpenPositions;
+export default PositionsCard;

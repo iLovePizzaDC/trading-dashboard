@@ -1,6 +1,7 @@
 import '@/app/index.css';
+import DecisionsCard from '@/features/decisions/components/organisms/DecisionCard';
 import EquityCard from '@/features/equity/components/organisms/EquityCard';
-import OpenPositions from '@/features/positions/components/organisms/OpenPositions';
+import PositionsCard from '@/features/positions/components/organisms/PositionsCard';
 import MetricCard from '@/features/summary/components/organisms/MetricCard';
 
 function App() {
@@ -12,8 +13,9 @@ function App() {
 					<div className='md:col-span-2'>
 						<EquityCard />
 					</div>
-					<OpenPositions />
+					<PositionsCard />
 				</div>
+				<DecisionsCard />
 			</div>
 		</main>
 	);
