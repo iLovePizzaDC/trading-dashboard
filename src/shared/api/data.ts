@@ -50,3 +50,13 @@ export async function fetchRegime(): Promise<RegimeEntry[]> {
 	const { data } = Papa.parse<RegimeEntry>(text, { header: true });
 	return data.filter((row) => row.date);
 }
+
+export async function fetchLastRebalanceDate(): Promise<string> {
+	const res = await fetch('/data/last_rebalance.txt');
+	return await res.text();
+}
+
+export async function fetchLastWeeklyReportDate(): Promise<string> {
+	const res = await fetch('/data/last_weekly_report.txt');
+	return await res.text();
+}

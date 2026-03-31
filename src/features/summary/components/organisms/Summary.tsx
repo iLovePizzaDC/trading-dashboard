@@ -1,16 +1,46 @@
 import SummaryCard from '@/features/summary/components/molecules/SummaryCard';
 import SummaryCardError from '@/features/summary/components/molecules/SummaryCardError';
 import SummaryCardSkeleton from '@/features/summary/components/molecules/SummaryCardSkeleton';
-import { fetchSummary } from '@/shared/api/data';
+import { fetchLastRebalanceDate, fetchLastWeeklyReportDate, fetchSummary } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 function Summary() {
-	const { data, loading, error } = useFetch(fetchSummary);
+	const {
+		data: lastRebalanceData,
+		loading: lastRebalanceLoading,
+		error: lastRebalanceError,
+	} = useFetch(fetchLastRebalanceDate);
+	const {
+		data: lastWeeklyReportData,
+		loading: lastWeeklyReportLoading,
+		error: lastWeeklyReportError,
+	} = useFetch(fetchLastWeeklyReportDate);
+	const {
+		data: summaryData,
+		loading: summaryLoading,
+		error: summaryError,
+	} = useFetch(fetchSummary);
 
-	if (loading) return <SummaryCardSkeleton />;
-	if (error || !data) return <SummaryCardError />;
+	if (lastRebalanceLoading || lastWeeklyReportLoading || summaryLoading)
+		return <SummaryCardSkeleton />;
 
-	return <SummaryCard data={data} />;
+	if (
+		lastRebalanceError ||
+		!lastRebalanceData ||
+		lastWeeklyReportError ||
+		!lastWeeklyReportData ||
+		summaryError ||
+		!summaryData
+	)
+		return <SummaryCardError />;
+
+	return (
+		<SummaryCard
+			lastRebalance={lastRebalanceData}
+			lastWeeklyReport={lastWeeklyReportData}
+			summary={summaryData}
+		/>
+	);
 }
 
 export default Summary;
