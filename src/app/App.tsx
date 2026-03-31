@@ -1,7 +1,8 @@
-import "@/app/styles/App.css";
+import '@/app/index.css';
+import MetricCard from '@/features/summary/components/organisms/MetricCard';
 
 function App() {
-  return <>hello world</>;
+	return <MetricCard />;
 }
 
 export default App;
