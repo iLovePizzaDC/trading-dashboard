@@ -5,6 +5,6 @@ export interface Trade {
 	shares: number;
 	price: number;
 	stop_price?: number;
-	pnl?: number;
-	reason?: string;
+	pnl?: number; // TODO ist das wirklich im trade bot drin?
+	reason?: string; // TODO ist das wirklich im trade bot drin?
 }

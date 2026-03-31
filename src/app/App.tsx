@@ -3,7 +3,9 @@ import DecisionsCard from '@/features/decisions/components/organisms/DecisionCar
 import EquityCard from '@/features/equity/components/organisms/EquityCard';
 import PositionsCard from '@/features/positions/components/organisms/PositionsCard';
 import MetricCard from '@/features/summary/components/organisms/MetricCard';
+import TradesCard from '@/features/trades/components/organisms/TradesCard';
 
+// TODO reorganize architecture. skeleton und error von organisms sind meistens in molecules!!
 function App() {
 	return (
 		<main className='min-h-screen p-4 md:p-8'>
@@ -15,7 +17,10 @@ function App() {
 					</div>
 					<PositionsCard />
 				</div>
-				<DecisionsCard />
+				<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+					<TradesCard />
+					<DecisionsCard />
+				</div>
 			</div>
 		</main>
 	);
