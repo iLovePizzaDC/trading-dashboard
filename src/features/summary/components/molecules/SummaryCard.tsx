@@ -38,7 +38,7 @@ export default function SummaryCard({ data }: ISummaryCard) {
 					positive={isPos(data.total_return)}
 				/>
 				<div className='rounded-lg bg-white/5 p-4'>
-					<p className='mb-1.5 text-[11px] uppercase tracking-wider text-white/40'>regime</p>
+					<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>regime</p>
 					<RegimeBadge regime={data.regime} />
 					<p className='mt-1 text-xs text-white/30'>
 						{data.regime === 'bullish' ? 'full exposure' : 'reduced exposure'}
