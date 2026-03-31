@@ -11,13 +11,13 @@ function App() {
 		<main className='min-h-screen p-4 md:p-8'>
 			<div className='mx-auto max-w-6xl space-y-4'>
 				<Summary />
-				<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+				<div className='grid grid-cols-1 gap-4 md:grid-cols-3 items-start'>
 					<div className='md:col-span-2'>
 						<Equity />
 					</div>
 					<Positions />
 				</div>
-				<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+				<div className='grid grid-cols-1 gap-4 md:grid-cols-2 items-start'>
 					<Decisions />
 					<Trades />
 					<StopHistory />
