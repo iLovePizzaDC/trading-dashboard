@@ -2,7 +2,7 @@ import '@/app/index.css';
 import DecisionsCard from '@/features/decisions/components/organisms/DecisionCard';
 import EquityCard from '@/features/equity/components/organisms/EquityCard';
 import PositionsCard from '@/features/positions/components/organisms/PositionsCard';
-import StopHistoryCard from '@/features/stops/components/organisms/StopHistorycard';
+import StopHistoryCard from '@/features/stops/components/organisms/StopHistoryCard';
 import MetricCard from '@/features/summary/components/organisms/MetricCard';
 import TradesCard from '@/features/trades/components/organisms/TradesCard';
 
