@@ -1,0 +1,87 @@
+import { computeTradeStats } from '@/features/trades/utils/trade-statistics';
+import type { Trade } from '@/shared/types/trades';
+
+interface ITradeStatistics {
+	data: Trade[];
+}
+
+function TradeStatistics({ data }: ITradeStatistics) {
+	const usd = (n: number) =>
+		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+
+	const stats = computeTradeStats(data);
+
+	if (!stats) return null;
+
+	const pfColor =
+		stats.profitFactor > 1.5
+			? 'text-green-400'
+			: stats.profitFactor > 1
+				? 'text-yellow-400'
+				: 'text-red-400';
+
+	return (
+		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+			<div className='mb-4'>
+				<p className='text-xs uppercase tracking-wider text-white/40'>trade stats</p>
+			</div>
+
+			<div className='space-y-4'>
+				<div className='grid grid-cols-3 gap-3'>
+					<div className='rounded-lg bg-white/5 p-3'>
+						<p className='text-xs text-white/40'>Win Rate</p>
+						<p className='text-lg font-semibold'>{(stats.winRate * 100).toFixed(1)}%</p>
+
+						<div className='mt-2 h-1 w-full bg-white/10 rounded'>
+							<div
+								className='h-1 bg-green-400 rounded'
+								style={{ width: `${stats.winRate * 100}%` }}
+							/>
+						</div>
+					</div>
+
+					<div className='rounded-lg bg-white/5 p-3'>
+						<p className='text-xs text-white/40'>Profit Factor</p>
+						<p className={`text-lg font-semibold ${pfColor}`}>{stats.profitFactor.toFixed(2)}</p>
+					</div>
+
+					<div className='rounded-lg bg-white/5 p-3'>
+						<p className='text-xs text-white/40'>Avg Hold</p>
+						<p className='text-lg font-semibold'>{stats.avgDuration.toFixed(1)}d</p>
+					</div>
+				</div>
+
+				<div className='grid grid-cols-2 gap-3 text-sm'>
+					<div className='flex justify-between text-white/60'>
+						<span>Avg Win</span>
+						<span className='text-green-400 font-medium'>{usd(stats.avgWin)}</span>
+					</div>
+
+					<div className='flex justify-between text-white/60'>
+						<span>Avg Loss</span>
+						<span className='text-red-400 font-medium'>{usd(stats.avgLoss)}</span>
+					</div>
+
+					<div className='flex justify-between text-white/60'>
+						<span>Total Trades</span>
+						<span className='font-medium'>{stats.totalTrades}</span>
+					</div>
+				</div>
+
+				<div className='grid grid-cols-2 gap-3'>
+					<div className='rounded-lg bg-green-500/10 p-3'>
+						<p className='text-xs text-green-400/70'>Best Trade</p>
+						<p className='text-sm font-semibold text-green-400'>{usd(stats.bestTrade)}</p>
+					</div>
+
+					<div className='rounded-lg bg-red-500/10 p-3'>
+						<p className='text-xs text-red-400/70'>Worst Trade</p>
+						<p className='text-sm font-semibold text-red-400'>{usd(stats.worstTrade)}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default TradeStatistics;
