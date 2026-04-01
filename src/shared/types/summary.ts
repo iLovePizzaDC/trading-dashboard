@@ -1,0 +1,15 @@
+export interface Summary {
+	last_run: string;
+	portfolio_value: number;
+	total_return: number;
+	rolling_4w: number | null;
+	spy_4w: number | null;
+	cagr: number;
+	max_dd: number;
+	sharpe: number;
+	regime: string;
+	total_trades: number;
+	winrate: number;
+	avg_win: number;
+	avg_loss: number;
+}
