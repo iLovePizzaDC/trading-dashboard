@@ -3,9 +3,10 @@ import type { StopHistoryEntry } from '@/shared/types/stops';
 interface IStopHistoryRow {
 	symbol: string;
 	entry: StopHistoryEntry;
+	isLast?: boolean;
 }
 
-function StopHistoryRow({ symbol, entry }: IStopHistoryRow) {
+function StopHistoryRow({ symbol, entry, isLast = false }: IStopHistoryRow) {
 	const usd = (n: number) =>
 		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
@@ -13,7 +14,9 @@ function StopHistoryRow({ symbol, entry }: IStopHistoryRow) {
 	const isFirst = entry.old_stop === 0;
 
 	return (
-		<div className='flex items-center justify-between border-b border-white/5 py-2.5 last:border-0'>
+		<div
+			className={`flex items-center justify-between py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}
+		>
 			<div className='flex items-center gap-3'>
 				<p className='w-12 text-xs font-medium text-white'>{symbol}</p>
 				<p className='text-xs text-white/40'>{entry.date}</p>

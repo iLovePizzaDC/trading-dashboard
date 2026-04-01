@@ -6,14 +6,21 @@ const reasonLabel: Record<string, string> = {
 	momentum_negative: 'momentum drop',
 };
 
-function TradeRow({ trade }: { trade: Trade }) {
+interface ITradeRow {
+	trade: Trade;
+	isLast?: boolean;
+}
+
+function TradeRow({ trade, isLast = false }: ITradeRow) {
 	const usd = (n: number) =>
 		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
 	const isBuy = trade.action === 'buy';
 
 	return (
-		<div className='flex items-center justify-between border-b border-white/5 py-2.5 last:border-0'>
+		<div
+			className={`flex items-center justify-between py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}
+		>
 			<div className='flex items-center gap-3'>
 				<span
 					className={`w-8 text-center text-[10px] font-medium uppercase ${isBuy ? 'text-green-400' : 'text-red-400'}`}

@@ -25,8 +25,12 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				<p className='text-xs text-white/30'>{latest.date}</p>
 			</div>
 
-			{preview.map((c) => (
-				<DecisionRow key={c.symbol} candidate={c} />
+			{preview.map((candidate, index) => (
+				<DecisionRow
+					key={candidate.symbol}
+					candidate={candidate}
+					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
+				/>
 			))}
 
 			<div
@@ -37,9 +41,9 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
-					{extra.map((c) => (
-						<div key={c.symbol}>
-							<DecisionRow candidate={c} />
+					{extra.map((candidate, index) => (
+						<div key={candidate.symbol}>
+							<DecisionRow candidate={candidate} isLast={index === extra.length - 1} />
 						</div>
 					))}
 				</div>

@@ -4,9 +4,10 @@ interface IPositionRow {
 	symbol: string;
 	stop: number;
 	trade?: Trade;
+	isLast?: boolean;
 }
 
-function PositionRow({ symbol, stop, trade }: IPositionRow) {
+function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
 	const usd = (n: number) =>
 		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
@@ -14,7 +15,9 @@ function PositionRow({ symbol, stop, trade }: IPositionRow) {
 	const stopPct = trade ? (((stop - trade.price) / trade.price) * 100).toFixed(1) : null;
 
 	return (
-		<div className='flex items-center justify-between border-b border-white/5 py-3 last:border-0'>
+		<div
+			className={`flex items-center justify-between py-3 ${isLast ? '' : 'border-b border-white/5'}`}
+		>
 			<div>
 				<p className='text-sm font-medium text-white'>{symbol}</p>
 				{trade && (

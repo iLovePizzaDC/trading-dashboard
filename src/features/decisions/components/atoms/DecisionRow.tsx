@@ -1,6 +1,11 @@
 import type { Candidate } from '@/shared/types/decisions';
 
-function DecisionRow({ candidate }: { candidate: Candidate }) {
+interface IDecisionRow {
+	candidate: Candidate;
+	isLast?: boolean;
+}
+
+function DecisionRow({ candidate, isLast = false }: IDecisionRow) {
 	const { symbol, momentum, passes_trend, selected, rejected_reason } = candidate;
 	const pct = momentum !== null ? (momentum * 100).toFixed(1) : null;
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
@@ -16,7 +21,7 @@ function DecisionRow({ candidate }: { candidate: Candidate }) {
 	};
 
 	return (
-		<div className='flex items-center gap-3 border-b border-white/5 py-2.5 last:border-0'>
+		<div className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}>
 			<p className='w-12 text-xs font-medium text-white'>{symbol}</p>
 			<div className='flex-1 overflow-hidden rounded-full bg-white/5' style={{ height: 4 }}>
 				<div

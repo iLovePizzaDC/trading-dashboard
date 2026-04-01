@@ -32,8 +32,12 @@ function TradesCard({ data }: ITradesCard) {
 				</p>
 			</div>
 
-			{preview.map((trade, i) => (
-				<TradeRow key={`${trade.date}-${trade.symbol}-${trade.action}-${i}`} trade={trade} />
+			{preview.map((trade, index) => (
+				<TradeRow
+					key={`${trade.date}-${trade.symbol}-${trade.action}-${index}`}
+					trade={trade}
+					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
+				/>
 			))}
 
 			<div
@@ -44,9 +48,9 @@ function TradesCard({ data }: ITradesCard) {
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
-					{extra.map((trade, i) => (
-						<div key={`${trade.date}-${trade.symbol}-${trade.action}-${i}`}>
-							<TradeRow trade={trade} />
+					{extra.map((trade, index) => (
+						<div key={`${trade.date}-${trade.symbol}-${trade.action}-${index}`}>
+							<TradeRow trade={trade} isLast={index === extra.length - 1} />
 						</div>
 					))}
 				</div>

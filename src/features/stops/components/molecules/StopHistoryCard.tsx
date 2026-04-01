@@ -25,11 +25,12 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 				<p className='text-xs text-white/30'>{sorted.length} adjustments</p>
 			</div>
 
-			{preview.map((item, i) => (
+			{preview.map((item, index) => (
 				<StopHistoryRow
-					key={`${item.symbol}-${item.entry.date}-${i}`}
+					key={`${item.symbol}-${item.entry.date}-${index}`}
 					symbol={item.symbol}
 					entry={item.entry}
+					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
 				/>
 			))}
 
@@ -41,9 +42,13 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
-					{extra.map((item, i) => (
-						<div key={`${item.symbol}-${item.entry.date}-${i}`}>
-							<StopHistoryRow symbol={item.symbol} entry={item.entry} />
+					{extra.map((item, index) => (
+						<div key={`${item.symbol}-${item.entry.date}-${index}`}>
+							<StopHistoryRow
+								symbol={item.symbol}
+								entry={item.entry}
+								isLast={index === extra.length - 1}
+							/>
 						</div>
 					))}
 				</div>

@@ -30,8 +30,14 @@ function PositionsCard({ stops, trades }: IPositionsCard) {
 				open positions ({symbols.length})
 			</p>
 
-			{preview.map((symbol) => (
-				<PositionRow key={symbol} symbol={symbol} stop={stops[symbol]} trade={lastBuy[symbol]} />
+			{preview.map((symbol, index) => (
+				<PositionRow
+					key={symbol}
+					symbol={symbol}
+					stop={stops[symbol]}
+					trade={lastBuy[symbol]}
+					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
+				/>
 			))}
 
 			<div
@@ -42,9 +48,14 @@ function PositionsCard({ stops, trades }: IPositionsCard) {
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
-					{extra.map((symbol) => (
+					{extra.map((symbol, index) => (
 						<div key={symbol}>
-							<PositionRow symbol={symbol} stop={stops[symbol]} trade={lastBuy[symbol]} />
+							<PositionRow
+								symbol={symbol}
+								stop={stops[symbol]}
+								trade={lastBuy[symbol]}
+								isLast={index === extra.length - 1}
+							/>
 						</div>
 					))}
 				</div>
