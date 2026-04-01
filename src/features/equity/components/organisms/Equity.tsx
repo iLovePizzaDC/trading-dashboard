@@ -1,6 +1,7 @@
 import EquityCard from '@/features/equity/components/molecules/EquityCard';
 import EquityError from '@/features/equity/components/molecules/EquityError';
 import EquitySkeleton from '@/features/equity/components/molecules/EquitySkeleton';
+import MonthlyHeatmap from '@/features/equity/components/molecules/MonthlyHeatMap';
 import { fetchEquity } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
@@ -10,7 +11,12 @@ function Equity() {
 	if (loading) return <EquitySkeleton />;
 	if (error || !data) return <EquityError />;
 
-	return <EquityCard data={data} />;
+	return (
+		<div className='grid grid-cols-1 gap-4 lg:grid-cols-[3fr_2fr] items-start'>
+			<EquityCard data={data} />
+			<MonthlyHeatmap data={data} />
+		</div>
+	);
 }
 
 export default Equity;
