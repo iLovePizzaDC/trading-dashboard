@@ -1,4 +1,6 @@
 import StopHistoryRow from '@/features/stops/components/atoms/StopHistoryRow';
+import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
+import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { StopHistory } from '@/shared/types/stops';
 
 interface IStopHistoryCard {
@@ -9,8 +11,12 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 	const entries = Object.entries(data).flatMap(([symbol, history]) =>
 		history.map((entry) => ({ symbol, entry })),
 	);
-
 	const sorted = entries.sort((a, b) => b.entry.date.localeCompare(a.entry.date));
+
+	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(sorted.length, 2);
+
+	const preview = sorted.slice(0, previewCount);
+	const extra = sorted.slice(previewCount);
 
 	return (
 		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
@@ -18,13 +24,40 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 				<p className='text-xs uppercase tracking-wider text-white/40'>stop history</p>
 				<p className='text-xs text-white/30'>{sorted.length} adjustments</p>
 			</div>
-			{sorted.map((item, i) => (
+
+			{preview.map((item, i) => (
 				<StopHistoryRow
 					key={`${item.symbol}-${item.entry.date}-${i}`}
 					symbol={item.symbol}
 					entry={item.entry}
 				/>
 			))}
+
+			<div
+				style={{
+					display: 'grid',
+					gridTemplateRows: expanded ? '1fr' : '0fr',
+					transition: 'grid-template-rows 0.35s ease',
+				}}
+			>
+				<div style={{ overflow: 'hidden' }}>
+					{extra.map((item, i) => (
+						<div
+							key={`${item.symbol}-${item.entry.date}-${i}`}
+							style={{
+								opacity: expanded ? 1 : 0,
+								transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
+								transition: `opacity 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms,
+								transform 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms`,
+							}}
+						>
+							<StopHistoryRow symbol={item.symbol} entry={item.entry} />
+						</div>
+					))}
+				</div>
+			</div>
+
+			{hasMore && <ShowMoreButton toggle={toggle} expanded={expanded} hiddenCount={hiddenCount} />}
 		</div>
 	);
 }

@@ -1,3 +1,5 @@
+import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
+import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { OpenStops } from '@/shared/types/stops';
 import type { Trade } from '@/shared/types/trades';
 import PositionRow from '../atoms/PositionRow';
@@ -9,27 +11,54 @@ interface IPositionsCard {
 }
 
 function PositionsCard({ stops, trades }: IPositionsCard) {
-	const symbols = Object.keys(stops as OpenStops);
+	const symbols = Object.keys(stops);
 	if (symbols.length === 0) return <PositionsEmpty />;
 
-	const lastBuy = (trades as Trade[]).reduce<Record<string, Trade>>((acc, t) => {
+	const lastBuy = trades.reduce<Record<string, Trade>>((acc, t) => {
 		if (t.action === 'buy') acc[t.symbol] = t;
 		return acc;
 	}, {});
+
+	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(symbols.length, 2);
+
+	const preview = symbols.slice(0, previewCount);
+	const extra = symbols.slice(previewCount);
 
 	return (
 		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
 			<p className='mb-2 text-xs uppercase tracking-wider text-white/40'>
 				open positions ({symbols.length})
 			</p>
-			{symbols.map((symbol) => (
-				<PositionRow
-					key={symbol}
-					symbol={symbol}
-					stop={(stops as OpenStops)[symbol]}
-					trade={lastBuy[symbol]}
-				/>
+
+			{preview.map((symbol) => (
+				<PositionRow key={symbol} symbol={symbol} stop={stops[symbol]} trade={lastBuy[symbol]} />
 			))}
+
+			<div
+				style={{
+					display: 'grid',
+					gridTemplateRows: expanded ? '1fr' : '0fr',
+					transition: 'grid-template-rows 0.35s ease',
+				}}
+			>
+				<div style={{ overflow: 'hidden' }}>
+					{extra.map((symbol, i) => (
+						<div
+							key={symbol}
+							style={{
+								opacity: expanded ? 1 : 0,
+								transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
+								transition: `opacity 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms,
+                             transform 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms`,
+							}}
+						>
+							<PositionRow symbol={symbol} stop={stops[symbol]} trade={lastBuy[symbol]} />
+						</div>
+					))}
+				</div>
+			</div>
+
+			{hasMore && <ShowMoreButton toggle={toggle} expanded={expanded} hiddenCount={hiddenCount} />}
 		</div>
 	);
 }

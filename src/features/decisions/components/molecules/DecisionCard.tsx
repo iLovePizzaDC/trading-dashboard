@@ -1,27 +1,22 @@
 import DecisionRow from '@/features/decisions/components/atoms/DecisionRow';
+import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-
-const PREVIEW_COUNT = 5;
-const ROW_HEIGHT = 44;
 
 interface IDecisionsCard {
 	data: DecisionEntry[];
 }
 
 function DecisionsCard({ data }: IDecisionsCard) {
-	const [expanded, setExpanded] = useState(false);
-
 	const latest = data[data.length - 1];
 	if (!latest) return null;
 
 	const sorted = [...latest.candidates].sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0));
 
-	const hasMore = sorted.length > PREVIEW_COUNT;
+	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(sorted.length, 3);
 
-	const collapsedHeight = PREVIEW_COUNT * ROW_HEIGHT;
-	const fullHeight = sorted.length * ROW_HEIGHT;
+	const preview = sorted.slice(0, previewCount);
+	const extra = sorted.slice(previewCount);
 
 	return (
 		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
@@ -30,29 +25,43 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				<p className='text-xs text-white/30'>{latest.date}</p>
 			</div>
 
+			{preview.map((c) => (
+				<DecisionRow key={c.symbol} candidate={c} />
+			))}
+
 			<div
-				className='overflow-hidden transition-all duration-300 ease-in-out'
 				style={{
-					maxHeight: expanded ? fullHeight : collapsedHeight,
+					display: 'grid',
+					gridTemplateRows: expanded ? '1fr' : '0fr',
+					transition: 'grid-template-rows 0.35s ease',
 				}}
 			>
-				{sorted.map((c) => (
-					<DecisionRow key={c.symbol} candidate={c} />
-				))}
+				<div style={{ overflow: 'hidden' }}>
+					{extra.map((c, i) => (
+						<div
+							key={c.symbol}
+							style={{
+								opacity: expanded ? 1 : 0,
+								transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
+								transition: `opacity 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms,
+                             transform 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms`,
+							}}
+						>
+							<DecisionRow candidate={c} />
+						</div>
+					))}
+				</div>
 			</div>
 
 			{hasMore && (
 				<button
-					onClick={() => setExpanded((prev) => !prev)}
+					onClick={toggle}
 					className='mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-xs text-white/30 transition-colors hover:bg-white/5 hover:text-white/60 cursor-pointer'
 				>
-					<span>{expanded ? 'show less' : `${sorted.length - PREVIEW_COUNT} more`}</span>
-
+					<span>{expanded ? 'show less' : `${hiddenCount} more`}</span>
 					<ChevronDownIcon
 						className='h-3 w-3 transition-transform duration-300'
-						style={{
-							transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-						}}
+						style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
 					/>
 				</button>
 			)}
