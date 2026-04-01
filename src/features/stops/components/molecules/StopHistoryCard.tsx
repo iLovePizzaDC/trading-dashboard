@@ -37,20 +37,12 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 				style={{
 					display: 'grid',
 					gridTemplateRows: expanded ? '1fr' : '0fr',
-					transition: 'grid-template-rows 0.35s ease',
+					transition: 'grid-template-rows 0.25s ease',
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
 					{extra.map((item, i) => (
-						<div
-							key={`${item.symbol}-${item.entry.date}-${i}`}
-							style={{
-								opacity: expanded ? 1 : 0,
-								transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
-								transition: `opacity 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms,
-								transform 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms`,
-							}}
-						>
+						<div key={`${item.symbol}-${item.entry.date}-${i}`}>
 							<StopHistoryRow symbol={item.symbol} entry={item.entry} />
 						</div>
 					))}

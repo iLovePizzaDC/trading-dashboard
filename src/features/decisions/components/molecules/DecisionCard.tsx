@@ -1,7 +1,7 @@
 import DecisionRow from '@/features/decisions/components/atoms/DecisionRow';
+import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
 import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { DecisionEntry } from '@/shared/types/decisions';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface IDecisionsCard {
 	data: DecisionEntry[];
@@ -33,38 +33,19 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				style={{
 					display: 'grid',
 					gridTemplateRows: expanded ? '1fr' : '0fr',
-					transition: 'grid-template-rows 0.35s ease',
+					transition: 'grid-template-rows 0.25s ease',
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
 					{extra.map((c, i) => (
-						<div
-							key={c.symbol}
-							style={{
-								opacity: expanded ? 1 : 0,
-								transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
-								transition: `opacity 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms,
-                             transform 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms`,
-							}}
-						>
+						<div key={c.symbol}>
 							<DecisionRow candidate={c} />
 						</div>
 					))}
 				</div>
 			</div>
 
-			{hasMore && (
-				<button
-					onClick={toggle}
-					className='mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-xs text-white/30 transition-colors hover:bg-white/5 hover:text-white/60 cursor-pointer'
-				>
-					<span>{expanded ? 'show less' : `${hiddenCount} more`}</span>
-					<ChevronDownIcon
-						className='h-3 w-3 transition-transform duration-300'
-						style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-					/>
-				</button>
-			)}
+			{hasMore && <ShowMoreButton toggle={toggle} expanded={expanded} hiddenCount={hiddenCount} />}
 		</div>
 	);
 }

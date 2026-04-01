@@ -38,20 +38,12 @@ function PositionsCard({ stops, trades }: IPositionsCard) {
 				style={{
 					display: 'grid',
 					gridTemplateRows: expanded ? '1fr' : '0fr',
-					transition: 'grid-template-rows 0.35s ease',
+					transition: 'grid-template-rows 0.25s ease',
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
 					{extra.map((symbol, i) => (
-						<div
-							key={symbol}
-							style={{
-								opacity: expanded ? 1 : 0,
-								transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
-								transition: `opacity 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms,
-                             transform 0.2s ease ${expanded ? i * 50 : (extra.length - 1 - i) * 50}ms`,
-							}}
-						>
+						<div key={symbol}>
 							<PositionRow symbol={symbol} stop={stops[symbol]} trade={lastBuy[symbol]} />
 						</div>
 					))}
