@@ -42,7 +42,7 @@ function PositionsCard({ stops, trades }: IPositionsCard) {
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
-					{extra.map((symbol, i) => (
+					{extra.map((symbol) => (
 						<div key={symbol}>
 							<PositionRow symbol={symbol} stop={stops[symbol]} trade={lastBuy[symbol]} />
 						</div>

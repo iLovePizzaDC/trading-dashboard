@@ -37,7 +37,7 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				}}
 			>
 				<div style={{ overflow: 'hidden' }}>
-					{extra.map((c, i) => (
+					{extra.map((c) => (
 						<div key={c.symbol}>
 							<DecisionRow candidate={c} />
 						</div>
