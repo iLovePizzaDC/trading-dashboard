@@ -12,7 +12,7 @@ function Decisions() {
 	if (error || !data) return <DecisionsError />;
 
 	return (
-		<div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+		<div className='grid grid-cols-1 gap-4'>
 			<DecisionsCard data={data} />
 			<DecisionHistory data={data} />
 		</div>

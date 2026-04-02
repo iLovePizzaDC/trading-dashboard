@@ -8,6 +8,7 @@ function MomentumSkeleton() {
 					<div className='h-3 w-12 animate-pulse rounded bg-white/10' />
 				</div>
 			</div>
+
 			<div className='h-40 w-full animate-pulse rounded-lg bg-linear-to-br from-white/5 to-white/0' />
 		</div>
 	);

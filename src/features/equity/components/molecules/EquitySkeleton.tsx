@@ -6,8 +6,7 @@ function EquitySkeleton() {
 					<div className='h-3 w-24 animate-pulse rounded bg-white/10' />
 					<div className='h-4 w-20 animate-pulse rounded bg-white/10' />
 				</div>
-
-				<div className='relative h-50 w-full overflow-hidden rounded-lg bg-linear-to-br from-white/5 to-white/0'>
+				<div className='relative h-52 w-full overflow-hidden rounded-lg bg-linear-to-br from-white/5 to-white/0'>
 					<div className='absolute inset-0 animate-pulse bg-linear-to-b from-white/10 to-transparent' />
 				</div>
 			</div>
