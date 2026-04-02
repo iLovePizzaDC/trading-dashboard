@@ -24,7 +24,7 @@ function MonthCell({ entry, onClick, selected }: IMonthCell) {
 			title={`${entry.year}-${String(entry.month).padStart(2, '0')}: ${entry.return >= 0 ? '+' : ''}${entry.return.toFixed(2)}%`}
 			className={`h-5 w-full rounded-sm transition-all ${getColor(entry.return)} ${
 				selected ? 'ring-1 ring-white/40' : ''
-			} hover:brightness-125`}
+			} cursor-pointer hover:brightness-125`}
 		/>
 	);
 }

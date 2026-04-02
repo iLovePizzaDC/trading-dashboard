@@ -11,7 +11,7 @@ import Trades from '@/features/trades/components/organisms/Trades';
 function App() {
 	return (
 		<main className='min-h-screen p-4 md:p-8 cursor-default'>
-			<div className='mx-auto max-w-7xl space-y-6'>
+			<div className='mx-auto max-w-7xl space-y-4'>
 				<Summary />
 				<Equity />
 				<Trades />
