@@ -22,9 +22,6 @@ function MetricItem({ label, value, sub, positive, featured, large }: IMetricIte
 				rounded-xl border border-white/10
 				bg-linear-to-br from-white/5 to-white/0
 				p-4 transition-all
-
-				hover:from-white/10 hover:to-white/5
-
 				${featured ? 'shadow-[0_0_20px_rgba(255,255,255,0.05)]' : ''}
 			`}
 		>
