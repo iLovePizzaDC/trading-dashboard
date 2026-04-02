@@ -24,13 +24,14 @@ function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 	const nextRebalance = new Date(new Date(lastRebalance).getTime() + 30 * 24 * 60 * 60 * 1000);
 
 	return (
-		<div className='space-y-2.5'>
+		<div className='space-y-3'>
 			<div className='flex justify-between text-xs text-white/30'>
 				<span>
 					last rebalance: {lastRebalance} (next: {nextRebalance.toISOString().split('T')[0]})
 				</span>
 			</div>
-			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
+
+			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
 				<div className='col-span-2'>
 					<MetricItem
 						label='portfolio value'
@@ -41,13 +42,15 @@ function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 						large
 					/>
 				</div>
+
 				<MetricItem
 					label='total return'
 					value={pct(summary.total_return)}
 					sub='since inception'
 					positive={isPos(summary.total_return)}
 				/>
-				<div className='flex flex-col items-center justify-center gap-2 rounded-lg bg-white/5 p-4 text-center'>
+
+				<div className='flex flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 text-center'>
 					<p className='text-xs uppercase tracking-wider text-white/40'>regime</p>
 
 					<RegimeBadge regime={summary.regime} />
@@ -58,25 +61,28 @@ function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 				</div>
 			</div>
 
-			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
+			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
 				<MetricItem
 					label='4-week return'
 					value={summary.rolling_4w !== null ? pct(summary.rolling_4w) : 'n/a'}
 					sub={summary.spy_4w !== null ? `SPY ${pct(summary.spy_4w)}` : undefined}
 					positive={summary.rolling_4w !== null ? isPos(summary.rolling_4w) : undefined}
 				/>
+
 				<MetricItem
 					label='vs SPY'
 					value={spy4wDiff !== null ? pct(spy4wDiff) : 'n/a'}
 					sub='4-week delta'
 					positive={spy4wDiff !== null ? isPos(spy4wDiff) : undefined}
 				/>
+
 				<MetricItem
 					label='max drawdown'
 					value={pct(summary.max_dd)}
 					sub='since inception'
 					positive={isPos(summary.max_dd)}
 				/>
+
 				<MetricItem
 					label='sharpe ratio'
 					value={summary.sharpe.toFixed(2)}

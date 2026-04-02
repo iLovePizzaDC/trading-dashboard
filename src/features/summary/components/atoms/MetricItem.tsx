@@ -11,21 +11,35 @@ interface IMetricItem {
 
 function MetricItem({ label, value, sub, positive, featured, large }: IMetricItem) {
 	const valueColor =
-		positive === undefined ? 'text-foreground' : positive ? 'text-green-700' : 'text-red-700';
+		positive === undefined ? 'text-white' : positive ? 'text-green-400' : 'text-red-400';
 
 	const subColor =
-		positive === undefined ? 'text-muted-foreground' : positive ? 'text-green-700' : 'text-red-700';
+		positive === undefined ? 'text-white/40' : positive ? 'text-green-300/80' : 'text-red-300/80';
 
 	return (
 		<div
-			className={
-				featured ? 'rounded-xl border border-gray-500 bg-gray-900 p-4' : 'rounded-lg bg-muted p-4'
-			}
+			className={`
+				rounded-xl border border-white/10
+				bg-linear-to-br from-white/5 to-white/0
+				p-4 transition-all
+
+				hover:from-white/10 hover:to-white/5
+
+				${featured ? 'shadow-[0_0_20px_rgba(255,255,255,0.05)]' : ''}
+			`}
 		>
-			<p className='mb-1.5 text-xs uppercase tracking-wider text-muted-foreground'>{label}</p>
-			<p className={`font-medium leading-tight ${large ? 'text-3xl' : 'text-2xl'} ${valueColor}`}>
+			<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>{label}</p>
+
+			<p
+				className={`
+					font-medium leading-tight
+					${large ? 'text-3xl' : 'text-2xl'}
+					${valueColor}
+				`}
+			>
 				{value}
 			</p>
+
 			{sub && <p className={`mt-1 text-xs ${subColor}`}>{sub}</p>}
 		</div>
 	);

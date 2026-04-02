@@ -23,7 +23,10 @@ function DecisionRow({ candidate, isLast = false }: IDecisionRow) {
 	return (
 		<div className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}>
 			<p className='w-12 text-xs font-medium text-white'>{symbol}</p>
-			<div className='flex-1 overflow-hidden rounded-full bg-white/5' style={{ height: 4 }}>
+			<div
+				className='flex-1 overflow-hidden rounded-full bg-linear-to-br from-white/5 to-white/0'
+				style={{ height: 4 }}
+			>
 				<div
 					className='h-full rounded-full transition-all'
 					style={{ width: `${barWidth}%`, background: barColor }}

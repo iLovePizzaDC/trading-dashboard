@@ -21,10 +21,10 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-center justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>sector breakdown</p>
-				<div className='flex rounded-lg bg-white/5'>
+				<div className='flex rounded-lg bg-linear-to-br from-white/5 to-white/0'>
 					{(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
 						<button
 							key={key}
@@ -64,7 +64,7 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 						<div className='flex items-center gap-2 sm:flex-1'>
 							<p className='hidden sm:block w-28 text-[10px] text-white/30 truncate'>{s.sector}</p>
 
-							<div className='flex-1 overflow-hidden rounded-full bg-white/5 h-1'>
+							<div className='flex-1 overflow-hidden rounded-full bg-linear-to-br from-white/5 to-white/0 h-1'>
 								<div
 									className='h-full rounded-full bg-purple-400/60 transition-all duration-300'
 									style={{ width: `${(s.timesSelected / maxSelected) * 100}%` }}

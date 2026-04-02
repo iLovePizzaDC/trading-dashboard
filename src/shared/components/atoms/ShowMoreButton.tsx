@@ -10,7 +10,7 @@ function ShowMoreButton({ toggle, expanded, hiddenCount }: IShowMoreButton) {
 	return (
 		<button
 			onClick={toggle}
-			className='mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-xs text-white/30 transition-colors hover:bg-white/5 hover:text-white/60 cursor-pointer'
+			className='mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-xs text-white/30 transition-colors hover:bg-linear-to-br from-white/5 to-white/0 hover:text-white/60 cursor-pointer'
 		>
 			<span>{expanded ? 'show less' : `${hiddenCount} more`}</span>
 			<ChevronDownIcon

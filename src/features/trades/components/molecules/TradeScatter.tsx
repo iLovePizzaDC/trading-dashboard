@@ -22,7 +22,7 @@ function TradeScatter({ data }: ITradeScatter) {
 
 	if (points.length === 0) {
 		return (
-			<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 				<p className='mb-3 text-xs uppercase tracking-wider text-white/40'>entry / exit analysis</p>
 				<p className='text-xs text-white/30'>No closed trades yet.</p>
 			</div>
@@ -37,7 +37,7 @@ function TradeScatter({ data }: ITradeScatter) {
 	const maxPrice = Math.max(...allPrices) * 1.02;
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-center justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>entry / exit analysis</p>
 				<div className='flex items-center gap-3 text-[10px] text-white/30'>

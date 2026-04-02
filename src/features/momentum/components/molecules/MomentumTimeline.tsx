@@ -20,7 +20,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 
 	if (timeline.length < 2) {
 		return (
-			<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 				<p className='mb-3 text-xs uppercase tracking-wider text-white/40'>momentum timeline</p>
 				<p className='text-xs text-white/30'>Not enough rebalance data yet.</p>
 			</div>
@@ -28,7 +28,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 	}
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-center justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>momentum timeline</p>
 				<div className='flex items-center gap-4 text-[10px] text-white/30'>

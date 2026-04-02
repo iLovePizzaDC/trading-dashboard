@@ -1,30 +1,47 @@
 function SkeletonBox({ className }: { className?: string }) {
-	return <div className={`animate-pulse rounded-md bg-white/10 ${className}`} />;
+	return (
+		<div
+			className={`
+				relative overflow-hidden rounded-md
+				bg-white/10
+				${className}
+			`}
+		>
+			<div className='absolute inset-0 animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent' />
+		</div>
+	);
 }
 
 function SummaryCardSkeleton() {
 	return (
-		<div className='space-y-2.5'>
-			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
-				<div className='col-span-2 rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='space-y-3'>
+			<div className='h-3 w-64 rounded-md bg-white/10 animate-pulse' />
+			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
+				<div className='col-span-2 rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 					<SkeletonBox className='mb-2 h-3 w-24' />
-					<SkeletonBox className='mb-3 h-9 w-40' />
+					<SkeletonBox className='mb-3 h-10 w-48' />
 					<SkeletonBox className='h-3 w-32' />
 				</div>
-				<div className='rounded-lg bg-white/5 p-4'>
+
+				<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 					<SkeletonBox className='mb-2 h-3 w-20' />
 					<SkeletonBox className='mb-3 h-8 w-24' />
 					<SkeletonBox className='h-3 w-16' />
 				</div>
-				<div className='rounded-lg bg-white/5 p-4'>
+
+				<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 flex flex-col items-center'>
 					<SkeletonBox className='mb-2 h-3 w-16' />
 					<SkeletonBox className='mb-3 h-6 w-20' />
 					<SkeletonBox className='h-3 w-24' />
 				</div>
 			</div>
-			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
+
+			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
 				{Array.from({ length: 4 }).map((_, i) => (
-					<div key={i} className='rounded-lg bg-white/5 p-4'>
+					<div
+						key={i}
+						className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'
+					>
 						<SkeletonBox className='mb-2 h-3 w-20' />
 						<SkeletonBox className='mb-3 h-8 w-16' />
 						<SkeletonBox className='h-3 w-12' />

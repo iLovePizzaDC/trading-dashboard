@@ -7,12 +7,12 @@ function SummaryCardError() {
 					<p className='mb-2 text-3xl font-medium text-red-400'>—</p>
 					<p className='text-xs text-red-400/70'>failed to load</p>
 				</div>
-				<div className='rounded-lg bg-white/5 p-4 opacity-40'>
+				<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-4 opacity-40'>
 					<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>total return</p>
 					<p className='mb-2 text-2xl font-medium text-white/20'>—</p>
 					<p className='text-xs text-white/20'>since inception</p>
 				</div>
-				<div className='rounded-lg bg-white/5 p-4 opacity-40'>
+				<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-4 opacity-40'>
 					<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>regime</p>
 					<p className='mb-2 text-2xl font-medium text-white/20'>—</p>
 					<p className='text-xs text-white/20'>unknown</p>
@@ -20,7 +20,10 @@ function SummaryCardError() {
 			</div>
 			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
 				{['4-week return', 'vs SPY', 'max drawdown', 'sharpe ratio'].map((label) => (
-					<div key={label} className='rounded-lg bg-white/5 p-4 opacity-40'>
+					<div
+						key={label}
+						className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-4 opacity-40'
+					>
 						<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>{label}</p>
 						<p className='mb-2 text-2xl font-medium text-white/20'>—</p>
 						<p className='text-xs text-white/20'>—</p>

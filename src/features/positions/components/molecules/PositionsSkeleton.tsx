@@ -1,6 +1,6 @@
 function PositionsSkeleton() {
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-4 h-3 w-32 animate-pulse rounded bg-white/10' />
 			{Array.from({ length: 2 }).map((_, i) => (
 				<div key={i} className='flex justify-between border-b border-white/5 py-3 last:border-0'>

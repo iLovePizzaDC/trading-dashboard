@@ -33,7 +33,7 @@ function TradesCard({ data }: ITradesCard) {
 	});
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-baseline justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>
 					trade history ({data.length})
