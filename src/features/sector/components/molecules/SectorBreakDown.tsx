@@ -24,14 +24,14 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
 			<div className='mb-3 flex items-center justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>sector breakdown</p>
-				<div className='flex flex-wrap gap-1'>
+				<div className='flex rounded-lg bg-white/5'>
 					{(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
 						<button
 							key={key}
 							onClick={() => setSortBy(key)}
-							className={`rounded px-1 py-px text-[10px] transition-colors ${
-								sortBy === key ? 'bg-white/10 text-white/70' : 'text-white/30 hover:text-white/50'
-							} cursor-pointer transition-all duration-300`}
+							className={`rounded-md px-2 py-px text-[10px] transition-all ${
+								sortBy === key ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/60'
+							} cursor-pointer`}
 						>
 							{SORT_LABELS[key]}
 						</button>
