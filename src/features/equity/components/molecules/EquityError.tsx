@@ -6,10 +6,10 @@ function EquityError() {
 					<p className='text-xs uppercase tracking-wider text-red-300/70'>equity curve</p>
 					<p className='text-xs text-red-300/50'>—</p>
 				</div>
-				<div className='flex h-52 flex-col items-center justify-center text-center gap-2'>
-					<p className='text-sm text-red-400'>No equity data available</p>
+				<div className='flex h-52 flex-col items-center justify-center text-center'>
+					<p className='text-sm text-red-400'>Could not load trade statistics</p>
 					<p className='text-xs text-red-300/70 max-w-xs'>
-						The bot may not have run yet or the API request failed.
+						Check if data is available or try again later.
 					</p>
 				</div>
 			</div>
@@ -28,7 +28,7 @@ function EquityError() {
 						</div>
 					))}
 				</div>
-				<p className='mt-3 text-xs text-white/30 text-center'>
+				<p className='pt-3 text-xs text-white/30 text-center'>
 					Not enough data to calculate monthly returns
 				</p>
 			</div>
