@@ -1,6 +1,6 @@
 import DecisionsCard from '@/features/decisions/components/molecules/DecisionCard';
-import DecisionsError from '@/features/decisions/components/molecules/DecisionError';
-import DecisionsSkeleton from '@/features/decisions/components/molecules/DecisionSkeleton';
+import DecisionsError from '@/features/decisions/components/molecules/DecisionsError';
+import DecisionsSkeleton from '@/features/decisions/components/molecules/DecisionsSkeleton';
 import { fetchDecisions } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 

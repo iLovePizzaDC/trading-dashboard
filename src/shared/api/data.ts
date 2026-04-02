@@ -11,8 +11,21 @@ export async function fetchSummary(): Promise<Summary> {
 	return res.json();
 }
 
-export async function fetchEquity(): Promise<EquityPoint[]> {
+export async function fetchBotEquity(): Promise<EquityPoint[]> {
 	const res = await fetch('/data/live_equity.csv');
+	const text = await res.text();
+
+	const { data } = Papa.parse<string[]>(text, { header: false });
+	return data
+		.filter((row) => row[0] && row[1])
+		.map((row) => ({
+			date: row[0],
+			equity: parseFloat(row[1]),
+		}));
+}
+
+export async function fetchSpyEquity(): Promise<EquityPoint[]> {
+	const res = await fetch('/data/spy_equity.csv');
 	const text = await res.text();
 
 	const { data } = Papa.parse<string[]>(text, { header: false });

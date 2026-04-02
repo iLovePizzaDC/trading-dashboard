@@ -1,4 +1,4 @@
-function StopHistoryError() {
+function StopsError() {
 	return (
 		<div className='rounded-xl border border-red-500/20 bg-red-500/5 p-4'>
 			<p className='mb-3 text-xs uppercase tracking-wider text-white/40'>stop history</p>
@@ -7,4 +7,4 @@ function StopHistoryError() {
 	);
 }
 
-export default StopHistoryError;
+export default StopsError;

@@ -39,7 +39,6 @@ function TradeRow({ trade, isLast = false }: ITradeRow) {
 					<p
 						className={`text-sm font-medium ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}
 					>
-						{trade.pnl >= 0 ? '+' : ''}
 						{usd(trade.pnl)}
 					</p>
 				) : (
