@@ -29,7 +29,7 @@ function TradesCard({ data }: ITradesCard) {
 				</p>
 			</div>
 
-			<div className='overflow-y-auto max-h-52 pb-3 pr-1.5 -mr-1.5 [scrollbar-width:thin] mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'>
+			<div className='overflow-y-auto max-h-52 pr-3 -mr-3 [scrollbar-width:thin] mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'>
 				{sorted.map((trade, index) => (
 					<TradeRow
 						key={`${trade.date}-${trade.symbol}-${trade.action}-${index}`}
