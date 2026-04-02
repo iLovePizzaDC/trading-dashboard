@@ -1,4 +1,4 @@
-import EquityCard from '@/features/equity/components/molecules/EquityCard';
+import EquityCurve from '@/features/equity/components/molecules/EquityCurve';
 import EquityError from '@/features/equity/components/molecules/EquityError';
 import EquitySkeleton from '@/features/equity/components/molecules/EquitySkeleton';
 import MonthlyHeatmap from '@/features/equity/components/molecules/MonthlyHeatMap';
@@ -13,7 +13,7 @@ function Equity() {
 
 	return (
 		<div className='grid grid-cols-1 gap-4 lg:grid-cols-[3fr_2fr] items-start'>
-			<EquityCard data={data} />
+			<EquityCurve data={data} />
 			<MonthlyHeatmap data={data} />
 		</div>
 	);

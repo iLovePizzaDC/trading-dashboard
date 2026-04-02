@@ -1,4 +1,4 @@
-import PositionsCard from '@/features/positions/components/molecules/PositionsCard';
+import OpenPositions from '@/features/positions/components/molecules/OpenPositions';
 import PositionsError from '@/features/positions/components/molecules/PositionsError';
 import PositionsSkeleton from '@/features/positions/components/molecules/PositionsSkeleton';
 import { fetchOpenStops, fetchTrades } from '@/shared/api/data';
@@ -11,7 +11,7 @@ function Positions() {
 	if (stopsLoading || tradesLoading) return <PositionsSkeleton />;
 	if (stopsError || tradesError || !stops || !trades) return <PositionsError />;
 
-	return <PositionsCard stops={stops} trades={trades} />;
+	return <OpenPositions stops={stops} trades={trades} />;
 }
 
 export default Positions;

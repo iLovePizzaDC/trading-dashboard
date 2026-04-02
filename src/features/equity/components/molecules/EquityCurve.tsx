@@ -11,11 +11,11 @@ import {
 	YAxis,
 } from 'recharts';
 
-interface IEquityChart {
+interface IEquityCurve {
 	data: EquityPoint[];
 }
 
-function EquityCard({ data }: IEquityChart) {
+function EquityCurve({ data }: IEquityCurve) {
 	const startValue = data[0]?.equity ?? 0;
 	const currentValue = data[data.length - 1]?.equity ?? 0;
 	const isPos = currentValue >= startValue;
@@ -80,4 +80,4 @@ function EquityCard({ data }: IEquityChart) {
 	);
 }
 
-export default EquityCard;
+export default EquityCurve;

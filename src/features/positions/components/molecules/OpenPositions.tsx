@@ -5,12 +5,12 @@ import type { Trade } from '@/shared/types/trades';
 import PositionRow from '../atoms/PositionRow';
 import PositionsEmpty from './PositionsEmpty';
 
-interface IPositionsCard {
+interface IOpenPositions {
 	stops: OpenStops;
 	trades: Trade[];
 }
 
-function PositionsCard({ stops, trades }: IPositionsCard) {
+function OpenPositions({ stops, trades }: IOpenPositions) {
 	const symbols = Object.keys(stops);
 	if (symbols.length === 0) return <PositionsEmpty />;
 
@@ -66,4 +66,4 @@ function PositionsCard({ stops, trades }: IPositionsCard) {
 	);
 }
 
-export default PositionsCard;
+export default OpenPositions;

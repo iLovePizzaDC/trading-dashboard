@@ -1,4 +1,4 @@
-function StopHistorySkeleton() {
+function StopsSkeleton() {
 	return (
 		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
 			<div className='mb-3 flex items-baseline justify-between'>
@@ -25,4 +25,4 @@ function StopHistorySkeleton() {
 	);
 }
 
-export default StopHistorySkeleton;
+export default StopsSkeleton;
