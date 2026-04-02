@@ -3,6 +3,7 @@ import Decisions from '@/features/decisions/components/organisms/Decisions';
 import Equity from '@/features/equity/components/organisms/Equity';
 import Momentum from '@/features/momentum/components/organisms/Momentum';
 import Positions from '@/features/positions/components/organisms/Positions';
+import Sector from '@/features/sector/components/organisms/Sector';
 import Stops from '@/features/stops/components/organisms/Stops';
 import Summary from '@/features/summary/components/organisms/Summary';
 import Trades from '@/features/trades/components/organisms/Trades';
@@ -18,6 +19,7 @@ function App() {
 					<Positions />
 					<Decisions />
 					<Stops />
+					<Sector />
 				</div>
 				<Momentum />
 			</div>
