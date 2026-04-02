@@ -4,11 +4,10 @@ import type { Summary } from '@/shared/types/summary';
 
 interface ISummaryCard {
 	lastRebalance: string;
-	lastWeeklyReport: string;
 	summary: Summary;
 }
 
-function SummaryCard({ lastRebalance, lastWeeklyReport, summary }: ISummaryCard) {
+function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 	const isPos = (n: number) => n >= 0;
 	const pct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
 	const usd = (n: number) =>
@@ -22,11 +21,14 @@ function SummaryCard({ lastRebalance, lastWeeklyReport, summary }: ISummaryCard)
 	const startValue = summary.portfolio_value / (1 + summary.total_return / 100);
 	const absReturn = summary.portfolio_value - startValue;
 
+	const nextRebalance = new Date(new Date(lastRebalance).getTime() + 30 * 24 * 60 * 60 * 1000);
+
 	return (
 		<div className='space-y-2.5'>
 			<div className='flex justify-between text-xs text-white/30'>
-				<span>last rebalance: {lastRebalance}</span>
-				<span>last report: {lastWeeklyReport}</span>
+				<span>
+					last rebalance: {lastRebalance} (next: {nextRebalance.toISOString().split('T')[0]})
+				</span>
 			</div>
 			<div className='grid grid-cols-2 gap-2.5 md:grid-cols-4'>
 				<div className='col-span-2'>
