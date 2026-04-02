@@ -8,7 +8,7 @@ function SkeletonBox({ className }: { className?: string }) {
 
 function DecisionsSkeleton() {
 	return (
-		<div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+		<div className='grid grid-cols-1 gap-4'>
 			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 				<div className='mb-3 flex justify-between'>
 					<SkeletonBox className='h-3 w-28' />
