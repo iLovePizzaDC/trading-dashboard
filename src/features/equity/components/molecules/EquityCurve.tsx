@@ -81,7 +81,7 @@ function EquityCurve({ data }: IEquityCurve) {
 							onClick={() => setRange(r)}
 							className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium transition cursor-pointer ${
 								range === r ? 'bg-white/15 text-white' : 'text-white/35 hover:text-white/60'
-							}`}
+							} transition-all duration-300 cursor-pointer`}
 						>
 							{r}
 						</button>
