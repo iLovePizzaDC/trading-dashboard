@@ -2,6 +2,8 @@ import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
 import { useMemo, useState } from 'react';
 
+import { RANGES, type Range } from '@/features/equity/constants/equity';
+import { cutoffDate } from '@/features/equity/utils/performance';
 import {
 	Area,
 	AreaChart,
@@ -21,29 +23,38 @@ interface IEquityCurve {
 function EquityCurve({ data }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useState(true);
 	const [relative, setRelative] = useState(true);
+	const [range, setRange] = useState<Range>('ALL');
+
+	const filteredData = useMemo(() => {
+		const cutoff = cutoffDate(range);
+		if (!cutoff) return data;
+		return data.filter((d) => new Date(d.date) >= cutoff);
+	}, [data, range]);
 
 	const chartData = useMemo(() => {
-		if (!data.length) return [];
+		if (!filteredData.length) return [];
 
 		const botStart = data[0].equity;
 		const spyStart = data.find((d) => d.spy)?.spy ?? null;
 
-		return data.map((d) => ({
+		return filteredData.map((d) => ({
 			date: d.date,
 			equity: relative ? (d.equity / botStart) * 100 : d.equity,
 			spy: relative && d.spy && spyStart ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
-	}, [data, relative]);
+	}, [filteredData, relative]);
 
 	const startValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
 	const isPos = currentValue >= startValue;
-
 	const color = isPos ? '#4ade80' : '#f87171';
 
-	const minVal = Math.min(...chartData.map((d) => d.equity));
-	const maxVal = Math.max(...chartData.map((d) => d.equity));
-	const padding = (maxVal - minVal) * 0.1;
+	const allVals = chartData.flatMap((d) =>
+		showSpy && d.spy != null ? [d.equity, d.spy] : [d.equity],
+	);
+	const minVal = Math.min(...allVals);
+	const maxVal = Math.max(...allVals);
+	const padding = (maxVal - minVal) * 0.1 || 1;
 
 	const tickInterval = Math.ceil(chartData.length / 6);
 
@@ -62,8 +73,22 @@ function EquityCurve({ data }: IEquityCurve) {
 				</p>
 			</div>
 
-			<div className='mb-2 flex items-center justify-between text-xs'>
-				<div className='flex gap-4'>
+			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+				<div className='flex gap-1 overflow-x-auto scrollbar-none'>
+					{RANGES.map((r) => (
+						<button
+							key={r}
+							onClick={() => setRange(r)}
+							className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium transition cursor-pointer ${
+								range === r ? 'bg-white/15 text-white' : 'text-white/35 hover:text-white/60'
+							}`}
+						>
+							{r}
+						</button>
+					))}
+				</div>
+
+				<div className='flex items-center justify-between gap-4 text-xs sm:justify-end'>
 					<span className='flex items-center gap-1 text-white/60'>
 						<span className='h-2 w-2 rounded-full' style={{ backgroundColor: color }} />
 						Bot
@@ -71,23 +96,33 @@ function EquityCurve({ data }: IEquityCurve) {
 
 					<button
 						onClick={() => setShowSpy((prev) => !prev)}
-						className={`flex items-center gap-1 transition ${
-							showSpy ? 'text-white/60' : 'text-white/20'
-						} cursor-pointer`}
+						className={`flex items-center gap-1 transition cursor-pointer ${
+							showSpy ? 'text-white/60' : 'text-white/25'
+						}`}
 					>
 						<span
-							className={`h-2 w-2 rounded-full ${showSpy ? 'bg-linear-to-br from-white/5 to-white/00' : 'bg-white/20'}`}
+							className={`h-2 w-2 rounded-full border ${
+								showSpy ? 'border-white/50 bg-transparent' : 'border-white/20 bg-transparent'
+							}`}
+							style={
+								showSpy
+									? {
+											background:
+												'repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0px,rgba(255,255,255,.5) 3px,transparent 3px,transparent 6px)',
+										}
+									: {}
+							}
 						/>
 						SPY
 					</button>
-				</div>
 
-				<button
-					onClick={() => setRelative((prev) => !prev)}
-					className='text-white/40 hover:text-white/70 transition cursor-pointer'
-				>
-					{relative ? '% return' : '$ value'}
-				</button>
+					<button
+						onClick={() => setRelative((prev) => !prev)}
+						className='text-white/40 hover:text-white/70 transition cursor-pointer'
+					>
+						{relative ? '% return' : '$ value'}
+					</button>
+				</div>
 			</div>
 
 			<ResponsiveContainer width='100%' height={200}>
