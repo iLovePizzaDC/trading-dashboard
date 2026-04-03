@@ -17,7 +17,9 @@ function App() {
 				<Trades />
 				<div className='grid grid-cols-1 gap-4 md:grid-cols-2 items-start'>
 					<Positions />
-					<Decisions />
+					<div className='md:col-span-2'>
+						<Decisions />
+					</div>
 					<Stops />
 					<Sector />
 				</div>
