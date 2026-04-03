@@ -24,15 +24,6 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 
 	const timeline = useMemo(() => calcMomentumTimeline(filteredData), [filteredData]);
 
-	if (timeline.length < 2) {
-		return (
-			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-				<p className='mb-3 text-xs uppercase tracking-wider text-white/40'>momentum timeline</p>
-				<p className='text-xs text-white/30'>Not enough rebalance data yet.</p>
-			</div>
-		);
-	}
-
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-4 flex items-center justify-between'>
@@ -49,47 +40,55 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
 				<DateRangeFilter range={range} setRange={setRange} />
 			</div>
-			<div className='h-40'>
-				<ResponsiveContainer width='100%' height='100%'>
-					<LineChart data={timeline} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-						<CartesianGrid strokeDasharray='3 3' stroke='rgba(255,255,255,0.05)' vertical={false} />
-						<XAxis
-							dataKey='date'
-							tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
-							tickLine={false}
-							axisLine={false}
-							tickFormatter={(v) => v.slice(5)}
-						/>
-						<YAxis
-							tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
-							tickLine={false}
-							axisLine={false}
-							tickFormatter={(v) => `${v}%`}
-							width={36}
-						/>
-						<Tooltip content={<MomentumTooltip />} />
-						<Line
-							type='monotone'
-							dataKey='avgMomentum'
-							name='avg'
-							stroke='#c084fc'
-							strokeWidth={1.5}
-							dot={{ r: 3, fill: '#c084fc', strokeWidth: 0 }}
-							activeDot={{ r: 4, fill: '#c084fc', strokeWidth: 0 }}
-						/>
-						<Line
-							type='monotone'
-							dataKey='topMomentum'
-							name='top'
-							stroke='rgba(255,255,255,0.2)'
-							strokeWidth={1}
-							strokeDasharray='4 4'
-							dot={false}
-							activeDot={false}
-						/>
-					</LineChart>
-				</ResponsiveContainer>
-			</div>
+			{timeline.length < 2 ? (
+				<p className='py-6 text-center text-xs text-white/30'>Not enough rebalance data yet.</p>
+			) : (
+				<div className='h-40'>
+					<ResponsiveContainer width='100%' height='100%'>
+						<LineChart data={timeline} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='rgba(255,255,255,0.05)'
+								vertical={false}
+							/>
+							<XAxis
+								dataKey='date'
+								tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
+								tickLine={false}
+								axisLine={false}
+								tickFormatter={(v) => v.slice(5)}
+							/>
+							<YAxis
+								tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
+								tickLine={false}
+								axisLine={false}
+								tickFormatter={(v) => `${v}%`}
+								width={36}
+							/>
+							<Tooltip content={<MomentumTooltip />} />
+							<Line
+								type='monotone'
+								dataKey='avgMomentum'
+								name='avg'
+								stroke='#c084fc'
+								strokeWidth={1.5}
+								dot={{ r: 3, fill: '#c084fc', strokeWidth: 0 }}
+								activeDot={{ r: 4, fill: '#c084fc', strokeWidth: 0 }}
+							/>
+							<Line
+								type='monotone'
+								dataKey='topMomentum'
+								name='top'
+								stroke='rgba(255,255,255,0.2)'
+								strokeWidth={1}
+								strokeDasharray='4 4'
+								dot={false}
+								activeDot={false}
+							/>
+						</LineChart>
+					</ResponsiveContainer>
+				</div>
+			)}
 		</div>
 	);
 }
