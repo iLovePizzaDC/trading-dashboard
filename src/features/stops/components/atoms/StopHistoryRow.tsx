@@ -15,7 +15,7 @@ function StopHistoryRow({ symbol, entry, isLast = false }: IStopHistoryRow) {
 
 	return (
 		<div
-			className={`flex items-center justify-between py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}
+			className={`flex items-center justify-between ${isLast ? 'pt-2.5' : 'py-2.5 border-b border-white/5'}`}
 		>
 			<div className='flex items-center gap-3'>
 				<p className='w-12 text-xs font-medium text-white'>{symbol}</p>

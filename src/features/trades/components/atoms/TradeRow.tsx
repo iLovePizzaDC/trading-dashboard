@@ -19,7 +19,7 @@ function TradeRow({ trade, isLast = false }: ITradeRow) {
 
 	return (
 		<div
-			className={`flex items-center justify-between py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}
+			className={`flex items-center justify-between ${isLast ? 'pt-2.5' : 'py-2.5 border-b border-white/5'}`}
 		>
 			<div className='flex items-center gap-3'>
 				<span

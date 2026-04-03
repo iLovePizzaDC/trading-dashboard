@@ -16,7 +16,7 @@ function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
 
 	return (
 		<div
-			className={`flex items-center justify-between py-3 ${isLast ? '' : 'border-b border-white/5'}`}
+			className={`flex items-center justify-between ${isLast ? 'pt-3' : 'py-3 border-b border-white/5'}`}
 		>
 			<div>
 				<p className='text-sm font-medium text-white'>{symbol}</p>
