@@ -6,7 +6,7 @@ interface IDecisionHistory {
 	data: DecisionEntry[];
 }
 
-const ROW_HEIGHT = 128;
+const ROW_HEIGHT = 110;
 
 function getMomentumColor(value?: number) {
 	if (!value) return 'bg-white/10 text-white/60';
@@ -57,7 +57,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 								className='absolute top-0 left-0 w-full'
 								style={{ transform: `translateY(${virtualRow.start}px)` }}
 							>
-								<div className='rounded-lg border border-white/10 bg-linear-to-br from-white/5 to-transparent p-3'>
+								<div className='rounded-lg border border-white/10 bg-linear-to-br from-white/5 to-transparent py-1.5 px-3'>
 									<div className='flex items-center justify-between mb-2'>
 										<p className='text-xs text-white/40'>{decision.date}</p>
 
@@ -91,7 +91,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 									</div>
 
 									{decision.candidates.length > 3 && (
-										<p className='text-[10px] text-white/30 mt-2'>
+										<p className='text-[10px] text-white/30 mt-1'>
 											+{decision.candidates.length - 3} more
 										</p>
 									)}
