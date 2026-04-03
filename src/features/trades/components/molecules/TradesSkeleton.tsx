@@ -65,13 +65,11 @@ function TradesSkeleton() {
 						>
 							<div className='flex items-center gap-3'>
 								<SkeletonBox className='h-3 w-8' />
-
 								<div className='space-y-1.5'>
 									<SkeletonBox className='h-4 w-16' />
 									<SkeletonBox className='h-3 w-28' />
 								</div>
 							</div>
-
 							<div className='space-y-1.5 text-right'>
 								<SkeletonBox className='h-4 w-20 ml-auto' />
 								<SkeletonBox className='h-3 w-16 ml-auto' />
@@ -85,6 +83,12 @@ function TradesSkeleton() {
 				<div className='mb-3 flex items-center justify-between'>
 					<SkeletonBox className='h-3 w-36' />
 					<SkeletonBox className='h-3 w-24' />
+				</div>
+
+				<div className='mb-3 flex gap-1'>
+					{Array.from({ length: 6 }).map((_, i) => (
+						<SkeletonBox key={i} className='h-5 w-8 rounded' />
+					))}
 				</div>
 
 				<SkeletonBox className='h-48 w-full rounded-lg' />
