@@ -1,5 +1,5 @@
+import type { ScatterPoint } from '@/features/trades/types/scatter';
 import type { Trade } from '@/shared/types/trades';
-import type { ScatterPoint } from '../types/scatter';
 
 export function buildScatterData(trades: Trade[]): ScatterPoint[] {
 	const buys = trades.filter((t) => t.action === 'buy');

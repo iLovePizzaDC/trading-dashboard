@@ -1,9 +1,9 @@
+import PositionRow from '@/features/positions/components/atoms/PositionRow';
+import PositionsEmpty from '@/features/positions/components/molecules/PositionsEmpty';
 import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
 import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { OpenStops } from '@/shared/types/stops';
 import type { Trade } from '@/shared/types/trades';
-import PositionRow from '../atoms/PositionRow';
-import PositionsEmpty from './PositionsEmpty';
 
 interface IOpenPositions {
 	stops: OpenStops;
