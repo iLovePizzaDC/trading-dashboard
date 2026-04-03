@@ -23,7 +23,7 @@ interface IEquityCurve {
 function EquityCurve({ data }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useState(true);
 	const [relative, setRelative] = useState(true);
-	const [range, setRange] = useState<Range>('ALL');
+	const [range, setRange] = useState<Range>('3M');
 
 	const filteredData = useMemo(() => {
 		const cutoff = cutoffDate(range);
