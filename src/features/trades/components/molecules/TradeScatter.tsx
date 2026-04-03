@@ -1,9 +1,9 @@
-import { RANGES, type Range } from '@/features/equity/constants/equity';
-import { cutoffDate } from '@/features/equity/utils/performance';
 import ScatterTooltip from '@/features/trades/components/atoms/ScatterTooltip';
 import { buildScatterData } from '@/features/trades/utils/scatter';
+import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
+import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import type { Trade } from '@/shared/types/trades';
-import { useMemo, useState } from 'react';
+import { useCallback } from 'react';
 import {
 	CartesianGrid,
 	ReferenceLine,
@@ -20,13 +20,8 @@ interface ITradeScatter {
 }
 
 function TradeScatter({ data }: ITradeScatter) {
-	const [range, setRange] = useState<Range>('3M');
-
-	const filteredData = useMemo(() => {
-		const cutoff = cutoffDate(range);
-		if (!cutoff) return data;
-		return data.filter((t) => new Date(t.date) >= cutoff);
-	}, [data, range]);
+	const getDate = useCallback((d: Trade) => d.date, []);
+	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
 
 	const points = buildScatterData(filteredData);
 	const wins = points.filter((p) => p.pnl >= 0);
@@ -38,7 +33,7 @@ function TradeScatter({ data }: ITradeScatter) {
 
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-			<div className='mb-3 flex items-center justify-between'>
+			<div className='mb-4 flex items-center justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>entry / exit analysis</p>
 				<div className='flex items-center gap-3 text-[10px] text-white/30'>
 					<span className='flex items-center gap-1'>
@@ -52,18 +47,8 @@ function TradeScatter({ data }: ITradeScatter) {
 				</div>
 			</div>
 
-			<div className='mb-3 flex gap-1 overflow-x-auto scrollbar-none'>
-				{RANGES.map((r) => (
-					<button
-						key={r}
-						onClick={() => setRange(r)}
-						className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium transition-all duration-300 cursor-pointer ${
-							range === r ? 'bg-white/15 text-white' : 'text-white/35 hover:text-white/60'
-						}`}
-					>
-						{r}
-					</button>
-				))}
+			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+				<DateRangeFilter range={range} setRange={setRange} />
 			</div>
 
 			{points.length === 0 ? (

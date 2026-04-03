@@ -1,9 +1,9 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { RANGES, type Range } from '@/features/equity/constants/equity';
-import { cutoffDate } from '@/features/equity/utils/performance';
+import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
+import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import {
 	Area,
 	AreaChart,
@@ -23,24 +23,21 @@ interface IEquityCurve {
 function EquityCurve({ data }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useState(true);
 	const [relative, setRelative] = useState(true);
-	const [range, setRange] = useState<Range>('3M');
 
-	const filteredData = useMemo(() => {
-		const cutoff = cutoffDate(range);
-		if (!cutoff) return data;
-		return data.filter((d) => new Date(d.date) >= cutoff);
-	}, [data, range]);
+	const getDate = useCallback((d: EquityPoint) => d.date, []);
+	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
 
 	const chartData = useMemo(() => {
 		if (!filteredData.length) return [];
 
-		const botStart = data[0].equity;
-		const spyStart = data.find((d) => d.spy)?.spy ?? null;
+		const botStart = filteredData[0].equity;
+		const spyStart = filteredData.find((d) => d.spy != null)?.spy ?? null;
 
 		return filteredData.map((d) => ({
 			date: d.date,
 			equity: relative ? (d.equity / botStart) * 100 : d.equity,
-			spy: relative && d.spy && spyStart ? (d.spy / spyStart) * 100 : (d.spy ?? null),
+			spy:
+				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
 	}, [filteredData, relative]);
 
@@ -74,19 +71,7 @@ function EquityCurve({ data }: IEquityCurve) {
 			</div>
 
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-				<div className='flex gap-1 overflow-x-auto scrollbar-none'>
-					{RANGES.map((r) => (
-						<button
-							key={r}
-							onClick={() => setRange(r)}
-							className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium transition cursor-pointer ${
-								range === r ? 'bg-white/15 text-white' : 'text-white/35 hover:text-white/60'
-							} transition-all duration-300 cursor-pointer`}
-						>
-							{r}
-						</button>
-					))}
-				</div>
+				<DateRangeFilter range={range} setRange={setRange} />
 
 				<div className='flex items-center justify-between gap-4 text-xs sm:justify-end'>
 					<span className='flex items-center gap-1 text-white/60'>

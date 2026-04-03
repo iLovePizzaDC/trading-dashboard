@@ -80,7 +80,7 @@ function TradesSkeleton() {
 			</div>
 
 			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-				<div className='mb-3 flex items-center justify-between'>
+				<div className='mb-4 flex items-center justify-between'>
 					<SkeletonBox className='h-3 w-36' />
 					<SkeletonBox className='h-3 w-24' />
 				</div>
