@@ -21,10 +21,17 @@ function MonthCell({ entry, onClick, selected }: IMonthCell) {
 	return (
 		<button
 			onClick={onClick}
-			title={`${entry.year}-${String(entry.month).padStart(2, '0')}: ${entry.return >= 0 ? '+' : ''}${entry.return.toFixed(2)}%`}
-			className={`h-5 w-full rounded-sm transition-all ${getColor(entry.return)} ${
-				selected ? 'ring-1 ring-white/40' : ''
-			} cursor-pointer hover:brightness-125`}
+			title={`${entry.year}-${String(entry.month).padStart(2, '0')}: ${
+				entry.return >= 0 ? '+' : ''
+			}${entry.return.toFixed(2)}%`}
+			className={`
+				h-5 w-full rounded-sm
+				transition-all duration-200
+				${getColor(entry.return)}
+				${selected ? 'shadow-[0_0_8px_rgba(255,255,255,0.6)] scale-105 z-10' : ''}
+				cursor-pointer
+				hover:brightness-125
+			`}
 		/>
 	);
 }
