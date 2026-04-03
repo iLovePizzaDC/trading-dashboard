@@ -41,13 +41,11 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 			))}
 
 			<div
-				style={{
-					display: 'grid',
-					gridTemplateRows: expanded ? '1fr' : '0fr',
-					transition: 'grid-template-rows 0.25s ease',
-				}}
+				className={`grid transition-[grid-template-rows] duration-250 ease-in-out ${
+					expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+				}`}
 			>
-				<div style={{ overflow: 'hidden' }}>
+				<div className='overflow-hidden'>
 					{extra.map((symbol, index) => (
 						<div key={symbol}>
 							<PositionRow

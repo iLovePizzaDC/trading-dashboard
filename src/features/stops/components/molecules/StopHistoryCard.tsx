@@ -38,25 +38,15 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 				mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
 				[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
 			>
-				<div
-					style={{
-						height: rowVirtualizer.getTotalSize(),
-						position: 'relative',
-					}}
-				>
+				<div className='relative' style={{ height: rowVirtualizer.getTotalSize() }}>
 					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 						const item = sorted[virtualRow.index];
 
 						return (
 							<div
 								key={virtualRow.key}
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									transform: `translateY(${virtualRow.start}px)`,
-								}}
+								className='absolute top-0 left-0 w-full'
+								style={{ transform: `translateY(${virtualRow.start}px)` }}
 							>
 								<StopHistoryRow
 									symbol={item.symbol}

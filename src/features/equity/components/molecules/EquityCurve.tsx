@@ -90,7 +90,7 @@ function EquityCurve({ data }: IEquityCurve) {
 
 				<div className='flex items-center justify-between gap-4 text-xs sm:justify-end'>
 					<span className='flex items-center gap-1 text-white/60'>
-						<span className='h-2 w-2 rounded-full' style={{ backgroundColor: color }} />
+						<span className={`h-2 w-2 rounded-full ${isPos ? 'text-green-400' : 'text-red-400'}`} />
 						Bot
 					</span>
 
@@ -161,7 +161,7 @@ function EquityCurve({ data }: IEquityCurve) {
 					/>
 
 					<Tooltip
-						content={<EquityTooltip color={color} showSpy={showSpy} relative={relative} />}
+						content={<EquityTooltip positive={isPos} showSpy={showSpy} relative={relative} />}
 					/>
 
 					<Area

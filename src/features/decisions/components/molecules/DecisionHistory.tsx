@@ -43,12 +43,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 				mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
 				[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
 			>
-				<div
-					style={{
-						height: rowVirtualizer.getTotalSize(),
-						position: 'relative',
-					}}
-				>
+				<div className='relative' style={{ height: rowVirtualizer.getTotalSize() }}>
 					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 						const decision = sorted[virtualRow.index];
 
@@ -59,13 +54,8 @@ function DecisionHistory({ data }: IDecisionHistory) {
 						return (
 							<div
 								key={decision.date + virtualRow.index}
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									transform: `translateY(${virtualRow.start}px)`,
-								}}
+								className='absolute top-0 left-0 w-full'
+								style={{ transform: `translateY(${virtualRow.start}px)` }}
 							>
 								<div className='rounded-lg border border-white/10 bg-linear-to-br from-white/5 to-transparent p-3'>
 									<div className='flex items-center justify-between mb-2'>

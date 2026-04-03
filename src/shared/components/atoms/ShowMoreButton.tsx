@@ -14,8 +14,7 @@ function ShowMoreButton({ toggle, expanded, hiddenCount }: IShowMoreButton) {
 		>
 			<span>{expanded ? 'show less' : `${hiddenCount} more`}</span>
 			<ChevronDownIcon
-				className='h-3 w-3 transition-transform duration-200'
-				style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+				className={`h-3 w-3 transition-transform duration-200 ${expanded ? 'rotate-180' : 'rotate-0'}`}
 			/>
 		</button>
 	);
