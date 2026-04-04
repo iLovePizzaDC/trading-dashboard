@@ -18,21 +18,21 @@ function SummaryCardSkeleton() {
 			<div className='h-3 w-64 rounded-md bg-white/10 animate-pulse' />
 			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
 				<div className='col-span-2 rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-					<SkeletonBox className='mb-2 h-3 w-24' />
-					<SkeletonBox className='mb-3 h-10 w-48' />
-					<SkeletonBox className='h-3 w-32' />
+					<SkeletonBox className='mb-2 h-2 w-24' />
+					<SkeletonBox className='mb-3 h-9 w-48' />
+					<SkeletonBox className='h-2 w-32' />
 				</div>
 
 				<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-					<SkeletonBox className='mb-2 h-3 w-20' />
-					<SkeletonBox className='mb-3 h-8 w-24' />
-					<SkeletonBox className='h-3 w-16' />
+					<SkeletonBox className='mb-2 h-2 w-20' />
+					<SkeletonBox className='mb-3 h-7 w-24' />
+					<SkeletonBox className='h-2 w-16' />
 				</div>
 
 				<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 flex flex-col items-center'>
-					<SkeletonBox className='mb-2 h-3 w-16' />
-					<SkeletonBox className='mb-3 h-6 w-20' />
-					<SkeletonBox className='h-3 w-24' />
+					<SkeletonBox className='mb-2 h-2 w-16' />
+					<SkeletonBox className='mb-3 h-5 w-20' />
+					<SkeletonBox className='h-2 w-24' />
 				</div>
 			</div>
 
@@ -42,9 +42,9 @@ function SummaryCardSkeleton() {
 						key={i}
 						className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'
 					>
-						<SkeletonBox className='mb-2 h-3 w-20' />
-						<SkeletonBox className='mb-3 h-8 w-16' />
-						<SkeletonBox className='h-3 w-12' />
+						<SkeletonBox className='mb-2 h-2 w-20' />
+						<SkeletonBox className='mb-3 h-7 w-16' />
+						<SkeletonBox className='h-2 w-12' />
 					</div>
 				))}
 			</div>

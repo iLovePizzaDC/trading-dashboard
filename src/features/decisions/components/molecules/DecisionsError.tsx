@@ -1,6 +1,6 @@
 function DecisionsError() {
 	return (
-		<div className='grid grid-cols-1 gap-4'>
+		<div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-start'>
 			<div className='rounded-xl border border-red-500/30 bg-linear-to-br from-red-500/10 to-transparent p-4'>
 				<div className='mb-3 flex justify-between'>
 					<p className='text-xs uppercase tracking-wider text-red-300/70'>last decisions</p>
