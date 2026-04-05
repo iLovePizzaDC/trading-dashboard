@@ -1,4 +1,4 @@
-import DecisionRow from '@/features/decisions/components/atoms/DecisionRow';
+import DecisionCardRow from '@/features/decisions/components/atoms/DecisionCardRow';
 import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
 import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { DecisionEntry } from '@/shared/types/decisions';
@@ -26,7 +26,7 @@ function DecisionsCard({ data }: IDecisionsCard) {
 			</div>
 
 			{preview.map((candidate, index) => (
-				<DecisionRow
+				<DecisionCardRow
 					key={candidate.symbol}
 					candidate={candidate}
 					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
@@ -41,7 +41,7 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				<div className='overflow-hidden'>
 					{extra.map((candidate, index) => (
 						<div key={candidate.symbol}>
-							<DecisionRow candidate={candidate} isLast={index === extra.length - 1} />
+							<DecisionCardRow candidate={candidate} isLast={index === extra.length - 1} />
 						</div>
 					))}
 				</div>

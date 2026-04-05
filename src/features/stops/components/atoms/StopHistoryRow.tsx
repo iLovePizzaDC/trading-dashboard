@@ -15,24 +15,31 @@ function StopHistoryRow({ symbol, entry, isLast = false }: IStopHistoryRow) {
 
 	return (
 		<div
-			className={`flex items-center justify-between ${isLast ? 'pt-2.5' : 'py-2.5 border-b border-white/5'}`}
+			className={`h-full flex items-center justify-between ${
+				isLast ? '' : 'border-b border-white/5'
+			}`}
 		>
-			<div className='flex items-center gap-3'>
-				<p className='w-12 text-xs font-medium text-white'>{symbol}</p>
-				<p className='text-xs text-white/40'>{entry.date}</p>
+			<div className='flex items-center gap-3 min-w-0'>
+				<p className='w-12 text-xs font-medium text-white truncate'>{symbol}</p>
+				<p className='text-xs text-white/40 truncate'>{entry.date}</p>
 			</div>
-			<div className='flex items-center gap-2 text-right'>
+
+			<div className='flex items-center gap-2 text-right min-w-0'>
 				{!isFirst && (
 					<>
-						<p className='text-xs text-white/30'>{usd(entry.old_stop)}</p>
+						<p className='text-xs text-white/30 truncate'>{usd(entry.old_stop)}</p>
 						<p className='text-xs text-white/20'>→</p>
 					</>
 				)}
+
 				<p
-					className={`text-sm font-medium ${isFirst ? 'text-white/70' : isRaise ? 'text-green-400' : 'text-red-400'}`}
+					className={`text-sm font-medium truncate ${
+						isFirst ? 'text-white/70' : isRaise ? 'text-green-400' : 'text-red-400'
+					}`}
 				>
 					{usd(entry.new_stop)}
 				</p>
+
 				{!isFirst && (
 					<p className={`text-xs ${isRaise ? 'text-green-400/60' : 'text-red-400/60'}`}>
 						{isRaise ? '↑' : '↓'}

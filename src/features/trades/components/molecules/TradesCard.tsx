@@ -45,19 +45,25 @@ function TradesCard({ data }: ITradesCard) {
 
 			<div
 				ref={parentRef}
-				className='overflow-y-auto max-h-52 pr-3 -mr-3 [scrollbar-width:thin]
+				className='max-h-52 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]
 					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
 					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
 			>
-				<div className='relative' style={{ height: rowVirtualizer.getTotalSize() }}>
+				<div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}>
 					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 						const trade = sorted[virtualRow.index];
 
 						return (
 							<div
 								key={virtualRow.key}
-								className='absolute top-0 left-0 w-full'
-								style={{ transform: `translateY(${virtualRow.start}px)` }}
+								style={{
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									width: '100%',
+									height: ROW_HEIGHT,
+									transform: `translateY(${virtualRow.start}px)`,
+								}}
 							>
 								<TradeRow trade={trade} isLast={virtualRow.index === sorted.length - 1} />
 							</div>

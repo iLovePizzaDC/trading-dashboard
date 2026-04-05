@@ -1,11 +1,11 @@
 import type { Candidate } from '@/shared/types/decisions';
 
-interface IDecisionRow {
+interface IDecisionCardRow {
 	candidate: Candidate;
 	isLast?: boolean;
 }
 
-function DecisionRow({ candidate, isLast = false }: IDecisionRow) {
+function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 	const { symbol, momentum, passes_trend, selected, rejected_reason } = candidate;
 	const pct = momentum !== null ? (momentum * 100).toFixed(1) : null;
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
@@ -43,4 +43,4 @@ function DecisionRow({ candidate, isLast = false }: IDecisionRow) {
 	);
 }
 
-export default DecisionRow;
+export default DecisionCardRow;
