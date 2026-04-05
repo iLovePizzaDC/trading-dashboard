@@ -29,7 +29,7 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-baseline justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>stop history</p>
-				<p className='text-xs text-white/30'>{sorted.length} adjustments</p>
+				<p className='text-xs text-white/30'>{sorted.length} changes</p>
 			</div>
 
 			<div
