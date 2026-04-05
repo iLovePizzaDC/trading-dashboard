@@ -1,5 +1,5 @@
 import { getMomentumColor } from '@/features/decisions/utils/decision-history-row';
-import type { DecisionEntry } from '@/shared/types/decisions';
+import type { Candidate, DecisionEntry } from '@/shared/types/decisions';
 
 interface IDecisionHistoryRow {
 	decision: DecisionEntry;
@@ -10,6 +10,9 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 	const top = [...decision.candidates]
 		.sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0))
 		.slice(0, 3);
+
+	// TODO outsource pct function into shared utils (also used in decisioncardrow)
+	const pct = (c: Candidate) => (c.momentum !== null ? (c.momentum * 100).toFixed(1) : null);
 
 	return (
 		<div
@@ -36,9 +39,7 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 						`}
 					>
 						<span className='font-medium'>{c.symbol}</span>
-						{c.momentum !== undefined && (
-							<span className='ml-1 opacity-70'>{c.momentum ? c.momentum.toFixed(2) : ''}</span>
-						)}
+						{c.momentum !== undefined && <span className='ml-1 opacity-70'>{pct(c)}%</span>}
 					</div>
 				))}
 			</div>
