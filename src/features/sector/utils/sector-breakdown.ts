@@ -1,5 +1,5 @@
-import { SECTOR_MAP } from '@/features/sector/constants/sectors';
 import type { SectorStat } from '@/features/sector/types/sector-breakdown';
+import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
 

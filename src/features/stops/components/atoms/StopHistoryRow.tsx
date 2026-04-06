@@ -15,7 +15,7 @@ function StopHistoryRow({ symbol, entry, isLast = false, isLatestRun = false }: 
 	return (
 		<div
 			className={`h-full pr-2 flex items-center justify-between rounded
-				${isLatestRun ? 'bg-white/4' : ''}
+				${isLatestRun ? 'border border-white/10 bg-linear-to-br from-white/5 to-transparent' : ''}
 				${isLast ? '' : 'border-b border-white/5'}
 			`}
 		>

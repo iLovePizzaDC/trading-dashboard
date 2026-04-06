@@ -1,5 +1,6 @@
 import TradeEntry from '@/features/trades/components/atoms/TradeEntry'; // TODO DO NOT USE ATOMS IN ATOMS!
 import type { TradeGroup } from '@/features/trades/types/trades-card';
+import { SECTOR_MAP } from '@/shared/constants/sectors';
 import { usd } from '@/shared/utils/currency';
 import { useState } from 'react';
 
@@ -19,6 +20,8 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 	const olderEntries = reversed.slice(1);
 	const hiddenCount = olderEntries.length;
 
+	const symbolName = SECTOR_MAP[group.symbol];
+
 	return (
 		<div>
 			<button
@@ -27,17 +30,24 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 					hasMultiple ? 'cursor-pointer' : 'cursor-default'
 				}`}
 			>
-				<div className='flex items-center gap-2'>
+				<div className='flex items-center gap-2 min-w-0'>
 					<span
 						className='w-2 h-2 rounded-full shrink-0'
 						style={{ backgroundColor: group.color }}
 					/>
-					<span className='text-[11px] font-semibold tracking-widest text-white/75'>
-						{group.symbol}
-					</span>
+					<div className='flex flex-col min-w-0'>
+						<span className='text-[11px] font-semibold tracking-widest text-white/75 leading-tight'>
+							{group.symbol}
+						</span>
+						{symbolName && (
+							<span className='text-[10px] text-white/30 font-normal tracking-normal leading-tight truncate'>
+								{symbolName}
+							</span>
+						)}
+					</div>
 					{hasMultiple && (
 						<svg
-							className={`w-3 h-3 text-white/25 transition-transform duration-300 group-hover/header:text-white/50 ${
+							className={`w-3 h-3 text-white/25 shrink-0 transition-transform duration-300 group-hover/header:text-white/50 ${
 								expanded ? 'rotate-180' : ''
 							}`}
 							viewBox='0 0 12 12'

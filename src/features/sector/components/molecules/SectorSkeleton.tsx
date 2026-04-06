@@ -23,9 +23,7 @@ function SectorSkeleton() {
 				{Array.from({ length: 4 }).map((_, i) => (
 					<div key={i} className='flex items-center gap-3'>
 						<SkeletonBox className='h-3 w-10' />
-						<SkeletonBox className='h-3 w-28' />
 						<SkeletonBox className='h-1 flex-1 rounded-full' />
-						<SkeletonBox className='h-3 w-6' />
 						<SkeletonBox className='h-3 w-20' />
 					</div>
 				))}
