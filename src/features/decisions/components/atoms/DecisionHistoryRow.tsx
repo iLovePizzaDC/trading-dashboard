@@ -27,7 +27,7 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 				</div>
 			</div>
 
-			<div className='flex gap-2'>
+			<div className='flex gap-2 px-1 -mx-1 py-2 -my-2 overflow-y-hidden overflow-x-auto [scrollbar-width:thin]'>
 				{top.map((c, i) => (
 					<div
 						key={c.symbol}
