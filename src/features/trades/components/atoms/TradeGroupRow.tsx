@@ -2,6 +2,7 @@ import TradeEntry from '@/features/trades/components/atoms/TradeEntry'; // TODO 
 import type { TradeGroup } from '@/features/trades/types/trades-card';
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import { usd } from '@/shared/utils/currency';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 interface ITradeGroupRow {
@@ -46,19 +47,11 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 						)}
 					</div>
 					{hasMultiple && (
-						<svg
+						<ChevronDownIcon
 							className={`w-3 h-3 text-white/25 shrink-0 transition-transform duration-300 group-hover/header:text-white/50 ${
 								expanded ? 'rotate-180' : ''
 							}`}
-							viewBox='0 0 12 12'
-							fill='none'
-							stroke='currentColor'
-							strokeWidth='1.5'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<path d='M2 4l4 4 4-4' />
-						</svg>
+						/>
 					)}
 				</div>
 

@@ -1,5 +1,6 @@
 import type { StopHistoryEntry } from '@/shared/types/stops';
 import { usd } from '@/shared/utils/currency';
+import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 
 interface IStopHistoryRow {
 	symbol: string;
@@ -28,7 +29,9 @@ function StopHistoryRow({ symbol, entry, isLast = false, isLatestRun = false }: 
 				{!isFirst && (
 					<>
 						<p className='text-xs text-white/30 truncate'>{usd(entry.old_stop)}</p>
-						<p className='text-xs text-white/20'>→</p>
+						<p className='text-white/20'>
+							<ArrowRightIcon className='h-3 w-3' />
+						</p>
 					</>
 				)}
 
@@ -41,8 +44,8 @@ function StopHistoryRow({ symbol, entry, isLast = false, isLatestRun = false }: 
 				</p>
 
 				{!isFirst && (
-					<p className={`text-xs ${isRaise ? 'text-green-400/60' : 'text-red-400/60'}`}>
-						{isRaise ? '↑' : '↓'}
+					<p className={`${isRaise ? 'text-green-400/60' : 'text-red-400/60'}`}>
+						{isRaise ? <ArrowUpIcon className='h-3 w-3' /> : <ArrowDownIcon className='h-3 w-3' />}
 					</p>
 				)}
 			</div>
