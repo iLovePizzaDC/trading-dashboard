@@ -17,6 +17,7 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 	);
 
 	const sorted = entries.sort((a, b) => b.entry.date.localeCompare(a.entry.date));
+	const latestDate = sorted[0]?.entry.date;
 
 	const rowVirtualizer = useVirtualizer({
 		count: sorted.length,
@@ -34,7 +35,7 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 
 			<div
 				ref={parentRef}
-				className='max-h-52 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]
+				className='max-h-52 overflow-y-auto px-1 pr-3 -mx-1 -mr-3 [scrollbar-width:thin]
 					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
 					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
 			>
@@ -58,6 +59,7 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 									symbol={item.symbol}
 									entry={item.entry}
 									isLast={virtualRow.index === sorted.length - 1}
+									isLatestRun={item.entry.date === latestDate}
 								/>
 							</div>
 						);

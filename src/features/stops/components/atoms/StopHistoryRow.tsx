@@ -4,9 +4,10 @@ interface IStopHistoryRow {
 	symbol: string;
 	entry: StopHistoryEntry;
 	isLast?: boolean;
+	isLatestRun?: boolean;
 }
 
-function StopHistoryRow({ symbol, entry, isLast = false }: IStopHistoryRow) {
+function StopHistoryRow({ symbol, entry, isLast = false, isLatestRun = false }: IStopHistoryRow) {
 	const usd = (n: number) =>
 		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
@@ -15,9 +16,10 @@ function StopHistoryRow({ symbol, entry, isLast = false }: IStopHistoryRow) {
 
 	return (
 		<div
-			className={`h-full flex items-center justify-between ${
-				isLast ? '' : 'border-b border-white/5'
-			}`}
+			className={`h-full pr-2 flex items-center justify-between rounded
+				${isLatestRun ? 'bg-white/4' : ''}
+				${isLast ? '' : 'border-b border-white/5'}
+			`}
 		>
 			<div className='flex items-center gap-3 min-w-0'>
 				<p className='w-12 text-xs font-medium text-white truncate'>{symbol}</p>

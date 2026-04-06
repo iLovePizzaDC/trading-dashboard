@@ -11,7 +11,6 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 		.sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0))
 		.slice(0, 3);
 
-	// TODO outsource pct function into shared utils (also used in decisioncardrow)
 	const pct = (c: Candidate) => (c.momentum !== null ? (c.momentum * 100).toFixed(1) : null);
 
 	return (
