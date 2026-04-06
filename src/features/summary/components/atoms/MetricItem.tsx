@@ -19,13 +19,19 @@ function MetricItem({ label, value, sub, positive, featured, large }: IMetricIte
 	return (
 		<div
 			className={`
-				rounded-xl border border-white/10
+				group relative rounded-xl border border-white/10
 				bg-linear-to-br from-white/5 to-white/0
-				p-4 transition-all
+				p-4 transition-all duration-300 ease-out
+				hover:border-white/20
+				hover:from-white/[0.07] hover:to-purple-500/3
 				${featured ? 'shadow-[0_0_20px_rgba(255,255,255,0.05)]' : ''}
 			`}
 		>
-			<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40'>{label}</p>
+			<div className='absolute inset-x-0 top-0 h-px rounded-t-xl bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+
+			<p className='mb-1.5 text-xs uppercase tracking-wider text-white/40 transition-colors duration-300 group-hover:text-white/55'>
+				{label}
+			</p>
 
 			<p
 				className={`

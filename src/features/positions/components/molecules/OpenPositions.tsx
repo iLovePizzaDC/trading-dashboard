@@ -25,7 +25,7 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 	const extra = symbols.slice(previewCount);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<p className='mb-2 text-xs uppercase tracking-wider text-white/40'>
 				open positions ({symbols.length})
 			</p>

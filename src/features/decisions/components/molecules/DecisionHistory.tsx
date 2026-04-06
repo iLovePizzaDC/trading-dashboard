@@ -24,7 +24,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 	});
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<div className='mb-4 flex items-baseline justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>decision history</p>
 				<p className='text-xs text-white/30'>{sorted.length} entries</p>
