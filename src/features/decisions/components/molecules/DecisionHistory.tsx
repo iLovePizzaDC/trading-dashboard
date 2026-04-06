@@ -7,7 +7,7 @@ interface IDecisionHistory {
 	data: DecisionEntry[];
 }
 
-const CARD_HEIGHT = 112;
+const CARD_HEIGHT = 97;
 const CARD_GAP = 10;
 const ROW_HEIGHT = CARD_HEIGHT + CARD_GAP;
 
