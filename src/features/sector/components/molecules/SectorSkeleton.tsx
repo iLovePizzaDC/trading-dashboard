@@ -1,22 +1,30 @@
+function SkeletonBox({ className }: { className?: string }) {
+	return (
+		<div className={`relative overflow-hidden rounded-md bg-white/10 ${className}`}>
+			<div className='absolute inset-0 animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent' />
+		</div>
+	);
+}
+
 function SectorSkeleton() {
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-center justify-between'>
-				<div className='h-3 w-32 animate-pulse rounded bg-white/10' />
-				<div className='flex gap-1'>
+				<SkeletonBox className='h-3 w-32' />
+
+				<div className='flex gap-2'>
 					{Array.from({ length: 4 }).map((_, i) => (
-						<div key={i} className='h-4 w-12 animate-pulse rounded bg-white/10' />
+						<SkeletonBox key={i} className='h-4 w-12' />
 					))}
 				</div>
 			</div>
+
 			<div className='space-y-1.5'>
-				{Array.from({ length: 3 }).map((_, i) => (
+				{Array.from({ length: 4 }).map((_, i) => (
 					<div key={i} className='flex items-center gap-3'>
-						<div className='h-3 w-10 animate-pulse rounded bg-white/10' />
-						<div className='h-3 w-28 animate-pulse rounded bg-white/10' />
-						<div className='flex-1 h-1 animate-pulse rounded-full bg-white/10' />
-						<div className='h-3 w-6 animate-pulse rounded bg-white/10' />
-						<div className='h-3 w-20 animate-pulse rounded bg-white/10' />
+						<SkeletonBox className='h-3 w-10' />
+						<SkeletonBox className='h-1 flex-1 rounded-full' />
+						<SkeletonBox className='h-3 w-20' />
 					</div>
 				))}
 			</div>

@@ -1,4 +1,5 @@
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
 
 const reasonLabel: Record<string, string> = {
 	stop_triggered: 'stop hit',
@@ -12,39 +13,47 @@ interface ITradeRow {
 }
 
 function TradeRow({ trade, isLast = false }: ITradeRow) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const isBuy = trade.action === 'buy';
 
 	return (
 		<div
-			className={`flex items-center justify-between py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}
+			className={`h-full flex items-center justify-between ${
+				isLast ? '' : 'border-b border-white/5'
+			}`}
 		>
-			<div className='flex items-center gap-3'>
+			<div className='flex items-center gap-3 min-w-0'>
 				<span
-					className={`w-8 text-center text-[10px] font-medium uppercase ${isBuy ? 'text-green-400' : 'text-red-400'}`}
+					className={`w-8 text-center text-[10px] font-medium uppercase ${
+						isBuy ? 'text-green-400' : 'text-red-400'
+					}`}
 				>
 					{trade.action}
 				</span>
-				<div>
-					<p className='text-sm font-medium text-white'>{trade.symbol}</p>
-					<p className='text-xs text-white/40'>
+
+				<div className='min-w-0'>
+					<p className='text-sm font-medium text-white truncate'>{trade.symbol}</p>
+					<p className='text-xs text-white/40 truncate'>
 						{trade.shares.toFixed(4)} @ {usd(trade.price)}
 					</p>
 				</div>
 			</div>
-			<div className='text-right'>
+
+			<div className='text-right min-w-0'>
 				{trade.pnl !== undefined ? (
 					<p
-						className={`text-sm font-medium ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}
+						className={`text-sm font-medium truncate ${
+							trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'
+						}`}
 					>
 						{usd(trade.pnl)}
 					</p>
 				) : (
-					trade.stop_price && <p className='text-sm text-white/40'>stop {usd(trade.stop_price)}</p>
+					trade.stop_price && (
+						<p className='text-sm text-white/40 truncate'>stop {usd(trade.stop_price)}</p>
+					)
 				)}
-				<p className='text-xs text-white/30'>
+
+				<p className='text-xs text-white/30 truncate'>
 					{trade.reason ? (reasonLabel[trade.reason] ?? trade.reason) : trade.date}
 				</p>
 			</div>

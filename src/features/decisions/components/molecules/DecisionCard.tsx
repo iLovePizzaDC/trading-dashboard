@@ -1,4 +1,4 @@
-import DecisionRow from '@/features/decisions/components/atoms/DecisionRow';
+import DecisionCardRow from '@/features/decisions/components/atoms/DecisionCardRow';
 import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
 import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { DecisionEntry } from '@/shared/types/decisions';
@@ -19,14 +19,14 @@ function DecisionsCard({ data }: IDecisionsCard) {
 	const extra = sorted.slice(previewCount);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-baseline justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>last decisions</p>
 				<p className='text-xs text-white/30'>{latest.date}</p>
 			</div>
 
 			{preview.map((candidate, index) => (
-				<DecisionRow
+				<DecisionCardRow
 					key={candidate.symbol}
 					candidate={candidate}
 					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
@@ -34,16 +34,14 @@ function DecisionsCard({ data }: IDecisionsCard) {
 			))}
 
 			<div
-				style={{
-					display: 'grid',
-					gridTemplateRows: expanded ? '1fr' : '0fr',
-					transition: 'grid-template-rows 0.25s ease',
-				}}
+				className={`grid transition-[grid-template-rows] duration-250 ease-in-out ${
+					expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+				}`}
 			>
-				<div style={{ overflow: 'hidden' }}>
+				<div className='overflow-hidden'>
 					{extra.map((candidate, index) => (
 						<div key={candidate.symbol}>
-							<DecisionRow candidate={candidate} isLast={index === extra.length - 1} />
+							<DecisionCardRow candidate={candidate} isLast={index === extra.length - 1} />
 						</div>
 					))}
 				</div>

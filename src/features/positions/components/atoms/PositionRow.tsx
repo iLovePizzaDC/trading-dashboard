@@ -1,4 +1,5 @@
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
 
 interface IPositionRow {
 	symbol: string;
@@ -8,15 +9,12 @@ interface IPositionRow {
 }
 
 function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const entryValue = trade ? trade.shares * trade.price : null;
 	const stopPct = trade ? (((stop - trade.price) / trade.price) * 100).toFixed(1) : null;
 
 	return (
 		<div
-			className={`flex items-center justify-between py-3 ${isLast ? '' : 'border-b border-white/5'}`}
+			className={`flex items-center justify-between ${isLast ? 'pt-3' : 'py-3 border-b border-white/5'}`}
 		>
 			<div>
 				<p className='text-sm font-medium text-white'>{symbol}</p>

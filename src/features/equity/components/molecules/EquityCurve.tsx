@@ -1,7 +1,9 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
+import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
+import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import {
 	Area,
 	AreaChart,
@@ -22,33 +24,39 @@ function EquityCurve({ data }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useState(true);
 	const [relative, setRelative] = useState(true);
 
+	const getDate = useCallback((d: EquityPoint) => d.date, []);
+	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
+
 	const chartData = useMemo(() => {
-		if (!data.length) return [];
+		if (!filteredData.length) return [];
 
-		const botStart = data[0].equity;
-		const spyStart = data.find((d) => d.spy)?.spy ?? null;
+		const botStart = filteredData[0].equity;
+		const spyStart = filteredData.find((d) => d.spy != null)?.spy ?? null;
 
-		return data.map((d) => ({
+		return filteredData.map((d) => ({
 			date: d.date,
 			equity: relative ? (d.equity / botStart) * 100 : d.equity,
-			spy: relative && d.spy && spyStart ? (d.spy / spyStart) * 100 : (d.spy ?? null),
+			spy:
+				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
-	}, [data, relative]);
+	}, [filteredData, relative]);
 
 	const startValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
 	const isPos = currentValue >= startValue;
-
 	const color = isPos ? '#4ade80' : '#f87171';
 
-	const minVal = Math.min(...chartData.map((d) => d.equity));
-	const maxVal = Math.max(...chartData.map((d) => d.equity));
-	const padding = (maxVal - minVal) * 0.1;
+	const allVals = chartData.flatMap((d) =>
+		showSpy && d.spy != null ? [d.equity, d.spy] : [d.equity],
+	);
+	const minVal = Math.min(...allVals);
+	const maxVal = Math.max(...allVals);
+	const padding = (maxVal - minVal) * 0.1 || 1;
 
 	const tickInterval = Math.ceil(chartData.length / 6);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-4 flex items-baseline justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>equity curve</p>
 
@@ -62,30 +70,44 @@ function EquityCurve({ data }: IEquityCurve) {
 				</p>
 			</div>
 
-			<div className='mb-2 flex items-center justify-between text-xs'>
-				<div className='flex gap-4'>
+			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+				<DateRangeFilter range={range} setRange={setRange} />
+
+				<div className='flex items-center justify-between gap-4 text-xs sm:justify-end'>
 					<span className='flex items-center gap-1 text-white/60'>
-						<span className='h-2 w-2 rounded-full' style={{ backgroundColor: color }} />
+						<span className={`h-2 w-2 rounded-full ${isPos ? 'bg-green-400' : 'bg-red-400'}`} />
 						Bot
 					</span>
 
 					<button
 						onClick={() => setShowSpy((prev) => !prev)}
-						className={`flex items-center gap-1 transition ${
-							showSpy ? 'text-white/60' : 'text-white/20'
-						} cursor-pointer`}
+						className={`flex items-center gap-1 transition cursor-pointer ${
+							showSpy ? 'text-white/60' : 'text-white/25'
+						}`}
 					>
-						<span className={`h-2 w-2 rounded-full ${showSpy ? 'bg-white/50' : 'bg-white/20'}`} />
+						<span
+							className={`h-2 w-2 rounded-full border ${
+								showSpy ? 'border-white/50 bg-transparent' : 'border-white/20 bg-transparent'
+							}`}
+							style={
+								showSpy
+									? {
+											background:
+												'repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0px,rgba(255,255,255,.5) 3px,transparent 3px,transparent 6px)',
+										}
+									: {}
+							}
+						/>
 						SPY
 					</button>
-				</div>
 
-				<button
-					onClick={() => setRelative((prev) => !prev)}
-					className='text-white/40 hover:text-white/70 transition cursor-pointer'
-				>
-					{relative ? '% return' : '$ value'}
-				</button>
+					<button
+						onClick={() => setRelative((prev) => !prev)}
+						className='text-white/40 hover:text-white/70 transition cursor-pointer'
+					>
+						{relative ? '% return' : '$ value'}
+					</button>
+				</div>
 			</div>
 
 			<ResponsiveContainer width='100%' height={200}>
@@ -124,7 +146,7 @@ function EquityCurve({ data }: IEquityCurve) {
 					/>
 
 					<Tooltip
-						content={<EquityTooltip color={color} showSpy={showSpy} relative={relative} />}
+						content={<EquityTooltip positive={isPos} showSpy={showSpy} relative={relative} />}
 					/>
 
 					<Area

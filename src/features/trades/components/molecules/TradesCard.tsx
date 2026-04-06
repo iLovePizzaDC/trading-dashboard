@@ -1,25 +1,26 @@
-import TradeRow from '@/features/trades/components/atoms/TradeRow';
+import TradeGroupRow from '@/features/trades/components/atoms/TradeGroupRow';
+import { groupTrades } from '@/features/trades/utils/trades-card';
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
+import { useMemo } from 'react';
 
 interface ITradesCard {
 	data: Trade[];
 }
 
 function TradesCard({ data }: ITradesCard) {
-	const sorted = [...data].sort((a, b) => b.date.localeCompare(a.date));
+	const groups = useMemo(() => groupTrades(data), [data]);
 
 	const totalPnl = data
 		.filter((t) => t.pnl !== undefined)
 		.reduce((sum, t) => sum + (t.pnl ?? 0), 0);
+
 	const isPos = totalPnl >= 0;
 
-	const totalPnlFormatted = new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
-	}).format(totalPnl);
+	const totalPnlFormatted = usd(totalPnl);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-baseline justify-between'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>
 					trade history ({data.length})
@@ -29,13 +30,13 @@ function TradesCard({ data }: ITradesCard) {
 				</p>
 			</div>
 
-			<div className='overflow-y-auto max-h-52 pr-3 -mr-3 [scrollbar-width:thin] mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'>
-				{sorted.map((trade, index) => (
-					<TradeRow
-						key={`${trade.date}-${trade.symbol}-${trade.action}-${index}`}
-						trade={trade}
-						isLast={index === sorted.length - 1}
-					/>
+			<div
+				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin] space-y-3
+					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
+					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
+			>
+				{groups.map((group) => (
+					<TradeGroupRow key={group.symbol} group={group} />
 				))}
 			</div>
 		</div>

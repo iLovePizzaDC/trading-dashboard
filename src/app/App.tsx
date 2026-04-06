@@ -1,6 +1,7 @@
 import '@/app/index.css';
 import Decisions from '@/features/decisions/components/organisms/Decisions';
 import Equity from '@/features/equity/components/organisms/Equity';
+import Header from '@/features/header/components/organisms/Header';
 import Momentum from '@/features/momentum/components/organisms/Momentum';
 import Positions from '@/features/positions/components/organisms/Positions';
 import Sector from '@/features/sector/components/organisms/Sector';
@@ -12,12 +13,15 @@ function App() {
 	return (
 		<main className='min-h-screen p-4 md:p-8 cursor-default'>
 			<div className='mx-auto max-w-7xl space-y-4'>
+				<Header />
 				<Summary />
 				<Equity />
 				<Trades />
 				<div className='grid grid-cols-1 gap-4 md:grid-cols-2 items-start'>
 					<Positions />
-					<Decisions />
+					<div className='md:col-span-2'>
+						<Decisions />
+					</div>
 					<Stops />
 					<Sector />
 				</div>

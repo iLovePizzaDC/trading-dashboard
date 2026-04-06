@@ -1,4 +1,5 @@
 import type { ScatterPoint } from '@/features/trades/types/scatter';
+import { usd } from '@/shared/utils/currency';
 
 interface IScatterTooltip {
 	active?: boolean;
@@ -9,8 +10,6 @@ function ScatterTooltip({ active, payload }: IScatterTooltip) {
 	if (!active || !payload?.length) return null;
 
 	const d = payload[0].payload;
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 	const isPos = d.pnl >= 0;
 
 	return (

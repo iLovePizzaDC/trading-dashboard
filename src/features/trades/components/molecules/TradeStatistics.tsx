@@ -1,14 +1,12 @@
-import { computeTradeStats } from '@/features/trades/utils/trade-statistics';
+import { computeTradeStats } from '@/features/trades/utils/trades-statistics';
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
 
 interface ITradeStatistics {
 	data: Trade[];
 }
 
 function TradeStatistics({ data }: ITradeStatistics) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const stats = computeTradeStats(data);
 
 	if (!stats) return null;
@@ -21,14 +19,14 @@ function TradeStatistics({ data }: ITradeStatistics) {
 				: 'text-red-400';
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-white/5 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-4'>
 				<p className='text-xs uppercase tracking-wider text-white/40'>trade stats</p>
 			</div>
 
 			<div className='space-y-4'>
 				<div className='grid grid-cols-3 gap-3'>
-					<div className='rounded-lg bg-white/5 p-3'>
+					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
 						<p className='text-xs text-white/40'>Win Rate</p>
 						<p className='text-lg font-semibold'>{(stats.winRate * 100).toFixed(1)}%</p>
 
@@ -40,12 +38,12 @@ function TradeStatistics({ data }: ITradeStatistics) {
 						</div>
 					</div>
 
-					<div className='rounded-lg bg-white/5 p-3'>
+					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
 						<p className='text-xs text-white/40'>Profit Factor</p>
 						<p className={`text-lg font-semibold ${pfColor}`}>{stats.profitFactor.toFixed(2)}</p>
 					</div>
 
-					<div className='rounded-lg bg-white/5 p-3'>
+					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
 						<p className='text-xs text-white/40'>Avg Hold</p>
 						<p className='text-lg font-semibold'>{stats.avgDuration.toFixed(1)}d</p>
 					</div>
