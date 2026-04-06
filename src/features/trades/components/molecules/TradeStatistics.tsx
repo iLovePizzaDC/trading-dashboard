@@ -1,14 +1,12 @@
-import { computeTradeStats } from '@/features/trades/utils/trade-statistics';
+import { computeTradeStats } from '@/features/trades/utils/trades-statistics';
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
 
 interface ITradeStatistics {
 	data: Trade[];
 }
 
 function TradeStatistics({ data }: ITradeStatistics) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const stats = computeTradeStats(data);
 
 	if (!stats) return null;

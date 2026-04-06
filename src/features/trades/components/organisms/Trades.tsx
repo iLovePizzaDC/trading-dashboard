@@ -14,7 +14,7 @@ function Trades() {
 
 	return (
 		<div className='space-y-4'>
-			<div className='grid gap-4 lg:grid-cols-[4fr_3fr]'>
+			<div className='grid gap-4 lg:grid-cols-[4fr_3fr] items-start'>
 				<TradeStatistics data={data} />
 				<TradesCard data={data} />
 			</div>

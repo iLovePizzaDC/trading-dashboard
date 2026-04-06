@@ -3,6 +3,7 @@ import type { SortKey } from '@/features/sector/types/sector-breakdown';
 import { calcSectorStats } from '@/features/sector/utils/sector-breakdown';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
 import { useState } from 'react';
 
 interface ISectorBreakdown {
@@ -17,8 +18,6 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 	const sorted = [...stats].sort((a, b) => b[sortBy] - a[sortBy]);
 
 	const maxSelected = Math.max(...stats.map((s) => s.timesSelected), 1);
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>

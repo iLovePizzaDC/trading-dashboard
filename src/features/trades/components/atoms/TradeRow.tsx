@@ -1,4 +1,5 @@
 import type { Trade } from '@/shared/types/trades';
+import { usd } from '@/shared/utils/currency';
 
 const reasonLabel: Record<string, string> = {
 	stop_triggered: 'stop hit',
@@ -12,9 +13,6 @@ interface ITradeRow {
 }
 
 function TradeRow({ trade, isLast = false }: ITradeRow) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const isBuy = trade.action === 'buy';
 
 	return (

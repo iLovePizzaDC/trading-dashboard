@@ -1,4 +1,5 @@
 import type { StopHistoryEntry } from '@/shared/types/stops';
+import { usd } from '@/shared/utils/currency';
 
 interface IStopHistoryRow {
 	symbol: string;
@@ -8,9 +9,6 @@ interface IStopHistoryRow {
 }
 
 function StopHistoryRow({ symbol, entry, isLast = false, isLatestRun = false }: IStopHistoryRow) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const isRaise = entry.new_stop > entry.old_stop;
 	const isFirst = entry.old_stop === 0;
 

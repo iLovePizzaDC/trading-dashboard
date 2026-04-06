@@ -1,14 +1,12 @@
 import { MONTHS } from '@/features/equity/constants/heatmap';
 import type { MonthlyReturn } from '@/features/equity/types/heatmap';
+import { usd } from '@/shared/utils/currency';
 
 interface IDetailPanel {
 	entry: MonthlyReturn;
 }
 
 function DetailPanel({ entry }: IDetailPanel) {
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-
 	const abs = entry.endEquity - entry.startEquity;
 
 	return (

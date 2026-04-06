@@ -29,7 +29,7 @@ function EquitySkeleton() {
 					</div>
 				</div>
 
-				<SkeletonBox className='h-50 w-full rounded-lg' />
+				<SkeletonBox className='h-44 w-full rounded-lg' />
 			</div>
 
 			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>

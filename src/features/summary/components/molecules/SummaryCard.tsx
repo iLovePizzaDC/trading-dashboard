@@ -1,6 +1,7 @@
 import MetricItem from '@/features/summary/components/atoms/MetricItem';
 import RegimeBadge from '@/features/summary/components/atoms/RegimeBadge';
 import type { Summary } from '@/shared/types/summary';
+import { usd } from '@/shared/utils/currency';
 
 interface ISummaryCard {
 	lastRebalance: string;
@@ -10,8 +11,6 @@ interface ISummaryCard {
 function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 	const isPos = (n: number) => n >= 0;
 	const pct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
-	const usd = (n: number) =>
-		new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
 	const spy4wDiff =
 		summary.rolling_4w !== null && summary.spy_4w !== null

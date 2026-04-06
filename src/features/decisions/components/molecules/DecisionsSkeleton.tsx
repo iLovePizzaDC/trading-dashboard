@@ -15,7 +15,7 @@ function DecisionsSkeleton() {
 					<SkeletonBox className='h-3 w-20' />
 				</div>
 
-				{Array.from({ length: 4 }).map((_, i) => (
+				{Array.from({ length: 3 }).map((_, i) => (
 					<div
 						key={i}
 						className='flex items-center gap-3 border-b border-white/5 py-3 last:border-0'

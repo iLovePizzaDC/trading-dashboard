@@ -1,18 +1,15 @@
-import TradeRow from '@/features/trades/components/atoms/TradeRow';
+import TradeGroupRow from '@/features/trades/components/atoms/TradeGroupRow';
+import { groupTrades } from '@/features/trades/utils/trades-card';
 import type { Trade } from '@/shared/types/trades';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { useRef } from 'react';
+import { usd } from '@/shared/utils/currency';
+import { useMemo } from 'react';
 
 interface ITradesCard {
 	data: Trade[];
 }
 
-const ROW_HEIGHT = 56;
-
 function TradesCard({ data }: ITradesCard) {
-	const parentRef = useRef<HTMLDivElement>(null);
-
-	const sorted = [...data].sort((a, b) => b.date.localeCompare(a.date));
+	const groups = useMemo(() => groupTrades(data), [data]);
 
 	const totalPnl = data
 		.filter((t) => t.pnl !== undefined)
@@ -20,17 +17,7 @@ function TradesCard({ data }: ITradesCard) {
 
 	const isPos = totalPnl >= 0;
 
-	const totalPnlFormatted = new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
-	}).format(totalPnl);
-
-	const rowVirtualizer = useVirtualizer({
-		count: sorted.length,
-		getScrollElement: () => parentRef.current,
-		estimateSize: () => ROW_HEIGHT,
-		overscan: 5,
-	});
+	const totalPnlFormatted = usd(totalPnl);
 
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
@@ -44,32 +31,13 @@ function TradesCard({ data }: ITradesCard) {
 			</div>
 
 			<div
-				ref={parentRef}
-				className='max-h-52 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]
+				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin] space-y-3
 					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
 					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
 			>
-				<div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}>
-					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
-						const trade = sorted[virtualRow.index];
-
-						return (
-							<div
-								key={virtualRow.key}
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									height: ROW_HEIGHT,
-									transform: `translateY(${virtualRow.start}px)`,
-								}}
-							>
-								<TradeRow trade={trade} isLast={virtualRow.index === sorted.length - 1} />
-							</div>
-						);
-					})}
-				</div>
+				{groups.map((group) => (
+					<TradeGroupRow key={group.symbol} group={group} />
+				))}
 			</div>
 		</div>
 	);
