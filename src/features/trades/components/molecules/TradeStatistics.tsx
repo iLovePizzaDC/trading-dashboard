@@ -68,12 +68,12 @@ function TradeStatistics({ data }: ITradeStatistics) {
 				</div>
 
 				<div className='grid grid-cols-2 gap-3'>
-					<div className='rounded-lg bg-green-500/10 p-3'>
+					<div className='rounded-lg border border-green-500/10 bg-linear-to-br from-green-500/5 to-green-500/0 p-3'>
 						<p className='text-xs text-green-400/70'>Best Trade</p>
 						<p className='text-sm font-semibold text-green-400'>{usd(stats.bestTrade)}</p>
 					</div>
 
-					<div className='rounded-lg bg-red-500/10 p-3'>
+					<div className='rounded-lg border border-red-500/10 bg-linear-to-br from-red-500/5 to-red-500/0 p-3'>
 						<p className='text-xs text-red-400/70'>Worst Trade</p>
 						<p className='text-sm font-semibold text-red-400'>{usd(stats.worstTrade)}</p>
 					</div>

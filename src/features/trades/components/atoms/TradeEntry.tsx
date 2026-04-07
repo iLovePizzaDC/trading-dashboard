@@ -24,7 +24,7 @@ function TradeEntry({ trade, color, isLast }: ITradeEntry) {
 			</div>
 
 			<div
-				className={`flex-1 flex items-start justify-between pb-2 min-w-0 ${
+				className={`flex-1 flex items-start justify-between min-w-0 ${
 					isLast ? '' : 'border-b border-white/5'
 				}`}
 			>
