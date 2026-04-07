@@ -10,6 +10,10 @@ interface IOpenPositions {
 	trades: Trade[];
 }
 
+const Divider = () => (
+	<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px' />
+);
+
 function OpenPositions({ stops, trades }: IOpenPositions) {
 	const symbols = Object.keys(stops);
 	if (symbols.length === 0) return <PositionsEmpty />;
@@ -36,15 +40,12 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 			{preview.map((symbol, index) => (
 				<div key={symbol}>
 					<PositionRow
-						key={symbol}
 						symbol={symbol}
 						stop={stops[symbol]}
 						trade={lastBuy[symbol]}
-						isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
+						isLast={index === preview.length - 1 && extra.length === 0}
 					/>
-					{index < preview.length - 1 && (
-						<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px' />
-					)}
+					{index < preview.length - 1 && <Divider />}
 				</div>
 			))}
 
@@ -56,6 +57,7 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 				<div className='overflow-hidden'>
 					{extra.map((symbol, index) => (
 						<div key={symbol}>
+							<Divider />
 							<PositionRow
 								symbol={symbol}
 								stop={stops[symbol]}
