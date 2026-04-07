@@ -1,7 +1,8 @@
 import { regimeColors } from '@/features/summary/constants/regime-badge';
+import type { Regime } from '@/shared/constants/regime';
 
 interface IRegimeBadge {
-	regime: 'bullish' | 'bearish';
+	regime: Regime;
 }
 
 function RegimeBadge({ regime }: IRegimeBadge) {
