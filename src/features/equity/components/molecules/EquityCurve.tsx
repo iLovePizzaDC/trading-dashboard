@@ -159,7 +159,13 @@ function EquityCurve({ data }: IEquityCurve) {
 						strokeWidth={1.5}
 						fill='url(#equityGradient)'
 						dot={false}
-						activeDot={{ r: 4, fill: color, strokeWidth: 0 }}
+						activeDot={{
+							r: 5,
+							fill: color,
+							strokeWidth: 2,
+							stroke: 'rgba(255,255,255,0.3)',
+							filter: `drop-shadow(0 0 8px ${color}66)`,
+						}}
 					/>
 
 					{showSpy && (

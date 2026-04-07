@@ -112,8 +112,16 @@ function TradeScatter({ data }: ITradeScatter) {
 										strokeDasharray: '4 4',
 									}}
 								/>
-								<Scatter data={wins} fill='rgba(74,222,128,0.6)' />
-								<Scatter data={losses} fill='rgba(248,113,113,0.6)' />
+								<Scatter
+									data={wins}
+									fill='rgba(74,222,128,0.6)'
+									style={{ filter: 'drop-shadow(0 0 6px rgba(74,222,128,0.4))' }}
+								/>
+								<Scatter
+									data={losses}
+									fill='rgba(248,113,113,0.6)'
+									style={{ filter: 'drop-shadow(0 0 6px rgba(248,113,113,0.4))' }}
+								/>
 							</ScatterChart>
 						</ResponsiveContainer>
 					</div>
