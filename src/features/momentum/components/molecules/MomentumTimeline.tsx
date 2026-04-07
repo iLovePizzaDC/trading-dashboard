@@ -82,7 +82,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 								type='monotone'
 								dataKey='topMomentum'
 								name='top'
-								stroke='rgba(255,255,255,0.2)'
+								stroke='rgba(255,255,255,0.4)'
 								strokeWidth={1}
 								strokeDasharray='4 4'
 								dot={false}

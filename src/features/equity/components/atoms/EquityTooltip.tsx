@@ -18,9 +18,8 @@ function EquityTooltip({ active, payload, label, positive, showSpy, relative }: 
 	if (!bot) return null;
 
 	return (
-		<div className='rounded-lg border border-white/10 bg-[#1f2028] px-3 py-2 text-xs'>
+		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
 			<p className='text-white/40'>{label}</p>
-
 			<p className={`font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
 				Bot: {relative ? `${(bot - 100).toFixed(2)}%` : `$${bot.toFixed(2)}`}
 			</p>

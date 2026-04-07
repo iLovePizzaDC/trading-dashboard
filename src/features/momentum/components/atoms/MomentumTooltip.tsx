@@ -8,7 +8,7 @@ function MomentumTooltip({ active, payload, label }: IMomentumTooltip) {
 	if (!active || !payload?.length) return null;
 
 	return (
-		<div className='rounded-lg border border-white/10 bg-[#1f2028] px-3 py-2 text-xs'>
+		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
 			<p className='mb-1 text-white/40'>{label}</p>
 			{payload.map((p) => (
 				<p key={p.name} style={{ color: p.color }}>
