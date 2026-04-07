@@ -13,9 +13,7 @@ function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
 	const stopPct = trade ? (((stop - trade.price) / trade.price) * 100).toFixed(1) : null;
 
 	return (
-		<div
-			className={`flex items-center justify-between ${isLast ? 'pt-3' : 'py-3 border-b border-white/5'}`}
-		>
+		<div className={`flex items-center justify-between ${isLast ? 'pt-3' : 'py-3'}`}>
 			<div>
 				<p className='text-sm font-medium text-white'>{symbol}</p>
 				{trade && (

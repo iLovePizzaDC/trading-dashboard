@@ -34,13 +34,18 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 			</div>
 
 			{preview.map((symbol, index) => (
-				<PositionRow
-					key={symbol}
-					symbol={symbol}
-					stop={stops[symbol]}
-					trade={lastBuy[symbol]}
-					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
-				/>
+				<div key={symbol}>
+					<PositionRow
+						key={symbol}
+						symbol={symbol}
+						stop={stops[symbol]}
+						trade={lastBuy[symbol]}
+						isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
+					/>
+					{index < preview.length - 1 && (
+						<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px' />
+					)}
+				</div>
 			))}
 
 			<div

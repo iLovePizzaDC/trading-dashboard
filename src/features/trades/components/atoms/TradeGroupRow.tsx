@@ -48,7 +48,7 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 					</div>
 					{hasMultiple && (
 						<ChevronDownIcon
-							className={`w-3 h-3 text-white/25 shrink-0 transition-transform duration-300 group-hover/header:text-white/50 ${
+							className={`w-3 h-3 text-white/25 shrink-0 transition-all duration-300 group-hover/header:text-white/50 ${
 								expanded ? 'rotate-180' : ''
 							}`}
 						/>

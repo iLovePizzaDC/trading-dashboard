@@ -34,12 +34,17 @@ function TradesCard({ data }: ITradesCard) {
 			</div>
 
 			<div
-				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin] space-y-3
+				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]
 					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
 					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
 			>
-				{groups.map((group) => (
-					<TradeGroupRow key={group.symbol} group={group} />
+				{groups.map((group, index) => (
+					<div key={group.symbol}>
+						<TradeGroupRow group={group} />
+						{index < groups.length - 1 && (
+							<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px my-3' />
+						)}
+					</div>
 				))}
 			</div>
 		</div>
