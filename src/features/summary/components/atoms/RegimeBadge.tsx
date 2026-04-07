@@ -1,23 +1,31 @@
+import { regimeColors } from '@/features/summary/constants/regime-badge';
+
 interface IRegimeBadge {
-	regime: string;
+	regime: 'bullish' | 'bearish';
 }
 
 function RegimeBadge({ regime }: IRegimeBadge) {
-	const isBullish = regime === 'bullish';
+	const colors = regimeColors[regime];
 
 	return (
-		<span
+		<div
 			className={`
-				rounded-md px-2.5 py-1 text-xs font-semibold border
-				${
-					isBullish
-						? 'bg-green-500/20 text-green-300 border-green-500/30 shadow-[0_0_10px_rgba(34,197,94,0.3)]'
-						: 'bg-red-500/20 text-red-300 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.3)]'
-				}
-			`}
+			inline-flex items-center gap-2
+			rounded-lg border px-3 py-1.5 my-1
+			${colors.bg} ${colors.border} ${colors.glow}
+		`}
 		>
-			{regime}
-		</span>
+			<span className='relative flex h-1.5 w-1.5'>
+				<span
+					className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${colors.dot}`}
+				/>
+				<span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${colors.dot}`} />
+			</span>
+
+			<span className={`text-xs font-semibold uppercase tracking-wider ${colors.text}`}>
+				{regime}
+			</span>
+		</div>
 	);
 }
 
