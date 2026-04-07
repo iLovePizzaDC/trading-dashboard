@@ -10,6 +10,7 @@ interface IDecisionHistory {
 const CARD_HEIGHT = 97;
 const CARD_GAP = 10;
 const ROW_HEIGHT = CARD_HEIGHT + CARD_GAP;
+const MAX_HEIGHT = 256;
 
 function DecisionHistory({ data }: IDecisionHistory) {
 	const parentRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,8 @@ function DecisionHistory({ data }: IDecisionHistory) {
 		overscan: 6,
 	});
 
+	const canScroll = rowVirtualizer.getTotalSize() > MAX_HEIGHT;
+
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<div className='mb-4 flex items-baseline justify-between'>
@@ -35,10 +38,16 @@ function DecisionHistory({ data }: IDecisionHistory) {
 
 			<div
 				ref={parentRef}
-				className='max-h-64 overflow-y-auto [scrollbar-width:thin]
-					px-3 -mx-3 py-2 -my-2
-					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
-					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
+				className='max-h-64 overflow-y-auto [scrollbar-width:thin] px-3 -mx-3 -my-2'
+				style={
+					canScroll
+						? {
+								maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
+								WebkitMaskImage:
+									'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
+							}
+						: undefined
+				}
 			>
 				<div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}>
 					{rowVirtualizer.getVirtualItems().map((virtualRow) => {

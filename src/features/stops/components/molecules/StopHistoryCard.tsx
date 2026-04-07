@@ -8,6 +8,7 @@ interface IStopHistoryCard {
 }
 
 const ROW_HEIGHT = 40;
+const MAX_HEIGHT = 208;
 
 function StopHistoryCard({ data }: IStopHistoryCard) {
 	const parentRef = useRef<HTMLDivElement>(null);
@@ -26,6 +27,8 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 		overscan: 5,
 	});
 
+	const canScroll = rowVirtualizer.getTotalSize() > MAX_HEIGHT;
+
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<div className='mb-3 flex items-baseline justify-between'>
@@ -38,9 +41,16 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 
 			<div
 				ref={parentRef}
-				className='max-h-52 overflow-y-auto px-1 pr-3 -mx-1 -mr-3 [scrollbar-width:thin]
-					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
-					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
+				className='max-h-52 overflow-y-auto px-1 pr-3 -mx-1 -mr-3 [scrollbar-width:thin]'
+				style={
+					canScroll
+						? {
+								maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
+								WebkitMaskImage:
+									'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
+							}
+						: undefined
+				}
 			>
 				<div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}>
 					{rowVirtualizer.getVirtualItems().map((virtualRow) => {

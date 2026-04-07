@@ -2,7 +2,7 @@ import TradeGroupRow from '@/features/trades/components/atoms/TradeGroupRow';
 import { groupTrades } from '@/features/trades/utils/trades-card';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface ITradesCard {
 	data: Trade[];
@@ -10,13 +10,26 @@ interface ITradesCard {
 
 function TradesCard({ data }: ITradesCard) {
 	const groups = useMemo(() => groupTrades(data), [data]);
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const [canScroll, setCanScroll] = useState(false);
+
+	useEffect(() => {
+		const el = scrollRef.current;
+		if (!el) return;
+
+		const check = () => setCanScroll(el.scrollHeight > el.clientHeight);
+		check();
+
+		const ro = new ResizeObserver(check);
+		ro.observe(el);
+		return () => ro.disconnect();
+	}, [groups]);
 
 	const totalPnl = data
 		.filter((t) => t.pnl !== undefined)
 		.reduce((sum, t) => sum + (t.pnl ?? 0), 0);
 
 	const isPos = totalPnl >= 0;
-
 	const totalPnlFormatted = usd(totalPnl);
 
 	return (
@@ -34,9 +47,17 @@ function TradesCard({ data }: ITradesCard) {
 			</div>
 
 			<div
-				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]
-					mask-[linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]
-					[-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent_100%)]'
+				ref={scrollRef}
+				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]'
+				style={
+					canScroll
+						? {
+								maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
+								WebkitMaskImage:
+									'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
+							}
+						: undefined
+				}
 			>
 				{groups.map((group, index) => (
 					<div key={group.symbol}>
