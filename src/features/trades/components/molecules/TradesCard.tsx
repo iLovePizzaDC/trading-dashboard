@@ -22,9 +22,12 @@ function TradesCard({ data }: ITradesCard) {
 	return (
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<div className='mb-3 flex items-baseline justify-between'>
-				<p className='text-xs uppercase tracking-wider text-white/40'>
-					trade history ({data.length})
-				</p>
+				<div className='flex items-center gap-2'>
+					<span className='w-1 h-4 bg-purple-500 rounded-full' />
+					<p className='text-xs uppercase tracking-wider text-white/40'>
+						trade history ({data.length})
+					</p>
+				</div>
 				<p className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}>
 					{totalPnlFormatted}
 				</p>
