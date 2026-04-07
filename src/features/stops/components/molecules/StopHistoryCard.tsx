@@ -20,16 +20,22 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 	const [canScroll, setCanScroll] = useState(false);
 
 	const groups = useMemo<StopHistoryGroup[]>(() => {
-		return Object.entries(data).map(([symbol, history]) => {
-			const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
-			return {
-				symbol,
-				color: symbolColor(symbol),
-				entries: sorted,
-				latestStop: sorted[0]?.new_stop ?? 0,
-				totalChanges: sorted.length,
-			};
-		});
+		return Object.entries(data)
+			.map(([symbol, history]) => {
+				const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
+				return {
+					symbol,
+					color: symbolColor(symbol),
+					entries: sorted,
+					latestStop: sorted[0]?.new_stop ?? 0,
+					totalChanges: sorted.length,
+				};
+			})
+			.sort((a, b) => {
+				const la = a.entries[0]?.date ?? '';
+				const lb = b.entries[0]?.date ?? '';
+				return lb.localeCompare(la);
+			});
 	}, [data]);
 
 	useEffect(() => {
