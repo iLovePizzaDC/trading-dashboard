@@ -2,8 +2,10 @@ import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
 import { useCallback, useMemo, useState } from 'react';
 
+import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { usd } from '@/shared/utils/currency';
 import {
 	Area,
 	AreaChart,
@@ -56,23 +58,14 @@ function EquityCurve({ data }: IEquityCurve) {
 	const tickInterval = Math.ceil(chartData.length / 6);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-baseline justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>equity curve</p>
-				</div>
-
+		<Card
+			title='equity curve'
+			badge={
 				<p className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}>
-					{relative
-						? `${(currentValue - 100).toFixed(2)}%`
-						: new Intl.NumberFormat('en-US', {
-								style: 'currency',
-								currency: 'USD',
-							}).format(currentValue)}
+					{relative ? `${(currentValue - 100).toFixed(2)}%` : usd(currentValue)}
 				</p>
-			</div>
-
+			}
+		>
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
 				<DateRangeFilter range={range} setRange={setRange} />
 
@@ -180,7 +173,7 @@ function EquityCurve({ data }: IEquityCurve) {
 					)}
 				</AreaChart>
 			</ResponsiveContainer>
-		</div>
+		</Card>
 	);
 }
 

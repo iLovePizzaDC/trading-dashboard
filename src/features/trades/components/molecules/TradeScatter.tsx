@@ -1,5 +1,6 @@
 import ScatterTooltip from '@/features/trades/components/atoms/ScatterTooltip';
 import { buildScatterData } from '@/features/trades/utils/scatter';
+import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import type { Trade } from '@/shared/types/trades';
@@ -32,12 +33,9 @@ function TradeScatter({ data }: ITradeScatter) {
 	const maxPrice = Math.max(...allPrices) * 1.02;
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-center justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>entry / exit analysis</p>
-				</div>
+		<Card
+			title='entry / exit analysis'
+			badge={
 				<div className='flex items-center gap-3 text-[10px] text-white/30'>
 					<span className='flex items-center gap-1'>
 						<span className='inline-block h-2 w-2 rounded-full bg-green-400/60' /> win (
@@ -48,8 +46,8 @@ function TradeScatter({ data }: ITradeScatter) {
 						{losses.length})
 					</span>
 				</div>
-			</div>
-
+			}
+		>
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
 				<DateRangeFilter range={range} setRange={setRange} />
 			</div>
@@ -130,7 +128,7 @@ function TradeScatter({ data }: ITradeScatter) {
 					</p>
 				</>
 			)}
-		</div>
+		</Card>
 	);
 }
 

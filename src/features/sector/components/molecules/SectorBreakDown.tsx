@@ -1,6 +1,7 @@
 import { SORT_LABELS } from '@/features/sector/constants/sectors';
 import type { SortKey } from '@/features/sector/types/sector-breakdown';
 import { calcSectorStats } from '@/features/sector/utils/sector-breakdown';
+import Card from '@/shared/components/atoms/Card';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
@@ -20,12 +21,9 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 	const maxSelected = Math.max(...stats.map((s) => s.timesSelected), 1);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-3 flex items-center justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>sector breakdown</p>
-				</div>
+		<Card
+			title='sector breakdown'
+			badge={
 				<div className='flex rounded-lg bg-linear-to-br from-white/5 to-white/0'>
 					{(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
 						<button
@@ -39,8 +37,8 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 						</button>
 					))}
 				</div>
-			</div>
-
+			}
+		>
 			<div className='space-y-2'>
 				{sorted.map((s) => (
 					<div key={s.symbol} className='flex items-center gap-3'>
@@ -75,7 +73,7 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 					</div>
 				))}
 			</div>
-		</div>
+		</Card>
 	);
 }
 

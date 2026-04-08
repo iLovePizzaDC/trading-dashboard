@@ -1,5 +1,6 @@
 import PositionRow from '@/features/positions/components/atoms/PositionRow';
 import PositionsEmpty from '@/features/positions/components/molecules/PositionsEmpty';
+import Card from '@/shared/components/atoms/Card';
 import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
 import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { OpenStops } from '@/shared/types/stops';
@@ -29,14 +30,7 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 	const extra = symbols.slice(previewCount);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-2 flex items-center gap-2'>
-				<span className='w-1 h-4 bg-purple-500 rounded-full' />
-				<p className='text-xs uppercase tracking-wider text-white/40'>
-					open positions ({symbols.length})
-				</p>
-			</div>
-
+		<Card title={`open positions (${symbols.length})`}>
 			{preview.map((symbol, index) => (
 				<div key={symbol}>
 					<PositionRow
@@ -70,7 +64,7 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 			</div>
 
 			{hasMore && <ShowMoreButton toggle={toggle} expanded={expanded} hiddenCount={hiddenCount} />}
-		</div>
+		</Card>
 	);
 }
 

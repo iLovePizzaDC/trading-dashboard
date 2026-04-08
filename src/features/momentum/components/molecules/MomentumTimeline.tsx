@@ -1,5 +1,6 @@
 import MomentumTooltip from '@/features/momentum/components/atoms/MomentumTooltip';
 import { calcMomentumTimeline } from '@/features/momentum/components/utils/momentum';
+import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import type { DecisionEntry } from '@/shared/types/decisions';
@@ -25,12 +26,9 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 	const timeline = useMemo(() => calcMomentumTimeline(filteredData), [filteredData]);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-center justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>momentum timeline</p>
-				</div>
+		<Card
+			title='momentum timeline'
+			badge={
 				<div className='flex items-center gap-4 text-[10px] text-white/30'>
 					<span className='flex items-center gap-1'>
 						<span className='inline-block h-px w-4 bg-purple-400' /> avg
@@ -39,7 +37,8 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 						<span className='inline-block h-px w-4 bg-white/20' /> top
 					</span>
 				</div>
-			</div>
+			}
+		>
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
 				<DateRangeFilter range={range} setRange={setRange} />
 			</div>
@@ -92,7 +91,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 					</ResponsiveContainer>
 				</div>
 			)}
-		</div>
+		</Card>
 	);
 }
 

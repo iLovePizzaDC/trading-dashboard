@@ -1,4 +1,5 @@
 import StopHistoryGroupRow from '@/features/stops/components/atoms/StopHistoryGroupRow';
+import Card from '@/shared/components/atoms/Card';
 import type { StopHistory } from '@/shared/types/stops';
 import { symbolColor } from '@/shared/utils/symbol-colors';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -53,17 +54,10 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 	const totalChanges = groups.reduce((sum, g) => sum + g.totalChanges, 0);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-3 flex items-baseline justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>
-						stop history ({totalChanges})
-					</p>
-				</div>
-				<p className='text-xs text-white/30'>{groups.length} symbols</p>
-			</div>
-
+		<Card
+			title={`stop history (${totalChanges})`}
+			badge={<p className='text-xs text-white/30'>{groups.length} symbols</p>}
+		>
 			<div
 				ref={scrollRef}
 				className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]'
@@ -86,7 +80,7 @@ function StopHistoryCard({ data }: IStopHistoryCard) {
 					</div>
 				))}
 			</div>
-		</div>
+		</Card>
 	);
 }
 

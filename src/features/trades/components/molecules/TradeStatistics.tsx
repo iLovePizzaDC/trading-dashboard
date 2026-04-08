@@ -1,4 +1,5 @@
 import { computeTradeStats } from '@/features/trades/utils/trades-statistics';
+import Card from '@/shared/components/atoms/Card';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
 
@@ -19,12 +20,7 @@ function TradeStatistics({ data }: ITradeStatistics) {
 				: 'text-red-400';
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-center gap-2'>
-				<span className='w-1 h-4 bg-purple-500 rounded-full' />
-				<p className='text-xs uppercase tracking-wider text-white/40'>trade stats</p>
-			</div>
-
+		<Card title='trade stats'>
 			<div className='space-y-4'>
 				<div className='grid grid-cols-3 gap-3'>
 					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
@@ -79,7 +75,7 @@ function TradeStatistics({ data }: ITradeStatistics) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Card>
 	);
 }
 
