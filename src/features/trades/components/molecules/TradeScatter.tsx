@@ -32,9 +32,12 @@ function TradeScatter({ data }: ITradeScatter) {
 	const maxPrice = Math.max(...allPrices) * 1.02;
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<div className='mb-4 flex items-center justify-between'>
-				<p className='text-xs uppercase tracking-wider text-white/40'>entry / exit analysis</p>
+				<div className='flex items-center gap-2'>
+					<span className='w-1 h-4 bg-purple-500 rounded-full' />
+					<p className='text-xs uppercase tracking-wider text-white/40'>entry / exit analysis</p>
+				</div>
 				<div className='flex items-center gap-3 text-[10px] text-white/30'>
 					<span className='flex items-center gap-1'>
 						<span className='inline-block h-2 w-2 rounded-full bg-green-400/60' /> win (
@@ -109,8 +112,16 @@ function TradeScatter({ data }: ITradeScatter) {
 										strokeDasharray: '4 4',
 									}}
 								/>
-								<Scatter data={wins} fill='rgba(74,222,128,0.6)' />
-								<Scatter data={losses} fill='rgba(248,113,113,0.6)' />
+								<Scatter
+									data={wins}
+									fill='rgba(74,222,128,0.6)'
+									style={{ filter: 'drop-shadow(0 0 6px rgba(74,222,128,0.4))' }}
+								/>
+								<Scatter
+									data={losses}
+									fill='rgba(248,113,113,0.6)'
+									style={{ filter: 'drop-shadow(0 0 6px rgba(248,113,113,0.4))' }}
+								/>
 							</ScatterChart>
 						</ResponsiveContainer>
 					</div>

@@ -1,3 +1,5 @@
+import type { Regime } from '@/shared/constants/regime';
+
 export interface Summary {
 	last_run: string;
 	portfolio_value: number;
@@ -7,7 +9,7 @@ export interface Summary {
 	cagr: number;
 	max_dd: number;
 	sharpe: number;
-	regime: string;
+	regime: Regime;
 	total_trades: number;
 	winrate: number;
 	avg_win: number;

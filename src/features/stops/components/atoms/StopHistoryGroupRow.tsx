@@ -1,25 +1,24 @@
-import TradeEntry from '@/features/trades/components/atoms/TradeEntry'; // TODO DO NOT USE ATOMS IN ATOMS!
-import type { TradeGroup } from '@/features/trades/types/trades-card';
+import StopHistoryEntryRow from '@/features/stops/components/atoms/StopHistoryEntryRow';
+import type { StopHistoryGroup } from '@/features/stops/components/molecules/StopHistoryCard';
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import { usd } from '@/shared/utils/currency';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-interface ITradeGroupRow {
-	group: TradeGroup;
+interface IStopHistoryGroupRow {
+	group: StopHistoryGroup;
 }
 
-function TradeGroupRow({ group }: ITradeGroupRow) {
+function StopHistoryGroupRow({ group }: IStopHistoryGroupRow) {
 	const [expanded, setExpanded] = useState(false);
 
-	const hasPnl = group.closedPnl !== 0;
-	const pnlPos = group.closedPnl >= 0;
 	const hasMultiple = group.entries.length > 1;
+	const latestEntry = group.entries[0];
+	const olderEntries = group.entries.slice(1);
 
-	const reversed = [...group.entries].reverse();
-	const latestEntry = reversed[0];
-	const olderEntries = reversed.slice(1);
-	const hiddenCount = olderEntries.length;
+	const firstEntry = group.entries[group.entries.length - 1];
+	const overallChange = group.latestStop - (firstEntry?.old_stop ?? 0);
+	const isUp = overallChange >= 0;
 
 	const symbolName = SECTOR_MAP[group.symbol];
 
@@ -58,27 +57,18 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 				<div className='flex items-center gap-2'>
 					{!expanded && hasMultiple && (
 						<span className='text-[9px] text-white/20 transition-opacity duration-200'>
-							+{hiddenCount} older
+							+{olderEntries.length} older
 						</span>
 					)}
-					{hasPnl && (
-						<span
-							className={`text-[11px] font-medium ${pnlPos ? 'text-green-400' : 'text-red-400'}`}
-						>
-							{usd(group.closedPnl)}
-						</span>
-					)}
-					{group.isOpen && (
-						<span className='text-[9px] uppercase tracking-widest text-white/30 border border-white/10 px-1.5 py-0.5 rounded'>
-							open
-						</span>
-					)}
+					<span className={`text-[11px] font-medium ${isUp ? 'text-green-400' : 'text-red-400'}`}>
+						{usd(group.latestStop)}
+					</span>
 				</div>
 			</button>
 
 			<div className='pl-1'>
-				<TradeEntry
-					trade={latestEntry}
+				<StopHistoryEntryRow
+					entry={latestEntry}
 					color={group.color}
 					isLast={!expanded || olderEntries.length === 0}
 				/>
@@ -92,17 +82,17 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 						}}
 					>
 						<div style={{ overflow: 'hidden' }}>
-							{olderEntries.map((trade, i) => (
+							{olderEntries.map((entry, i) => (
 								<div
-									key={`${trade.symbol}-${trade.date}-${i}`}
+									key={`${entry.date}-${i}`}
 									style={{
 										opacity: expanded ? 1 : 0,
 										transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
 										transition: `opacity 220ms ease ${i * 40}ms, transform 220ms ease ${i * 40}ms`,
 									}}
 								>
-									<TradeEntry
-										trade={trade}
+									<StopHistoryEntryRow
+										entry={entry}
 										color={group.color}
 										isLast={i === olderEntries.length - 1}
 									/>
@@ -116,4 +106,4 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 	);
 }
 
-export default TradeGroupRow;
+export default StopHistoryGroupRow;

@@ -1,0 +1,59 @@
+import type { StopHistoryEntry } from '@/shared/types/stops';
+import { usd } from '@/shared/utils/currency';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
+
+interface IStopHistoryEntryRow {
+	entry: StopHistoryEntry;
+	color: string;
+	isLast: boolean;
+}
+
+function StopHistoryEntryRow({ entry, color, isLast }: IStopHistoryEntryRow) {
+	const isFirst = entry.old_stop === 0;
+	const isRaise = entry.new_stop > entry.old_stop;
+
+	const label = isFirst ? 'init' : isRaise ? 'raise' : 'lower';
+	const labelColor = isFirst ? 'text-white/40' : isRaise ? 'text-green-400' : 'text-red-400';
+	const valueColor = isFirst ? 'text-white/50' : isRaise ? 'text-green-400' : 'text-red-400';
+
+	return (
+		<div className='flex gap-2.5'>
+			<div className='flex flex-col items-center w-3 shrink-0'>
+				<div
+					className='w-2 h-2 rounded-full mt-1.75 shrink-0 z-10'
+					style={{ backgroundColor: color, opacity: isRaise || isFirst ? 1 : 0.55 }}
+				/>
+				{!isLast && (
+					<div className='w-px flex-1 min-h-2' style={{ backgroundColor: color, opacity: 0.2 }} />
+				)}
+			</div>
+
+			<div
+				className={`flex-1 flex items-start justify-between min-w-0 ${
+					isLast ? '' : 'border-b border-white/5'
+				}`}
+			>
+				<div className='min-w-0'>
+					<div className='flex items-center gap-1.5'>
+						<span className={`text-[10px] font-medium uppercase shrink-0 ${labelColor}`}>
+							{label}
+						</span>
+						{!isFirst && (
+							<span className='text-xs text-white/30 flex items-center gap-1 truncate'>
+								{usd(entry.old_stop)}
+								<ArrowRightIcon className='h-2.5 w-2.5 text-white/20 shrink-0' />
+							</span>
+						)}
+					</div>
+					<p className='text-[11px] text-white/25 mt-0.5'>{entry.date}</p>
+				</div>
+
+				<div className='text-right shrink-0 ml-2'>
+					<span className={`text-xs font-medium ${valueColor}`}>{usd(entry.new_stop)}</span>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default StopHistoryEntryRow;

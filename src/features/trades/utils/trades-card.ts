@@ -1,17 +1,6 @@
-import { BRAND_COLORS } from '@/features/trades/constants/trades-card';
 import type { TradeGroup } from '@/features/trades/types/trades-card';
 import type { Trade } from '@/shared/types/trades';
-
-function symbolColor(symbol: string): string {
-	if (BRAND_COLORS[symbol]) return BRAND_COLORS[symbol];
-
-	let hash = 0;
-	for (let i = 0; i < symbol.length; i++) {
-		hash = symbol.charCodeAt(i) + ((hash << 5) - hash);
-	}
-	const hue = Math.abs(hash) % 360;
-	return `hsl(${hue}, 65%, 60%)`;
-}
+import { symbolColor } from '@/shared/utils/symbol-colors';
 
 export function groupTrades(data: Trade[]): TradeGroup[] {
 	const map = new Map<string, Trade[]>();

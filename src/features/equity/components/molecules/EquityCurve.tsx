@@ -56,9 +56,12 @@ function EquityCurve({ data }: IEquityCurve) {
 	const tickInterval = Math.ceil(chartData.length / 6);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
 			<div className='mb-4 flex items-baseline justify-between'>
-				<p className='text-xs uppercase tracking-wider text-white/40'>equity curve</p>
+				<div className='flex items-center gap-2'>
+					<span className='w-1 h-4 bg-purple-500 rounded-full' />
+					<p className='text-xs uppercase tracking-wider text-white/40'>equity curve</p>
+				</div>
 
 				<p className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}>
 					{relative
@@ -156,7 +159,13 @@ function EquityCurve({ data }: IEquityCurve) {
 						strokeWidth={1.5}
 						fill='url(#equityGradient)'
 						dot={false}
-						activeDot={{ r: 4, fill: color, strokeWidth: 0 }}
+						activeDot={{
+							r: 5,
+							fill: color,
+							strokeWidth: 2,
+							stroke: 'rgba(255,255,255,0.3)',
+							filter: `drop-shadow(0 0 8px ${color}66)`,
+						}}
 					/>
 
 					{showSpy && (

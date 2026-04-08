@@ -60,7 +60,7 @@ function TradesSkeleton() {
 					</div>
 
 					<div className='space-y-3'>
-						{[32, 24, 24, 32, 24].map((w, i) => (
+						{[32, 24, 32, 24].map((w, i) => (
 							<div key={i}>
 								<div className='flex items-center justify-between mb-2'>
 									<div className='flex items-center gap-2'>

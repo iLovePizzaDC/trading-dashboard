@@ -49,8 +49,20 @@ function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 					positive={isPos(summary.total_return)}
 				/>
 
-				<div className='flex flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 text-center'>
-					<p className='text-xs uppercase tracking-wider text-white/40'>regime</p>
+				<div
+					className={`
+						group relative rounded-xl border border-white/10
+						bg-linear-to-br from-white/5 to-white/0
+						p-4 transition-all duration-300 ease-out
+						hover:border-white/20
+						hover:from-white/[0.07] hover:to-purple-500/3
+					`}
+				>
+					<div className='absolute inset-x-0 top-0 h-px rounded-t-xl bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+
+					<p className='text-xs uppercase tracking-wider text-white/40 transition-colors duration-300 group-hover:text-white/55'>
+						regime
+					</p>
 
 					<RegimeBadge regime={summary.regime} />
 

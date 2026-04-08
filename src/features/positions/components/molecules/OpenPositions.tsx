@@ -10,6 +10,10 @@ interface IOpenPositions {
 	trades: Trade[];
 }
 
+const Divider = () => (
+	<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px' />
+);
+
 function OpenPositions({ stops, trades }: IOpenPositions) {
 	const symbols = Object.keys(stops);
 	if (symbols.length === 0) return <PositionsEmpty />;
@@ -25,19 +29,24 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 	const extra = symbols.slice(previewCount);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-			<p className='mb-2 text-xs uppercase tracking-wider text-white/40'>
-				open positions ({symbols.length})
-			</p>
+		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
+			<div className='mb-2 flex items-center gap-2'>
+				<span className='w-1 h-4 bg-purple-500 rounded-full' />
+				<p className='text-xs uppercase tracking-wider text-white/40'>
+					open positions ({symbols.length})
+				</p>
+			</div>
 
 			{preview.map((symbol, index) => (
-				<PositionRow
-					key={symbol}
-					symbol={symbol}
-					stop={stops[symbol]}
-					trade={lastBuy[symbol]}
-					isLast={index === preview.length - 1 && (!expanded || extra.length === 0)}
-				/>
+				<div key={symbol}>
+					<PositionRow
+						symbol={symbol}
+						stop={stops[symbol]}
+						trade={lastBuy[symbol]}
+						isLast={index === preview.length - 1 && extra.length === 0}
+					/>
+					{index < preview.length - 1 && <Divider />}
+				</div>
 			))}
 
 			<div
@@ -48,6 +57,7 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 				<div className='overflow-hidden'>
 					{extra.map((symbol, index) => (
 						<div key={symbol}>
+							<Divider />
 							<PositionRow
 								symbol={symbol}
 								stop={stops[symbol]}
