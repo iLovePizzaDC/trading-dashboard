@@ -13,7 +13,7 @@ function Card({ title, badge, children, className }: CardProps) {
 			className={`rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20 ${className ?? ''}`}
 		>
 			{title && (
-				<div className='mb-2 flex items-baseline justify-between'>
+				<div className='mb-2 flex items-center justify-between'>
 					<div className='flex items-center gap-2'>
 						<span className='w-1 h-4 bg-purple-500 rounded-full' />
 						<p className='text-xs uppercase tracking-wider text-white/40'>{title}</p>
