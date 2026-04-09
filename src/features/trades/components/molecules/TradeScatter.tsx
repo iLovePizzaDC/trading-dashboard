@@ -48,7 +48,7 @@ function TradeScatter({ data }: ITradeScatter) {
 				</div>
 			}
 		>
-			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+			<div className='mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
 				<DateRangeFilter range={range} setRange={setRange} />
 			</div>
 
