@@ -1,5 +1,6 @@
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 export interface DropdownItem {
 	key: string;
@@ -19,15 +20,9 @@ function Dropdown({ trigger, items, width = 'w-36' }: IDropdown) {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		function handleClick(e: MouseEvent) {
-			if (ref.current && !ref.current.contains(e.target as Node)) {
-				setOpen(false);
-			}
-		}
-		document.addEventListener('mousedown', handleClick);
-		return () => document.removeEventListener('mousedown', handleClick);
-	}, []);
+	useClickOutside(ref, () => {
+		setOpen(false);
+	});
 
 	return (
 		<div className='relative' ref={ref}>
