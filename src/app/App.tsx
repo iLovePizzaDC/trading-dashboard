@@ -8,26 +8,29 @@ import Sector from '@/features/sector/components/organisms/Sector';
 import Stops from '@/features/stops/components/organisms/Stops';
 import Summary from '@/features/summary/components/organisms/Summary';
 import Trades from '@/features/trades/components/organisms/Trades';
+import { DataVersionProvider } from '@/shared/context/DataVersionContext';
 
 function App() {
 	return (
-		<main className='min-h-screen p-4 md:p-8 cursor-default'>
-			<div className='mx-auto max-w-7xl space-y-4'>
-				<Header />
-				<Summary />
-				<Equity />
-				<Trades />
-				<div className='grid grid-cols-1 gap-4 md:grid-cols-2 items-start'>
-					<Positions />
-					<div className='md:col-span-2'>
-						<Decisions />
+		<DataVersionProvider>
+			<main className='min-h-screen p-4 md:p-8 cursor-default'>
+				<div className='mx-auto max-w-7xl space-y-4'>
+					<Header />
+					<Summary />
+					<Equity />
+					<Trades />
+					<div className='grid grid-cols-1 gap-4 md:grid-cols-2 items-start'>
+						<Positions />
+						<div className='md:col-span-2'>
+							<Decisions />
+						</div>
+						<Stops />
+						<Sector />
 					</div>
-					<Stops />
-					<Sector />
+					<Momentum />
 				</div>
-				<Momentum />
-			</div>
-		</main>
+			</main>
+		</DataVersionProvider>
 	);
 }
 
