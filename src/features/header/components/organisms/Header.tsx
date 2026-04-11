@@ -7,22 +7,28 @@ import { useBotStatus } from '@/features/header/hooks/useBotStatus';
 import { useLastUpdated } from '@/features/header/hooks/useLastUpdated';
 import type { StatusDotVariant } from '@/features/header/types/status-dot';
 import { fetchLastRebalanceDate } from '@/shared/api/data';
+import { useDataVersion } from '@/shared/hooks/useDataVersion';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { useState } from 'react';
 
 function Header() {
 	const { data: lastRebalance, loading, error } = useFetch(fetchLastRebalanceDate);
 	const lastUpdated = useLastUpdated();
+	const dataVersion = useDataVersion();
+	const status = useBotStatus(lastRebalance ?? null, dataVersion);
+
 	const [expanded, setExpanded] = useState(false);
 
 	const now = new Date();
 	const dow = now.getDay();
 	const isWeekday = dow >= 1 && dow <= 5;
 
-	const dotVariant: StatusDotVariant =
-		!lastRebalance && !loading ? 'inactive' : isWeekday ? 'active' : 'weekend';
-
-	const status = useBotStatus(lastRebalance ?? null);
+	const dotVariant: StatusDotVariant = (() => {
+		if (!lastRebalance && !loading) return 'inactive';
+		if (status?.isRunning) return 'running';
+		if (isWeekday) return 'active';
+		return 'weekend';
+	})();
 
 	return (
 		<div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>

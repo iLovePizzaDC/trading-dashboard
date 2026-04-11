@@ -1,1 +1,1 @@
-export type StatusDotVariant = 'active' | 'weekend' | 'inactive';
+export type StatusDotVariant = 'active' | 'running' | 'weekend' | 'inactive';

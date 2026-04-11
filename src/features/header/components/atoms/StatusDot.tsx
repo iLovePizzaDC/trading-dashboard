@@ -1,4 +1,4 @@
-import { STATUS_DOT_VARIANTS } from '@/features/header/constants/status-dot';
+import { STATUS_DOT_CONFIG } from '@/features/header/constants/status-dot';
 import type { StatusDotVariant } from '@/features/header/types/status-dot';
 
 interface IStatusDot {
@@ -6,7 +6,7 @@ interface IStatusDot {
 }
 
 function StatusDot({ variant }: IStatusDot) {
-	const { core, ring, animation } = STATUS_DOT_VARIANTS[variant];
+	const { core, ring, animation } = STATUS_DOT_CONFIG[variant];
 
 	return (
 		<span className='relative flex h-1.5 w-1.5 shrink-0'>

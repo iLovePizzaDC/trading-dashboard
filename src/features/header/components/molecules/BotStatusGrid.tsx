@@ -1,9 +1,12 @@
 import StatCard from '@/features/header/components/atoms/StatCard';
+import { getStatusCard } from '@/features/header/utils/status-card';
 
 interface IBotStatusGrid {
 	isWeekday: boolean;
 	dayName: string;
 	visible: boolean;
+	isRunning: boolean;
+	ranToday: boolean;
 	rebalanceDaysLeft: number;
 	rebalanceNextDate: string;
 	rebalancePct: number;
@@ -17,6 +20,8 @@ function BotStatusGrid({
 	isWeekday,
 	dayName,
 	visible,
+	isRunning,
+	ranToday,
 	rebalanceDaysLeft,
 	rebalanceNextDate,
 	rebalancePct,
@@ -25,17 +30,20 @@ function BotStatusGrid({
 	messagePct,
 	lastUpdated,
 }: IBotStatusGrid) {
+	const statusCard = getStatusCard(isRunning, ranToday, isWeekday, dayName);
+
 	return (
 		<div className='flex flex-col gap-2 pt-3'>
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3'>
 				<StatCard
 					label='Status'
-					value={isWeekday ? `${dayName} — active` : `${dayName} — resting`}
-					sub={isWeekday ? 'runs mon – fri' : 'resumes monday'}
-					progress={isWeekday ? ((new Date().getDay() - 1) / 4) * 100 : 100}
-					color={isWeekday ? 'green' : 'amber'}
+					value={statusCard.value}
+					sub={statusCard.sub}
+					progress={statusCard.progress}
+					color={statusCard.color}
 					delay='0ms'
 					visible={visible}
+					highlight={isRunning}
 				/>
 				<StatCard
 					label='Rebalance'
