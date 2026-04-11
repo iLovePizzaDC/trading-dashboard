@@ -86,6 +86,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 								strokeDasharray='4 4'
 								dot={false}
 								activeDot={false}
+								isAnimationActive={false}
 							/>
 						</LineChart>
 					</ResponsiveContainer>

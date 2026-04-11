@@ -172,6 +172,7 @@ function EquityCurve({ data }: IEquityCurve) {
 							strokeWidth={1.2}
 							dot={false}
 							strokeDasharray='5 5'
+							isAnimationActive={false}
 						/>
 					)}
 				</AreaChart>
