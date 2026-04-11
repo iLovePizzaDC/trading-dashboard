@@ -15,7 +15,6 @@ function SkeletonBox({ className }: { className?: string }) {
 function SummaryCardSkeleton() {
 	return (
 		<div className='space-y-3'>
-			<div className='h-3 w-64 rounded-md bg-white/10 animate-pulse' />
 			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
 				<div className='col-span-2 rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 					<SkeletonBox className='mb-2 h-2 w-24' />

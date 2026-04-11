@@ -4,11 +4,10 @@ import type { Summary } from '@/shared/types/summary';
 import { usd } from '@/shared/utils/currency';
 
 interface ISummaryCard {
-	lastRebalance: string;
 	summary: Summary;
 }
 
-function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
+function SummaryCard({ summary }: ISummaryCard) {
 	const isPos = (n: number) => n >= 0;
 	const pct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
 
@@ -20,16 +19,8 @@ function SummaryCard({ lastRebalance, summary }: ISummaryCard) {
 	const startValue = summary.portfolio_value / (1 + summary.total_return / 100);
 	const absReturn = summary.portfolio_value - startValue;
 
-	const nextRebalance = new Date(new Date(lastRebalance).getTime() + 30 * 24 * 60 * 60 * 1000);
-
 	return (
 		<div className='space-y-3'>
-			<div className='flex justify-between text-xs text-white/30'>
-				<span>
-					last rebalance: {lastRebalance} (next: {nextRebalance.toISOString().split('T')[0]})
-				</span>
-			</div>
-
 			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
 				<div className='col-span-2'>
 					<MetricItem
