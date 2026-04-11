@@ -33,7 +33,7 @@ function GroupRowLayout<T>({
 		<div>
 			<button
 				onClick={() => hasMultiple && setExpanded((v) => !v)}
-				className={`w-full flex items-center justify-between mb-2 group/header ${
+				className={`w-full flex items-center justify-between mb-2 mt-1 group/header ${
 					hasMultiple ? 'cursor-pointer' : 'cursor-default'
 				}`}
 			>
@@ -60,9 +60,10 @@ function GroupRowLayout<T>({
 
 				<div className='flex items-center gap-2'>
 					{!expanded && hasMultiple && (
-						<span className='text-[9px] text-white/20 transition-opacity duration-200'>
-							+{olderEntries.length} older
-						</span>
+						<div className='text-[9px] text-white/20 transition-opacity duration-200'>
+							<span className='hidden sm:inline'>+{olderEntries.length} older</span>
+							<span className='sm:hidden'>+{olderEntries.length}</span>
+						</div>
 					)}
 					{renderBadge(expanded)}
 				</div>

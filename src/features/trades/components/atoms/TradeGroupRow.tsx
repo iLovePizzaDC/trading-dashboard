@@ -28,7 +28,7 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 						</span>
 					)}
 					{group.isOpen && (
-						<span className='text-[9px] uppercase tracking-widest text-white/30 border border-white/10 px-1.5 py-0.5 rounded'>
+						<span className='text-[9px] uppercase tracking-widest text-white/30 border border-white/10 px-1 rounded'>
 							open
 						</span>
 					)}

@@ -39,7 +39,8 @@ function MonthlyHeatmap({ data }: IMonthlyHeatmap) {
 				<div />
 				{MONTHS.map((m) => (
 					<div key={m} className='text-center'>
-						{m.slice(0, 3)}
+						<span className='hidden sm:inline'>{m.slice(0, 3)}</span>
+						<span className='sm:hidden'>{m.slice(0, 1)}</span>
 					</div>
 				))}
 			</div>

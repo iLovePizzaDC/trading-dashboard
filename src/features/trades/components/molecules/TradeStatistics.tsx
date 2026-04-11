@@ -21,12 +21,11 @@ function TradeStatistics({ data }: ITradeStatistics) {
 
 	return (
 		<Card title='trade stats'>
-			<div className='space-y-4'>
-				<div className='grid grid-cols-3 gap-3'>
+			<div className='space-y-4 mt-1'>
+				<div className='grid grid-cols-1 xs:grid-cols-3 gap-3'>
 					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
 						<p className='text-xs text-white/40'>Win Rate</p>
 						<p className='text-lg font-semibold'>{(stats.winRate * 100).toFixed(1)}%</p>
-
 						<div className='mt-2 h-1 w-full bg-white/10 rounded'>
 							<div
 								className='h-1 bg-green-400 rounded'
@@ -46,7 +45,7 @@ function TradeStatistics({ data }: ITradeStatistics) {
 					</div>
 				</div>
 
-				<div className='grid grid-cols-2 gap-3 text-sm'>
+				<div className='grid grid-cols-1 xs:grid-cols-2 gap-3 text-sm'>
 					<div className='flex justify-between text-white/60'>
 						<span>Avg Win</span>
 						<span className='text-green-400 font-medium'>{usd(stats.avgWin)}</span>
