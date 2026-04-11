@@ -1,4 +1,4 @@
-import StopHistory from '@/features/stops/components/molecules/StopHistoryCard';
+import StopHistory from '@/features/stops/components/molecules/StopsCard';
 import StopsError from '@/features/stops/components/molecules/StopsError';
 import StopsSkeleton from '@/features/stops/components/molecules/StopsSkeleton';
 import { fetchStopHistory } from '@/shared/api/data';
