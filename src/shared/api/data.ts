@@ -6,13 +6,13 @@ import type { Summary } from '@/shared/types/summary';
 import type { Trade } from '@/shared/types/trades';
 import Papa from 'papaparse';
 
-export async function fetchSummary(): Promise<Summary> {
-	const res = await fetch('/data/summary.json');
+export async function fetchSummary(version: string): Promise<Summary> {
+	const res = await fetch(`/data/summary.json?v=${version}`);
 	return res.json();
 }
 
-export async function fetchBotEquity(): Promise<EquityPoint[]> {
-	const res = await fetch('/data/live_equity.csv');
+export async function fetchBotEquity(version: string): Promise<EquityPoint[]> {
+	const res = await fetch(`/data/live_equity.csv?v=${version}`);
 	const text = await res.text();
 
 	const { data } = Papa.parse<string[]>(text, { header: false });
@@ -24,8 +24,8 @@ export async function fetchBotEquity(): Promise<EquityPoint[]> {
 		}));
 }
 
-export async function fetchSpyEquity(): Promise<EquityPoint[]> {
-	const res = await fetch('/data/spy_equity.csv');
+export async function fetchSpyEquity(version: string): Promise<EquityPoint[]> {
+	const res = await fetch(`/data/spy_equity.csv?v=${version}`);
 	const text = await res.text();
 
 	const { data } = Papa.parse<string[]>(text, { header: false });
@@ -37,39 +37,39 @@ export async function fetchSpyEquity(): Promise<EquityPoint[]> {
 		}));
 }
 
-export async function fetchTrades(): Promise<Trade[]> {
-	const res = await fetch('/data/live_trades.json');
+export async function fetchTrades(version: string): Promise<Trade[]> {
+	const res = await fetch(`/data/live_trades.json?v=${version}`);
 	return res.json();
 }
 
-export async function fetchOpenStops(): Promise<OpenStops> {
-	const res = await fetch('/data/open_stops.json');
+export async function fetchOpenStops(version: string): Promise<OpenStops> {
+	const res = await fetch(`/data/open_stops.json?v=${version}`);
 	return res.json();
 }
 
-export async function fetchStopHistory(): Promise<StopHistory> {
-	const res = await fetch('/data/stop_history.json');
+export async function fetchStopHistory(version: string): Promise<StopHistory> {
+	const res = await fetch(`/data/stop_history.json?v=${version}`);
 	return res.json();
 }
 
-export async function fetchDecisions(): Promise<DecisionEntry[]> {
-	const res = await fetch('/data/decisions_log.json');
+export async function fetchDecisions(version: string): Promise<DecisionEntry[]> {
+	const res = await fetch(`/data/decisions_log.json?v=${version}`);
 	return res.json();
 }
 
-export async function fetchRegime(): Promise<RegimeEntry[]> {
-	const res = await fetch('/data/regime_log.csv');
+export async function fetchRegime(version: string): Promise<RegimeEntry[]> {
+	const res = await fetch(`/data/regime_log.csv?v=${version}`);
 	const text = await res.text();
 	const { data } = Papa.parse<RegimeEntry>(text, { header: true });
 	return data.filter((row) => row.date);
 }
 
-export async function fetchLastRebalanceDate(): Promise<string> {
-	const res = await fetch('/data/last_rebalance.txt');
+export async function fetchLastRebalanceDate(version: string): Promise<string> {
+	const res = await fetch(`/data/last_rebalance.txt?v=${version}`);
 	return await res.text();
 }
 
-export async function fetchLastWeeklyReportDate(): Promise<string> {
-	const res = await fetch('/data/last_weekly_report.txt');
+export async function fetchLastWeeklyReportDate(version: string): Promise<string> {
+	const res = await fetch(`/data/last_weekly_report.txt?v=${version}`);
 	return await res.text();
 }
