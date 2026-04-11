@@ -8,8 +8,6 @@ export function useLastUpdated(): string | null {
 	const datePart = date.toLocaleDateString('en-CA', { timeZone: 'Europe/Berlin' });
 	const timePart = date.toLocaleTimeString('en-GB', {
 		timeZone: 'Europe/Berlin',
-		hour: '2-digit',
-		minute: '2-digit',
 	});
 
 	return `${datePart} @ ${timePart}`;
