@@ -1,0 +1,23 @@
+import { STATUS_DOT_VARIANTS } from '@/features/header/constants/status-dot';
+import type { StatusDotVariant } from '@/features/header/types/status-dot';
+
+interface IStatusDot {
+	variant: StatusDotVariant;
+}
+
+function StatusDot({ variant }: IStatusDot) {
+	const { core, ring, animation } = STATUS_DOT_VARIANTS[variant];
+
+	return (
+		<span className='relative flex h-1.5 w-1.5 shrink-0'>
+			{variant !== 'inactive' && (
+				<span
+					className={`absolute inline-flex h-full w-full rounded-full opacity-60 ${ring} ${animation}`}
+				/>
+			)}
+			<span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${core}`} />
+		</span>
+	);
+}
+
+export default StatusDot;
