@@ -61,9 +61,12 @@ function EquityCurve({ data }: IEquityCurve) {
 		<Card
 			title='equity curve'
 			badge={
-				<p className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}>
+				<button
+					onClick={() => setRelative((prev) => !prev)}
+					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}
+				>
 					{relative ? `${(currentValue - 100).toFixed(2)}%` : usd(currentValue)}
-				</p>
+				</button>
 			}
 		>
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
