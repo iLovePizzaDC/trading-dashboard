@@ -1,5 +1,6 @@
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { EquityPoint } from '@/shared/types/equity';
+import type { MarketStatus } from '@/shared/types/market.status';
 import type { RegimeEntry } from '@/shared/types/regime';
 import type { OpenStops, StopHistory } from '@/shared/types/stops';
 import type { Summary } from '@/shared/types/summary';
@@ -72,4 +73,9 @@ export async function fetchLastRebalanceDate(version: string): Promise<string> {
 export async function fetchLastWeeklyReportDate(version: string): Promise<string> {
 	const res = await fetch(`/data/last_weekly_report.txt?v=${version}`);
 	return await res.text();
+}
+
+export async function fetchMarketStatus(version: string): Promise<MarketStatus> {
+	const res = await fetch(`/data/market_status.json?v=${version}`);
+	return await res.json();
 }

@@ -1,7 +1,6 @@
 import type { StatusDotVariant } from '@/features/header/types/status-dot';
 
 export const REBALANCE_DAYS = 30;
-export const MESSAGE_DAYS = 7;
 export const RUN_START = { hours: 16, minutes: 29 };
 export const RUN_END = { hours: 16, minutes: 35 };
 

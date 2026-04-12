@@ -1,36 +1,35 @@
 import StatCard from '@/features/header/components/atoms/StatCard';
-import { getStatusCard } from '@/features/header/utils/status-card';
+import { getStatusCard, getTradingDayProgress } from '@/features/header/utils/status-card';
+import { formatAsBerlinTime, formatNextOpen } from '@/features/header/utils/time-helper';
 
 interface IBotStatusGrid {
-	isWeekday: boolean;
-	dayName: string;
+	isTradingDay: boolean;
 	visible: boolean;
 	isRunning: boolean;
 	ranToday: boolean;
 	rebalanceDaysLeft: number;
 	rebalanceNextDate: string;
 	rebalancePct: number;
-	messageDaysLeft: number;
-	messageNextDate: string;
-	messagePct: number;
+	marketIsOpen: boolean | null;
+	nextOpen: string | null;
+	nextClose: string | null;
 	lastUpdated?: string;
 }
 
 function BotStatusGrid({
-	isWeekday,
-	dayName,
+	isTradingDay,
 	visible,
 	isRunning,
 	ranToday,
 	rebalanceDaysLeft,
 	rebalanceNextDate,
 	rebalancePct,
-	messageDaysLeft,
-	messageNextDate,
-	messagePct,
+	marketIsOpen,
+	nextOpen,
+	nextClose,
 	lastUpdated,
 }: IBotStatusGrid) {
-	const statusCard = getStatusCard(isRunning, ranToday, isWeekday, dayName);
+	const statusCard = getStatusCard(isRunning, ranToday, isTradingDay);
 
 	return (
 		<div className='flex flex-col gap-2 pt-3'>
@@ -55,11 +54,17 @@ function BotStatusGrid({
 					visible={visible}
 				/>
 				<StatCard
-					label='Message'
-					value={`in ${messageDaysLeft}d`}
-					sub={messageNextDate}
-					progress={messagePct}
-					color='blue'
+					label='Market'
+					value={marketIsOpen ? 'open' : 'closed'}
+					sub={
+						marketIsOpen && nextClose
+							? `closes ${formatAsBerlinTime(nextClose)}`
+							: nextOpen
+								? formatNextOpen(nextOpen)
+								: '—'
+					}
+					progress={marketIsOpen ? getTradingDayProgress() : 0}
+					color='amber'
 					delay='120ms'
 					visible={visible}
 				/>

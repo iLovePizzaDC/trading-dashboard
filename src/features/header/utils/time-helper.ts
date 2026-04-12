@@ -28,3 +28,38 @@ export function isInRunWindow(hours: number, minutes: number): boolean {
 		totalMinutes <= RUN_END.hours * 60 + RUN_END.minutes
 	);
 }
+
+export function formatAsBerlinTime(iso: string): string {
+	return new Date(iso).toLocaleTimeString('en-US', {
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: false,
+		timeZone: 'Europe/Berlin',
+	});
+}
+
+export function getBotRunTimeDE(): string {
+	const parts = new Intl.DateTimeFormat('en-US', {
+		timeZone: 'America/New_York',
+		timeZoneName: 'shortOffset',
+	}).formatToParts(new Date());
+
+	const offsetLabel = parts.find((p) => p.type === 'timeZoneName')?.value ?? '';
+	const isEDT = offsetLabel === 'GMT-4';
+
+	return isEDT ? '22:30' : '21:30';
+}
+
+export function formatNextOpen(iso: string): string {
+	const weekday = getWeekdayShort(new Date(iso));
+	return `opens ${weekday} ${formatAsBerlinTime(iso)}`;
+}
+
+export function getWeekdayShort(date: Date = new Date()): string {
+	return date
+		.toLocaleDateString('en-US', {
+			weekday: 'short',
+			timeZone: 'Europe/Berlin',
+		})
+		.toLowerCase();
+}

@@ -2,31 +2,29 @@ import BotNameRow from '@/features/header/components/molecules/BotNameRow';
 import BotStatusGrid from '@/features/header/components/molecules/BotStatusGrid';
 import BotStatusSkeleton from '@/features/header/components/molecules/BotStatusSkeleton';
 import DownloadDropdown from '@/features/header/components/molecules/DownloadDropdown';
-import { DAY_NAMES } from '@/features/header/constants/header';
 import { useBotStatus } from '@/features/header/hooks/useBotStatus';
 import { useLastUpdated } from '@/features/header/hooks/useLastUpdated';
 import type { StatusDotVariant } from '@/features/header/types/status-dot';
-import { fetchLastRebalanceDate } from '@/shared/api/data';
+import { fetchLastRebalanceDate, fetchMarketStatus } from '@/shared/api/data';
 import { useDataVersion } from '@/shared/hooks/useDataVersion';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { useState } from 'react';
 
 function Header() {
 	const { data: lastRebalance, loading, error } = useFetch(fetchLastRebalanceDate);
+	const { data: marketStatus } = useFetch(fetchMarketStatus);
 	const lastUpdated = useLastUpdated();
 	const dataVersion = useDataVersion();
-	const status = useBotStatus(lastRebalance ?? null, dataVersion);
+	const status = useBotStatus(lastRebalance ?? null, marketStatus, dataVersion);
 
 	const [expanded, setExpanded] = useState(false);
 
-	const now = new Date();
-	const dow = now.getDay();
-	const isWeekday = dow >= 1 && dow <= 5;
+	const isTradingDay = status?.isTradingDay ?? false;
 
 	const dotVariant: StatusDotVariant = (() => {
 		if (!lastRebalance && !loading) return 'inactive';
 		if (status?.isRunning) return 'running';
-		if (isWeekday) return 'active';
+		if (isTradingDay) return 'active';
 		return 'weekend';
 	})();
 
@@ -54,11 +52,13 @@ function Header() {
 
 						{status && !loading && !error && (
 							<BotStatusGrid
-								isWeekday={isWeekday}
-								dayName={DAY_NAMES[dow]}
 								visible={expanded}
+								marketIsOpen={marketStatus?.is_open ?? null}
+								nextOpen={marketStatus?.next_open ?? null}
+								nextClose={marketStatus?.next_close ?? null}
 								lastUpdated={lastUpdated ?? undefined}
 								{...status}
+								isTradingDay={isTradingDay}
 							/>
 						)}
 					</div>
