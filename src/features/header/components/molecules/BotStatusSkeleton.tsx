@@ -10,7 +10,7 @@ function BotStatusSkeleton() {
 					/>
 				))}
 			</div>
-			<div className='h-2.5 w-28 animate-pulse rounded bg-white/5' />
+			<div className='h-2.5 w-28 mx-auto animate-pulse rounded bg-white/5' />
 		</div>
 	);
 }

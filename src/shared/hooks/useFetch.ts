@@ -8,7 +8,7 @@ export function useFetch<T>(fetcher: (version: string) => Promise<T>) {
 	const [error, setError] = useState<Error | null>(null);
 
 	useEffect(() => {
-		if (!version) return;
+		if (version === null) return;
 		setLoading(true);
 		setError(null);
 		fetcher(version)

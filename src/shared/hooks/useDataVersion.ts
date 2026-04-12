@@ -12,7 +12,7 @@ async function fetchVersion(): Promise<string> {
 	}
 }
 
-export function useDataVersion(): string {
+export function useDataVersion(): string | null {
 	const [version, setVersion] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -26,5 +26,5 @@ export function useDataVersion(): string {
 		return () => clearInterval(interval);
 	}, []);
 
-	return version ?? '';
+	return version;
 }

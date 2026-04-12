@@ -1,7 +1,7 @@
 import { useDataVersion } from '@/shared/hooks/useDataVersion';
 import { createContext, useContext, type ReactNode } from 'react';
 
-const DataVersionContext = createContext('');
+const DataVersionContext = createContext<string | null>(null);
 
 export function DataVersionProvider({ children }: { children: ReactNode }) {
 	const version = useDataVersion();

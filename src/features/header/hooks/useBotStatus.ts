@@ -7,10 +7,10 @@ import { useMemo } from 'react';
 export function useBotStatus(
 	lastRebalance: string | null,
 	marketStatus: MarketStatus | null,
-	dataVersion: string,
+	dataVersion: string | null,
 ): BotStatus | null {
 	return useMemo(() => {
-		if (!lastRebalance) return null;
+		if (!lastRebalance || !dataVersion) return null;
 
 		const now = new Date();
 		const { hours, minutes, todayNY } = getNYTime();
