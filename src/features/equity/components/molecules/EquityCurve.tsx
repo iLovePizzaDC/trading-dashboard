@@ -63,7 +63,7 @@ function EquityCurve({ data }: IEquityCurve) {
 			badge={
 				<button
 					onClick={() => setRelative((prev) => !prev)}
-					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}
+					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'} cursor-pointer`}
 				>
 					{relative ? `${(currentValue - 100).toFixed(2)}%` : usd(currentValue)}
 				</button>
