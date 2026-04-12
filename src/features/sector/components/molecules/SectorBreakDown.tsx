@@ -25,34 +25,16 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 		<Card
 			title='sector breakdown'
 			badge={
-				<div className='flex rounded-lg bg-linear-to-br from-white/5 to-white/0'>
-					<div className='hidden sm:flex'>
-						{(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
-							<button
-								key={key}
-								onClick={() => setSortBy(key)}
-								className={`rounded-md px-2 py-px text-[10px] transition-all cursor-pointer ${
-									sortBy === key ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/60'
-								}`}
-							>
-								{SORT_LABELS[key]}
-							</button>
-						))}
-					</div>
-
-					<div className='sm:hidden'>
-						<Dropdown
-							trigger={<span>{SORT_LABELS[sortBy]}</span>}
-							items={(Object.keys(SORT_LABELS) as SortKey[]).map((key) => ({
-								key,
-								label: SORT_LABELS[key],
-								active: key === sortBy,
-								onClick: () => setSortBy(key),
-							}))}
-							width='w-32'
-						/>
-					</div>
-				</div>
+				<Dropdown
+					trigger={<span>{SORT_LABELS[sortBy]}</span>}
+					items={(Object.keys(SORT_LABELS) as SortKey[]).map((key) => ({
+						key,
+						label: SORT_LABELS[key],
+						active: key === sortBy,
+						onClick: () => setSortBy(key),
+					}))}
+					width='w-32'
+				/>
 			}
 		>
 			<div className='space-y-2'>

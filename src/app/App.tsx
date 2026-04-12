@@ -14,18 +14,18 @@ function App() {
 	return (
 		<DataVersionProvider>
 			<main className='min-h-screen p-4 md:p-8 cursor-default'>
-				<div className='mx-auto max-w-7xl space-y-4'>
+				<div className='mx-auto max-w-7xl space-y-6'>
 					<Header />
 					<Summary />
 					<Equity />
 					<Trades />
-					<div className='grid grid-cols-1 gap-4 md:grid-cols-2 items-start'>
+					<Decisions />
+					<div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 items-start'>
 						<Positions />
-						<div className='md:col-span-2'>
-							<Decisions />
-						</div>
 						<Stops />
-						<Sector />
+						<div className='md:col-span-2 xl:col-span-1'>
+							<Sector />
+						</div>
 					</div>
 					<Momentum />
 				</div>

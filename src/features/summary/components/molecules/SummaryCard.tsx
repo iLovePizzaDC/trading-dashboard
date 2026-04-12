@@ -20,8 +20,8 @@ function SummaryCard({ summary }: ISummaryCard) {
 	const absReturn = summary.portfolio_value - startValue;
 
 	return (
-		<div className='space-y-3'>
-			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
+		<div className='space-y-4'>
+			<div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
 				<div className='col-span-2'>
 					<MetricItem
 						label='portfolio value'
@@ -63,7 +63,7 @@ function SummaryCard({ summary }: ISummaryCard) {
 				</div>
 			</div>
 
-			<div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
+			<div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
 				<MetricItem
 					label='4-week return'
 					value={summary.rolling_4w !== null ? pct(summary.rolling_4w) : 'n/a'}

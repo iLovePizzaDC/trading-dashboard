@@ -31,7 +31,7 @@ function Equity() {
 	});
 
 	return (
-		<div className='grid grid-cols-1 gap-4 lg:grid-cols-[3fr_2fr] items-start'>
+		<div className='grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr] items-start'>
 			<EquityCurve data={mergedData} />
 			<MonthlyHeatmap data={botEquity} />
 		</div>

@@ -45,7 +45,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 			{timeline.length < 2 ? (
 				<p className='py-6 text-center text-xs text-white/30'>Not enough rebalance data yet.</p>
 			) : (
-				<div className='h-40'>
+				<div className='h-48'>
 					<ResponsiveContainer width='100%' height='100%'>
 						<LineChart data={timeline} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
 							<CartesianGrid

@@ -11,12 +11,7 @@ function SectorSkeleton() {
 		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 			<div className='mb-3 flex items-center justify-between'>
 				<SkeletonBox className='h-3 w-32' />
-
-				<div className='flex gap-2'>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<SkeletonBox key={i} className='h-4 w-12' />
-					))}
-				</div>
+				<SkeletonBox className='h-5 w-20' />
 			</div>
 
 			<div className='space-y-1.5'>
