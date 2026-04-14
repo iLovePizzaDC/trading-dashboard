@@ -1,5 +1,4 @@
-import { RUN_END, RUN_START } from '@/features/header/constants/status-dot';
-import { BOT_START_TIME_NY } from '@/shared/utils/bot';
+import { BOT_START_TIME_NY, RUN_END, RUN_START } from '@/shared/utils/bot';
 import { DateTime } from 'luxon';
 
 export function getNYTime() {
