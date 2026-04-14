@@ -21,7 +21,9 @@ export function useBotStatus(
 		const elapsedReb = Math.floor(nowUTC.diff(lastReb, 'days').days);
 
 		const todayNY = nowNY.toFormat('yyyy-MM-dd');
-		const versionDate = dataVersion.slice(0, 10);
+		const versionDate = DateTime.fromSeconds(Number(dataVersion), {
+			zone: 'America/New_York',
+		}).toFormat('yyyy-MM-dd');
 		const ranToday = versionDate === todayNY;
 
 		const nextOpen = marketStatus?.next_open
