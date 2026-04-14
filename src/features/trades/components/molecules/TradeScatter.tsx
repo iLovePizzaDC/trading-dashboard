@@ -2,6 +2,7 @@ import ScatterTooltip from '@/features/trades/components/atoms/ScatterTooltip';
 import { buildScatterData } from '@/features/trades/utils/scatter';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
+import type { Range } from '@/shared/constants/date-range';
 import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import type { Trade } from '@/shared/types/trades';
 import { useCallback } from 'react';
@@ -16,13 +17,21 @@ import {
 	YAxis,
 } from 'recharts';
 
+const EXCLUDED_RANGES: Range[] = ['1W', '1M'];
+
 interface ITradeScatter {
 	data: Trade[];
 }
 
 function TradeScatter({ data }: ITradeScatter) {
 	const getDate = useCallback((d: Trade) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
+	const { range, setRange, filteredData } = useDateRangeFilter(
+		'trade-scatter',
+		data,
+		getDate,
+		undefined,
+		EXCLUDED_RANGES,
+	);
 
 	const points = buildScatterData(filteredData);
 	const wins = points.filter((p) => p.pnl >= 0);
@@ -49,7 +58,7 @@ function TradeScatter({ data }: ITradeScatter) {
 			}
 		>
 			<div className='mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-				<DateRangeFilter range={range} setRange={setRange} />
+				<DateRangeFilter range={range} setRange={setRange} excludedRanges={EXCLUDED_RANGES} />
 			</div>
 
 			{points.length === 0 ? (

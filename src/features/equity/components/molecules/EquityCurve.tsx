@@ -28,7 +28,7 @@ function EquityCurve({ data }: IEquityCurve) {
 	const [relative, setRelative] = useState(true);
 
 	const getDate = useCallback((d: EquityPoint) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
+	const { range, setRange, filteredData } = useDateRangeFilter('equity-curve', data, getDate);
 
 	const chartData = useMemo(() => {
 		if (!filteredData.length) return [];

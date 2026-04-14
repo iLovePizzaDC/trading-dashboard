@@ -21,7 +21,7 @@ interface IMomentumTimeline {
 
 function MomentumTimeline({ data }: IMomentumTimeline) {
 	const getDate = useCallback((d: DecisionEntry) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
+	const { range, setRange, filteredData } = useDateRangeFilter('momentum-timeline', data, getDate);
 
 	const timeline = useMemo(() => calcMomentumTimeline(filteredData), [filteredData]);
 
