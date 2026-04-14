@@ -11,8 +11,8 @@ export function useDateRangeFilter<T>(data: T[], getDate: (item: T) => string) {
 		if (!cutoff) return data;
 
 		return data.filter((item) => {
-			const dt = DateTime.fromISO(getDate(item));
-			return dt.isValid && dt >= cutoff;
+			const dt = DateTime.fromISO(getDate(item)).startOf('day');
+			return dt >= cutoff.startOf('day');
 		});
 	}, [data, range, getDate]);
 
