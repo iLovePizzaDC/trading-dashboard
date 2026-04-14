@@ -24,6 +24,8 @@ interface ITradeScatter {
 }
 
 function TradeScatter({ data }: ITradeScatter) {
+	if (!data) return;
+
 	const getDate = useCallback((d: Trade) => d.date, []);
 	const { range, setRange, filteredData } = useDateRangeFilter(
 		'trade-scatter',
