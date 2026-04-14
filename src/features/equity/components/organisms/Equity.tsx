@@ -21,14 +21,12 @@ function Equity() {
 	if (botEquityLoading || spyEquityLoading) return <EquitySkeleton />;
 	if (botEquityError || !botEquity || spyEquityError || !spyEquity) return <EquityError />;
 
-	const mergedData = botEquity.map((point) => {
-		const spyPoint = spyEquity.find((s) => s.date === point.date);
+	const spyMap = new Map(spyEquity.map((s) => [s.date, s]));
 
-		return {
-			...point,
-			spy: spyPoint?.equity ?? null,
-		};
-	});
+	const mergedData = botEquity.map((point) => ({
+		...point,
+		spy: spyMap.get(point.date)?.equity ?? null,
+	}));
 
 	return (
 		<div className='grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr] items-start'>
