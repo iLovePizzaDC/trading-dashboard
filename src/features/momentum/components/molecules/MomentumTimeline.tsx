@@ -2,6 +2,7 @@ import MomentumTooltip from '@/features/momentum/components/atoms/MomentumToolti
 import { calcMomentumTimeline } from '@/features/momentum/components/utils/momentum';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
+import type { Range } from '@/shared/constants/date-range';
 import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import { useCallback, useMemo } from 'react';
@@ -15,13 +16,21 @@ import {
 	YAxis,
 } from 'recharts';
 
+const EXCLUDED_RANGES: Range[] = ['1W', '1M'];
+
 interface IMomentumTimeline {
 	data: DecisionEntry[];
 }
 
 function MomentumTimeline({ data }: IMomentumTimeline) {
 	const getDate = useCallback((d: DecisionEntry) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter('momentum-timeline', data, getDate);
+	const { range, setRange, filteredData } = useDateRangeFilter(
+		'momentum-timeline',
+		data,
+		getDate,
+		'6M',
+		EXCLUDED_RANGES,
+	);
 
 	const timeline = useMemo(() => calcMomentumTimeline(filteredData), [filteredData]);
 
@@ -40,7 +49,7 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 			}
 		>
 			<div className='mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-				<DateRangeFilter range={range} setRange={setRange} />
+				<DateRangeFilter range={range} setRange={setRange} excludedRanges={EXCLUDED_RANGES} />
 			</div>
 			{timeline.length < 2 ? (
 				<p className='py-6 text-center text-xs text-white/30'>Not enough rebalance data yet.</p>
