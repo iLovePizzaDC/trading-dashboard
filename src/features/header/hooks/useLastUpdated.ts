@@ -1,14 +1,11 @@
 import { useVersion } from '@/shared/context/DataVersionContext';
+import { DateTime } from 'luxon';
 
 export function useLastUpdated(): string | null {
 	const version = useVersion();
 	if (!version) return null;
 
-	const date = new Date(parseInt(version) * 1000);
-	const datePart = date.toLocaleDateString('en-CA', { timeZone: 'Europe/Berlin' });
-	const timePart = date.toLocaleTimeString('en-GB', {
-		timeZone: 'Europe/Berlin',
-	});
-
-	return `${datePart} @ ${timePart}`;
+	return DateTime.fromSeconds(parseInt(version), { zone: 'utc' })
+		.setZone('Europe/Berlin')
+		.toFormat('yyyy-MM-dd @ HH:mm:ss');
 }

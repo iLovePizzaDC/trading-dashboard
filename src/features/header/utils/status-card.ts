@@ -1,4 +1,5 @@
-import { getBotRunTimeDE, getWeekdayShort } from '@/features/header/utils/time-helper';
+import { getBotRunTimeDE, getWeekdayNow } from '@/features/header/utils/time-helper';
+import { DateTime } from 'luxon';
 
 export function getStatusCard(
 	isRunning: boolean,
@@ -6,7 +7,7 @@ export function getStatusCard(
 	isTradingDay: boolean,
 ): { value: string; sub: string; progress: number; color: 'green' | 'amber' | 'blue' } {
 	const runTime = getBotRunTimeDE();
-	const day = getWeekdayShort();
+	const day = getWeekdayNow();
 
 	if (isRunning) {
 		return { value: 'running now', sub: `started at ${runTime}`, progress: 100, color: 'green' };
@@ -33,8 +34,11 @@ export function getStatusCard(
 export function getTradingDayProgress(): number {
 	const OPEN_MINUTES = 9 * 60 + 30;
 	const TOTAL_MINUTES = 6 * 60 + 30;
-	const nyNow = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
-	const now = new Date(nyNow);
-	const elapsed = now.getHours() * 60 + now.getMinutes() - OPEN_MINUTES;
+
+	const nowNY = DateTime.now().setZone('America/New_York');
+
+	const minutesNow = nowNY.hour * 60 + nowNY.minute;
+	const elapsed = minutesNow - OPEN_MINUTES;
+
 	return Math.min(100, Math.max(0, Math.round((elapsed / TOTAL_MINUTES) * 100)));
 }

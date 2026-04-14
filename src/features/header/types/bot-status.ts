@@ -5,4 +5,5 @@ export interface BotStatus {
 	isRunning: boolean;
 	ranToday: boolean;
 	isTradingDay: boolean;
+	marketIsOpen: boolean;
 }

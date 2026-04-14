@@ -1,5 +1,6 @@
 import type { Range } from '@/shared/constants/date-range';
 import { cutoffDate } from '@/shared/utils/date-range';
+import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 
 export function useDateRangeFilter<T>(data: T[], getDate: (item: T) => string) {
@@ -9,7 +10,10 @@ export function useDateRangeFilter<T>(data: T[], getDate: (item: T) => string) {
 		const cutoff = cutoffDate(range);
 		if (!cutoff) return data;
 
-		return data.filter((item) => new Date(getDate(item)) >= cutoff);
+		return data.filter((item) => {
+			const dt = DateTime.fromISO(getDate(item));
+			return dt.isValid && dt >= cutoff;
+		});
 	}, [data, range, getDate]);
 
 	return { range, setRange, filteredData };

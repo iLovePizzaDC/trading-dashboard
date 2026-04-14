@@ -53,7 +53,6 @@ function Header() {
 						{status && !loading && !error && (
 							<BotStatusGrid
 								visible={expanded}
-								marketIsOpen={marketStatus?.is_open ?? null}
 								nextOpen={marketStatus?.next_open ?? null}
 								nextClose={marketStatus?.next_close ?? null}
 								lastUpdated={lastUpdated ?? undefined}

@@ -1,7 +1,7 @@
-import { REBALANCE_DAYS } from '@/features/header/constants/status-dot';
+import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/features/header/constants/status-dot';
 import type { BotStatus } from '@/features/header/types/bot-status';
-import { getNYTime, isInRunWindow } from '@/features/header/utils/time-helper';
 import type { MarketStatus } from '@/shared/types/market.status';
+import { DateTime } from 'luxon';
 import { useMemo } from 'react';
 
 export function useBotStatus(
@@ -12,29 +12,54 @@ export function useBotStatus(
 	return useMemo(() => {
 		if (!lastRebalance || !dataVersion) return null;
 
-		const now = new Date();
-		const { hours, minutes, todayNY } = getNYTime();
+		const nowNY = DateTime.now().setZone('America/New_York');
+		const nowUTC = DateTime.now().toUTC();
 
-		const lastReb = new Date(lastRebalance.trim());
-		const nextReb = new Date(lastReb.getTime() + REBALANCE_DAYS * 24 * 60 * 60 * 1000);
-		const elapsedReb = Math.floor((now.getTime() - lastReb.getTime()) / (24 * 60 * 60 * 1000));
+		const lastReb = DateTime.fromISO(lastRebalance.trim(), { zone: 'utc' });
+		const nextReb = lastReb.plus({ days: REBALANCE_DAYS });
 
+		const elapsedReb = Math.floor(nowUTC.diff(lastReb, 'days').days);
+
+		const todayNY = nowNY.toFormat('yyyy-MM-dd');
 		const versionDate = dataVersion.slice(0, 10);
 		const ranToday = versionDate === todayNY;
 
-		const isTradingDay = marketStatus?.is_trading_day ?? false;
-		const isRunning = isTradingDay && isInRunWindow(hours, minutes) && !ranToday;
+		const nextOpen = marketStatus?.next_open
+			? DateTime.fromISO(marketStatus.next_open, { setZone: true })
+			: null;
+
+		const nextClose = marketStatus?.next_close
+			? DateTime.fromISO(marketStatus.next_close, { setZone: true })
+			: null;
+
+		const isTradingDay =
+			nextOpen !== null &&
+			nextClose !== null &&
+			nextOpen.setZone('America/New_York').hasSame(nowNY, 'day');
+
+		const minutesNow = nowNY.hour * 60 + nowNY.minute;
+
+		const isRunning =
+			isTradingDay &&
+			minutesNow >= RUN_START.hours * 60 + RUN_START.minutes &&
+			minutesNow <= RUN_END.hours * 60 + RUN_END.minutes &&
+			!ranToday;
+
+		const marketIsOpen =
+			isTradingDay &&
+			nextOpen !== null &&
+			nextClose !== null &&
+			nowUTC >= nextOpen &&
+			nowUTC < nextClose;
 
 		return {
-			rebalanceDaysLeft: Math.max(
-				0,
-				Math.round((nextReb.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)),
-			),
-			rebalanceNextDate: nextReb.toISOString().split('T')[0],
-			rebalancePct: Math.min(100, Math.round((elapsedReb / 30) * 100)),
+			rebalanceDaysLeft: Math.max(0, Math.round(nextReb.diff(nowUTC, 'days').days)),
+			rebalanceNextDate: nextReb.toFormat('yyyy-MM-dd'),
+			rebalancePct: Math.min(100, Math.round((elapsedReb / REBALANCE_DAYS) * 100)),
 			isRunning,
 			ranToday,
 			isTradingDay,
+			marketIsOpen,
 		};
 	}, [lastRebalance, marketStatus, dataVersion]);
 }

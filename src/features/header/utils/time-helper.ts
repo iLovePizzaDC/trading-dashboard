@@ -1,23 +1,13 @@
-import { RUN_END, RUN_START } from '@/features/header/constants/status-dot';
+import { BOT_START_TIME_NY, RUN_END, RUN_START } from '@/features/header/constants/status-dot';
+import { DateTime } from 'luxon';
 
-export function getNYTime(): { hours: number; minutes: number; todayNY: string } {
-	const formatter = new Intl.DateTimeFormat('en-US', {
-		timeZone: 'America/New_York',
-		hour: 'numeric',
-		minute: 'numeric',
-		hour12: false,
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	});
-
-	const parts = formatter.formatToParts(new Date());
-	const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '0';
+export function getNYTime() {
+	const now = DateTime.now().setZone('America/New_York');
 
 	return {
-		hours: parseInt(get('hour'), 10),
-		minutes: parseInt(get('minute'), 10),
-		todayNY: `${get('year')}-${get('month')}-${get('day')}`,
+		hours: now.hour,
+		minutes: now.minute,
+		todayNY: now.toFormat('yyyy-MM-dd'),
 	};
 }
 
@@ -30,36 +20,35 @@ export function isInRunWindow(hours: number, minutes: number): boolean {
 }
 
 export function formatAsBerlinTime(iso: string): string {
-	return new Date(iso).toLocaleTimeString('en-US', {
-		hour: '2-digit',
-		minute: '2-digit',
-		hour12: false,
-		timeZone: 'Europe/Berlin',
-	});
+	const dt = DateTime.fromISO(iso, { setZone: true });
+
+	if (!dt.isValid) return '—';
+
+	return dt.setZone('Europe/Berlin').toFormat('HH:mm');
 }
 
-export function getBotRunTimeDE(): string {
-	const parts = new Intl.DateTimeFormat('en-US', {
-		timeZone: 'America/New_York',
-		timeZoneName: 'shortOffset',
-	}).formatToParts(new Date());
-
-	const offsetLabel = parts.find((p) => p.type === 'timeZoneName')?.value ?? '';
-	const isEDT = offsetLabel === 'GMT-4';
-
-	return isEDT ? '22:30' : '21:30';
+export function getBotRunTimeDE() {
+	return DateTime.fromObject(BOT_START_TIME_NY, { zone: 'America/New_York' })
+		.setZone('Europe/Berlin')
+		.toFormat('HH:mm');
 }
 
 export function formatNextOpen(iso: string): string {
-	const weekday = getWeekdayShort(new Date(iso));
-	return `opens ${weekday} ${formatAsBerlinTime(iso)}`;
+	const dt = DateTime.fromISO(iso, { setZone: true });
+
+	if (!dt.isValid) return '—';
+
+	return `opens ${getWeekdayFromISO(iso)} ${dt.toFormat('HH:mm')}`;
 }
 
-export function getWeekdayShort(date: Date = new Date()): string {
-	return date
-		.toLocaleDateString('en-US', {
-			weekday: 'short',
-			timeZone: 'Europe/Berlin',
-		})
-		.toLowerCase();
+export function getWeekdayNow(): string {
+	return DateTime.now().setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
+}
+
+export function getWeekdayFromISO(iso: string): string {
+	const dt = DateTime.fromISO(iso, { setZone: true });
+
+	if (!dt.isValid) return '—';
+
+	return dt.setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
 }
