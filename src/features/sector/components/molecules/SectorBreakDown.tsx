@@ -3,10 +3,10 @@ import type { SortKey } from '@/features/sector/types/sector-breakdown';
 import { calcSectorStats } from '@/features/sector/utils/sector-breakdown';
 import Card from '@/shared/components/atoms/Card';
 import Dropdown from '@/shared/components/atoms/Dropdown';
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
-import { useState } from 'react';
 
 interface ISectorBreakdown {
 	decisions: DecisionEntry[];
@@ -14,7 +14,7 @@ interface ISectorBreakdown {
 }
 
 function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
-	const [sortBy, setSortBy] = useState<SortKey>('timesSelected');
+	const [sortBy, setSortBy] = useLocalStorage<SortKey>('sector-breakdown', 'timesSelected');
 
 	const stats = calcSectorStats(decisions, trades);
 	const sorted = [...stats].sort((a, b) => b[sortBy] - a[sortBy]);
