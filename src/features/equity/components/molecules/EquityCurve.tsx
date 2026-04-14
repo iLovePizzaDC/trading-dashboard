@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { REBALANCE_DAYS } from '@/shared/utils/bot';
 import { usd } from '@/shared/utils/currency';
 import {
 	Area,
@@ -42,6 +43,16 @@ function EquityCurve({ data }: IEquityCurve) {
 				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
 	}, [filteredData, relative]);
+
+	const rebalanceIndexes = useMemo(() => {
+		if (!chartData.length) return [];
+
+		const result: number[] = [];
+		for (let i = 0; i < chartData.length; i += REBALANCE_DAYS) {
+			result.push(i);
+		}
+		return result;
+	}, [chartData]);
 
 	const startValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
@@ -143,6 +154,16 @@ function EquityCurve({ data }: IEquityCurve) {
 						stroke='rgba(255,255,255,0.15)'
 						strokeDasharray='4 4'
 					/>
+
+					{rebalanceIndexes.map((i) => (
+						<ReferenceLine
+							key={i}
+							x={chartData[i]?.date}
+							stroke='rgba(255,255,255,0.1)'
+							strokeDasharray='2 4'
+							strokeWidth={1}
+						/>
+					))}
 
 					<Tooltip
 						content={<EquityTooltip positive={isPos} showSpy={showSpy} relative={relative} />}

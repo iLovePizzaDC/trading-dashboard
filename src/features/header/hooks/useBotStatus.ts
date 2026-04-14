@@ -1,6 +1,7 @@
-import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/features/header/constants/status-dot';
+import { RUN_END, RUN_START } from '@/features/header/constants/status-dot';
 import type { BotStatus } from '@/features/header/types/bot-status';
 import type { MarketStatus } from '@/shared/types/market.status';
+import { REBALANCE_DAYS } from '@/shared/utils/bot';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
 
