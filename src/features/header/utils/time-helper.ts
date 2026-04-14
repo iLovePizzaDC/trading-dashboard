@@ -38,7 +38,9 @@ export function formatNextOpen(iso: string): string {
 
 	if (!dt.isValid) return '—';
 
-	return `opens ${getWeekdayFromISO(iso)} ${dt.toFormat('HH:mm')}`;
+	const berlin = dt.setZone('Europe/Berlin');
+
+	return `opens ${berlin.toFormat('ccc').toLowerCase()} ${berlin.toFormat('HH:mm')}`;
 }
 
 export function getWeekdayNow(): string {
