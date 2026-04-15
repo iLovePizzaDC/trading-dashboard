@@ -2,10 +2,11 @@ import ScatterTooltip from '@/features/trades/components/atoms/ScatterTooltip';
 import { buildScatterData } from '@/features/trades/utils/scatter';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import type { Range } from '@/shared/constants/date-range';
-import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { RANGES, type Range } from '@/shared/constants/date-range';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import type { Trade } from '@/shared/types/trades';
-import { useCallback } from 'react';
+import { cutoffDate } from '@/shared/utils/date-range';
+import { DateTime } from 'luxon';
 import {
 	CartesianGrid,
 	ReferenceLine,
@@ -26,14 +27,24 @@ interface ITradeScatter {
 function TradeScatter({ data }: ITradeScatter) {
 	if (!data) return;
 
-	const getDate = useCallback((d: Trade) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(
-		'trade-scatter',
+	const {
+		value: range,
+		setValue: setRange,
+		filteredData,
+	} = useFilterWithStorage<Trade, Range>({
+		storageKey: 'trade-scatter-range',
 		data,
-		getDate,
-		undefined,
-		EXCLUDED_RANGES,
-	);
+		defaultValue: '3M',
+		allValues: RANGES,
+		excludedValues: EXCLUDED_RANGES,
+		filterFn: (trade, range) => {
+			const cutoff = cutoffDate(range);
+			if (!cutoff) return true;
+
+			const dt = DateTime.fromISO(trade.date).startOf('day');
+			return dt >= cutoff.startOf('day');
+		},
+	});
 
 	const points = buildScatterData(filteredData);
 	const wins = points.filter((p) => p.pnl >= 0);

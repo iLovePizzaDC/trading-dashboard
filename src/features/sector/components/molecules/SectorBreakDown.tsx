@@ -3,7 +3,7 @@ import type { SortKey } from '@/features/sector/types/sector-breakdown';
 import { calcSectorStats } from '@/features/sector/utils/sector-breakdown';
 import Card from '@/shared/components/atoms/Card';
 import Dropdown from '@/shared/components/atoms/Dropdown';
-import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
@@ -14,12 +14,16 @@ interface ISectorBreakdown {
 }
 
 function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
-	const [sortBy, setSortBy] = useLocalStorage<SortKey>('sector-breakdown', 'timesSelected');
+	const { value: sortBy, setValue: setSortBy } = useFilterWithStorage({
+		storageKey: 'sector-breakdown',
+		data: trades,
+		defaultValue: 'timesSelected',
+		allValues: Object.keys(SORT_LABELS) as SortKey[],
+	});
 
 	const stats = calcSectorStats(decisions, trades);
-	const sorted = [...stats].sort((a, b) => b[sortBy] - a[sortBy]);
-
 	const maxSelected = Math.max(...stats.map((s) => s.timesSelected), 1);
+	const sorted = [...stats].sort((a, b) => b[sortBy] - a[sortBy]);
 
 	return (
 		<Card

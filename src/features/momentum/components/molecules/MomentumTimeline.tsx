@@ -2,10 +2,12 @@ import MomentumTooltip from '@/features/momentum/components/atoms/MomentumToolti
 import { calcMomentumTimeline } from '@/features/momentum/components/utils/momentum';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import type { Range } from '@/shared/constants/date-range';
-import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { RANGES, type Range } from '@/shared/constants/date-range';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
-import { useCallback, useMemo } from 'react';
+import { cutoffDate } from '@/shared/utils/date-range';
+import { DateTime } from 'luxon';
+import { useMemo } from 'react';
 import {
 	CartesianGrid,
 	Line,
@@ -23,14 +25,24 @@ interface IMomentumTimeline {
 }
 
 function MomentumTimeline({ data }: IMomentumTimeline) {
-	const getDate = useCallback((d: DecisionEntry) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(
-		'momentum-timeline',
+	const {
+		value: range,
+		setValue: setRange,
+		filteredData,
+	} = useFilterWithStorage<DecisionEntry, Range>({
+		storageKey: 'momentum-timeline',
 		data,
-		getDate,
-		'6M',
-		EXCLUDED_RANGES,
-	);
+		defaultValue: '6M',
+		allValues: RANGES,
+		excludedValues: EXCLUDED_RANGES,
+		filterFn: (decision, range) => {
+			const cutoff = cutoffDate(range);
+			if (!cutoff) return true;
+
+			const dt = DateTime.fromISO(decision.date).startOf('day');
+			return dt >= cutoff.startOf('day');
+		},
+	});
 
 	const timeline = useMemo(() => calcMomentumTimeline(filteredData), [filteredData]);
 

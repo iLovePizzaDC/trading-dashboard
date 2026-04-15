@@ -1,3 +1,15 @@
+export function getValidKey<T extends string>(
+	current: T,
+	defaultKey: T,
+	allKeys: readonly T[],
+	excluded: T[],
+): T {
+	if (!excluded.includes(current)) return current;
+	if (!excluded.includes(defaultKey)) return defaultKey;
+
+	return allKeys.find((k) => !excluded.includes(k)) ?? defaultKey;
+}
+
 export function getLocalStorageItem<T>(key: string, fallback: T): T {
 	if (typeof window === 'undefined') return fallback;
 

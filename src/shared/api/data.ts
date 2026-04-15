@@ -22,6 +22,7 @@ export async function fetchBotEquity(version: string): Promise<EquityPoint[]> {
 		.map((row) => ({
 			date: row[0],
 			equity: parseFloat(row[1]),
+			spy: null,
 		}));
 }
 
@@ -35,6 +36,7 @@ export async function fetchSpyEquity(version: string): Promise<EquityPoint[]> {
 		.map((row) => ({
 			date: row[0],
 			equity: parseFloat(row[1]),
+			spy: null,
 		}));
 }
 

@@ -1,12 +1,15 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { RANGES, type Range } from '@/shared/constants/date-range';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import { REBALANCE_DAYS } from '@/shared/utils/bot';
 import { usd } from '@/shared/utils/currency';
+import { cutoffDate } from '@/shared/utils/date-range';
+import { DateTime } from 'luxon';
 import {
 	Area,
 	AreaChart,
@@ -20,15 +23,30 @@ import {
 } from 'recharts';
 
 interface IEquityCurve {
-	data: (EquityPoint & { spy?: number | null })[];
+	data: EquityPoint[];
 }
 
 function EquityCurve({ data }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useState(true);
 	const [relative, setRelative] = useState(true);
 
-	const getDate = useCallback((d: EquityPoint) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter('equity-curve', data, getDate);
+	const {
+		value: range,
+		setValue: setRange,
+		filteredData,
+	} = useFilterWithStorage<EquityPoint, Range>({
+		storageKey: 'equity-curve-range',
+		data,
+		defaultValue: '3M',
+		allValues: RANGES,
+		filterFn: (d, range) => {
+			const cutoff = cutoffDate(range);
+			if (!cutoff) return true;
+
+			const dt = DateTime.fromISO(d.date).startOf('day');
+			return dt >= cutoff.startOf('day');
+		},
+	});
 
 	const chartData = useMemo(() => {
 		if (!filteredData.length) return [];

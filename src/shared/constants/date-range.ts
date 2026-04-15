@@ -1,3 +1,3 @@
-export type Range = '1W' | '1M' | '3M' | '6M' | 'YTD' | 'ALL';
+export const RANGES = ['1W', '1M', '3M', '6M', 'YTD', 'ALL'] as const;
 
-export const RANGES: Range[] = ['1W', '1M', '3M', '6M', 'YTD', 'ALL'];
+export type Range = (typeof RANGES)[number];
