@@ -1,6 +1,6 @@
 import type { BotStatus } from '@/features/header/types/bot-status';
+import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/shared/constants/bot';
 import type { MarketStatus } from '@/shared/types/market.status';
-import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/shared/utils/bot';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
 

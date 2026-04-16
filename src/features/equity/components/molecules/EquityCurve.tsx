@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react';
 
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
+import { REBALANCE_DAYS } from '@/shared/constants/bot';
 import { RANGES, type Range } from '@/shared/constants/date-range';
 import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
-import { REBALANCE_DAYS } from '@/shared/utils/bot';
 import { usd } from '@/shared/utils/currency';
 import { cutoffDate } from '@/shared/utils/date-range';
 import { DateTime } from 'luxon';
