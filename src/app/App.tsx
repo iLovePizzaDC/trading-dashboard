@@ -20,10 +20,10 @@ function App() {
 					<Equity />
 					<Trades />
 					<Decisions />
-					<div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 items-start'>
+					<div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 items-start'>
 						<Positions />
 						<Stops />
-						<div className='md:col-span-2 xl:col-span-1'>
+						<div className='md:col-span-2 xl:col-span-2'>
 							<Sector />
 						</div>
 					</div>

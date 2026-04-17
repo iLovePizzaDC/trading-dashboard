@@ -3,7 +3,7 @@ import { groupTrades } from '@/features/trades/utils/trades-card';
 import Card from '@/shared/components/atoms/Card';
 import ScrollableGroupList from '@/shared/components/molecules/ScrollableGroupList';
 import type { Trade } from '@/shared/types/trades';
-import { usd } from '@/shared/utils/currency';
+import { isPos, usd } from '@/shared/utils/currency';
 import { useMemo } from 'react';
 
 interface ITradesCard {
@@ -17,13 +17,11 @@ function TradesCard({ data }: ITradesCard) {
 		.filter((t) => t.pnl !== undefined)
 		.reduce((sum, t) => sum + (t.pnl ?? 0), 0);
 
-	const isPos = totalPnl >= 0;
-
 	return (
 		<Card
 			title={`trade history (${data.length})`}
 			badge={
-				<p className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}>
+				<p className={`text-sm font-medium ${isPos(totalPnl) ? 'text-green-400' : 'text-red-400'}`}>
 					{usd(totalPnl)}
 				</p>
 			}

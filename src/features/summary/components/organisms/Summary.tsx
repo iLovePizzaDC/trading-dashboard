@@ -1,6 +1,7 @@
-import SummaryCard from '@/features/summary/components/molecules/SummaryCard';
-import SummaryCardError from '@/features/summary/components/molecules/SummaryCardError';
-import SummaryCardSkeleton from '@/features/summary/components/molecules/SummaryCardSkeleton';
+import HeroCards from '@/features/summary/components/molecules/HeroCards';
+import SummaryCards from '@/features/summary/components/molecules/SummaryCards';
+import SummaryError from '@/features/summary/components/molecules/SummaryError';
+import SummarySkeleton from '@/features/summary/components/molecules/SummarySkeleton';
 import { fetchSummary } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
@@ -11,11 +12,20 @@ function Summary() {
 		error: summaryError,
 	} = useFetch(fetchSummary);
 
-	if (summaryLoading) return <SummaryCardSkeleton />;
+	if (summaryLoading) return <SummarySkeleton />;
 
-	if (summaryError || !summaryData) return <SummaryCardError />;
+	if (summaryError || !summaryData) return <SummaryError />;
 
-	return <SummaryCard summary={summaryData} />;
+	return (
+		<div className='space-y-4'>
+			<HeroCards
+				portfolioValue={summaryData.portfolio_value}
+				profit={summaryData.profit}
+				regime={summaryData.regime}
+			/>
+			<SummaryCards summary={summaryData} />
+		</div>
+	);
 }
 
 export default Summary;

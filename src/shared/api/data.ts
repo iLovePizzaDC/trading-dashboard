@@ -1,4 +1,5 @@
 import type { DecisionEntry } from '@/shared/types/decisions';
+import type { Deposit } from '@/shared/types/deposits';
 import type { EquityPoint } from '@/shared/types/equity';
 import type { MarketStatus } from '@/shared/types/market.status';
 import type { RegimeEntry } from '@/shared/types/regime';
@@ -9,6 +10,12 @@ import Papa from 'papaparse';
 
 export async function fetchSummary(version: string): Promise<Summary> {
 	const res = await fetch(`/data/summary.json?v=${version}`);
+	return res.json();
+}
+
+export async function fetchDeposits(): Promise<Deposit[]> {
+	const res = await fetch('/data/deposits.json');
+	if (!res.ok) return [];
 	return res.json();
 }
 

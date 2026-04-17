@@ -1,12 +1,14 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { REBALANCE_DAYS } from '@/shared/constants/bot';
 import { RANGES, type Range } from '@/shared/constants/date-range';
 import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import type { Deposit } from '@/shared/types/deposits';
 import { usd } from '@/shared/utils/currency';
 import { cutoffDate } from '@/shared/utils/date-range';
 import { DateTime } from 'luxon';
@@ -21,14 +23,16 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
+import DepositLabel from '../atoms/DepositLabel';
 
 interface IEquityCurve {
 	data: EquityPoint[];
+	deposits: Deposit[];
 }
 
-function EquityCurve({ data }: IEquityCurve) {
-	const [showSpy, setShowSpy] = useState(true);
-	const [relative, setRelative] = useState(true);
+function EquityCurve({ data, deposits }: IEquityCurve) {
+	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
+	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
 
 	const {
 		value: range,
@@ -139,7 +143,7 @@ function EquityCurve({ data }: IEquityCurve) {
 			</div>
 
 			<ResponsiveContainer width='100%' height={240}>
-				<AreaChart data={chartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+				<AreaChart data={chartData} margin={{ top: 10, right: 4, left: 0, bottom: 0 }}>
 					<defs>
 						<linearGradient id='equityGradient' x1='0' y1='0' x2='0' y2='1'>
 							<stop offset='5%' stopColor={color} stopOpacity={0.15} />
@@ -180,6 +184,16 @@ function EquityCurve({ data }: IEquityCurve) {
 							stroke='rgba(255,255,255,0.1)'
 							strokeDasharray='2 4'
 							strokeWidth={1}
+						/>
+					))}
+
+					{deposits.map((d) => (
+						<ReferenceLine
+							key={d.date}
+							x={d.date}
+							stroke='rgba(168,85,247,0.4)'
+							strokeDasharray='3 3'
+							label={<DepositLabel value={`+${usd(d.amount)}`} />}
 						/>
 					))}
 

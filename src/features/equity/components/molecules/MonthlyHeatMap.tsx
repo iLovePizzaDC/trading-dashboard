@@ -4,14 +4,16 @@ import { MONTHS } from '@/features/equity/constants/heatmap';
 import type { MonthlyReturn } from '@/features/equity/types/heatmap';
 import { calcMonthlyReturns } from '@/features/equity/utils/performance';
 import Card from '@/shared/components/atoms/Card';
+import type { Deposit } from '@/shared/types/deposits';
 import type { EquityPoint } from '@/shared/types/equity';
 import { useEffect, useRef, useState } from 'react';
 
 interface IMonthlyHeatmap {
 	data: EquityPoint[];
+	deposits: Deposit[];
 }
 
-function MonthlyHeatmap({ data }: IMonthlyHeatmap) {
+function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 	const [selected, setSelected] = useState<MonthlyReturn | null>(null);
 	const [displayed, setDisplayed] = useState<MonthlyReturn | null>(null);
 	const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -30,7 +32,7 @@ function MonthlyHeatmap({ data }: IMonthlyHeatmap) {
 		};
 	}, [selected]);
 
-	const monthly = calcMonthlyReturns(data);
+	const monthly = calcMonthlyReturns(data, deposits);
 	const years = [...new Set(monthly.map((m) => m.year))].sort((a, b) => b - a);
 
 	return (

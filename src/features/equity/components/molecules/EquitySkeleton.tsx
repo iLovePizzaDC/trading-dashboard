@@ -33,7 +33,7 @@ function EquitySkeleton() {
 			</div>
 
 			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-				<div className='flex justify-center mb-4'>
+				<div className='flex justify-start mb-4'>
 					<SkeletonBox className='h-3 w-32' />
 				</div>
 
