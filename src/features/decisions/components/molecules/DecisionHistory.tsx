@@ -13,6 +13,7 @@ const CARD_GAP = 10;
 const ROW_HEIGHT = CARD_HEIGHT + CARD_GAP;
 const MAX_HEIGHT = 256;
 
+// TODO automatically hide shadow on bottom when user reaches bottom
 function DecisionHistory({ data }: IDecisionHistory) {
 	const parentRef = useRef<HTMLDivElement>(null);
 

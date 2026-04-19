@@ -6,7 +6,7 @@ interface IRegimeBadge {
 }
 
 function RegimeBadge({ regime }: IRegimeBadge) {
-	const colors = regimeColors[regime];
+	const colors = regimeColors[regime]; // TODO check if regime is bullish/bearish if not match -> app crash
 
 	return (
 		<div

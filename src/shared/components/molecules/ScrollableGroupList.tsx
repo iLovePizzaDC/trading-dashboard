@@ -5,6 +5,7 @@ interface IScrollableGroupList<T extends { symbol: string }> {
 	renderGroup: (group: T) => React.ReactNode;
 }
 
+// TODO automatically hide shadow on bottom when user reaches bottom
 function ScrollableGroupList<T extends { symbol: string }>({
 	groups,
 	renderGroup,
