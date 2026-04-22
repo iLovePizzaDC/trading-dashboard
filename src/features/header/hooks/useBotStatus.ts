@@ -20,11 +20,14 @@ export function useBotStatus(
 
 		const elapsedReb = Math.floor(nowUTC.diff(lastReb, 'days').days);
 
-		const todayNY = nowNY.toFormat('yyyy-MM-dd');
-		const versionDate = DateTime.fromSeconds(Number(dataVersion), {
-			zone: 'America/New_York',
-		}).toFormat('yyyy-MM-dd');
-		const ranToday = versionDate === todayNY;
+		const nowDE = DateTime.now().setZone('Europe/Berlin');
+		const todayDE = nowDE.toFormat('yyyy-MM-dd');
+
+		const versionDateDE = DateTime.fromSeconds(Number(dataVersion))
+			.setZone('Europe/Berlin')
+			.toFormat('yyyy-MM-dd');
+
+		const ranToday = versionDateDE === todayDE;
 
 		const nextOpen = marketStatus?.next_open
 			? DateTime.fromISO(marketStatus.next_open, { setZone: true })
