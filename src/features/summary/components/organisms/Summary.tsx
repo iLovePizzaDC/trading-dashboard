@@ -1,27 +1,31 @@
-import SummaryCard from '@/features/summary/components/molecules/SummaryCard';
-import SummaryCardError from '@/features/summary/components/molecules/SummaryCardError';
-import SummaryCardSkeleton from '@/features/summary/components/molecules/SummaryCardSkeleton';
-import { fetchLastRebalanceDate, fetchSummary } from '@/shared/api/data';
+import HeroCards from '@/features/summary/components/molecules/HeroCards';
+import SummaryCards from '@/features/summary/components/molecules/SummaryCards';
+import SummaryError from '@/features/summary/components/molecules/SummaryError';
+import SummarySkeleton from '@/features/summary/components/molecules/SummarySkeleton';
+import { fetchSummary } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 function Summary() {
-	const {
-		data: lastRebalanceData,
-		loading: lastRebalanceLoading,
-		error: lastRebalanceError,
-	} = useFetch(fetchLastRebalanceDate);
 	const {
 		data: summaryData,
 		loading: summaryLoading,
 		error: summaryError,
 	} = useFetch(fetchSummary);
 
-	if (lastRebalanceLoading || summaryLoading) return <SummaryCardSkeleton />;
+	if (summaryLoading) return <SummarySkeleton />;
 
-	if (lastRebalanceError || !lastRebalanceData || summaryError || !summaryData)
-		return <SummaryCardError />;
+	if (summaryError || !summaryData) return <SummaryError />;
 
-	return <SummaryCard lastRebalance={lastRebalanceData} summary={summaryData} />;
+	return (
+		<div className='space-y-4'>
+			<HeroCards
+				portfolioValue={summaryData.portfolio_value}
+				profit={summaryData.profit}
+				regime={summaryData.regime}
+			/>
+			<SummaryCards summary={summaryData} />
+		</div>
+	);
 }
 
 export default Summary;

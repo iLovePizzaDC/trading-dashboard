@@ -3,14 +3,17 @@ import MonthCell from '@/features/equity/components/atoms/MonthCell';
 import { MONTHS } from '@/features/equity/constants/heatmap';
 import type { MonthlyReturn } from '@/features/equity/types/heatmap';
 import { calcMonthlyReturns } from '@/features/equity/utils/performance';
+import Card from '@/shared/components/atoms/Card';
+import type { Deposit } from '@/shared/types/deposits';
 import type { EquityPoint } from '@/shared/types/equity';
 import { useEffect, useRef, useState } from 'react';
 
 interface IMonthlyHeatmap {
 	data: EquityPoint[];
+	deposits: Deposit[];
 }
 
-function MonthlyHeatmap({ data }: IMonthlyHeatmap) {
+function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 	const [selected, setSelected] = useState<MonthlyReturn | null>(null);
 	const [displayed, setDisplayed] = useState<MonthlyReturn | null>(null);
 	const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -29,21 +32,17 @@ function MonthlyHeatmap({ data }: IMonthlyHeatmap) {
 		};
 	}, [selected]);
 
-	const monthly = calcMonthlyReturns(data);
+	const monthly = calcMonthlyReturns(data, deposits);
 	const years = [...new Set(monthly.map((m) => m.year))].sort((a, b) => b - a);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-center gap-2'>
-				<span className='w-1 h-4 bg-purple-500 rounded-full' />
-				<p className='text-xs uppercase tracking-wider text-white/40'>trade stats</p>
-			</div>
-
+		<Card title='monthly heatmap'>
 			<div className='mb-2 grid grid-cols-[2rem_repeat(12,1fr)] gap-1 text-[10px] text-white/30'>
 				<div />
 				{MONTHS.map((m) => (
 					<div key={m} className='text-center'>
-						{m.slice(0, 3)}
+						<span className='hidden sm:inline'>{m.slice(0, 3)}</span>
+						<span className='sm:hidden'>{m.slice(0, 1)}</span>
 					</div>
 				))}
 			</div>
@@ -90,7 +89,7 @@ function MonthlyHeatmap({ data }: IMonthlyHeatmap) {
 			>
 				<div className='overflow-hidden'>{displayed && <DetailPanel entry={displayed} />}</div>
 			</div>
-		</div>
+		</Card>
 	);
 }
 

@@ -24,7 +24,7 @@ function MomentumSkeleton() {
 				))}
 			</div>
 
-			<SkeletonBox className='h-40 w-full rounded-lg' />
+			<SkeletonBox className='h-48 w-full rounded-lg' />
 		</div>
 	);
 }

@@ -8,13 +8,13 @@ function SkeletonBox({ className }: { className?: string }) {
 
 function TradesSkeleton() {
 	return (
-		<div className='space-y-4'>
-			<div className='grid gap-4 lg:grid-cols-[4fr_3fr] items-start'>
+		<div className='space-y-6'>
+			<div className='grid gap-6 lg:grid-cols-[4fr_3fr] items-start'>
 				<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 					<div className='mb-4'>
 						<SkeletonBox className='h-3 w-20' />
 					</div>
-					<div className='space-y-4'>
+					<div className='space-y-6'>
 						<div className='grid grid-cols-3 gap-3'>
 							<div className='space-y-2 rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
 								<SkeletonBox className='h-2.5 w-14' />

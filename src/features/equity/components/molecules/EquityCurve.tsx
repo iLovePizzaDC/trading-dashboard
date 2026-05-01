@@ -1,9 +1,17 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
+import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { REBALANCE_DAYS } from '@/shared/constants/bot';
+import { RANGES, type Range } from '@/shared/constants/date-range';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import type { Deposit } from '@/shared/types/deposits';
+import { usd } from '@/shared/utils/currency';
+import { cutoffDate } from '@/shared/utils/date-range';
+import { DateTime } from 'luxon';
 import {
 	Area,
 	AreaChart,
@@ -15,17 +23,34 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
+import DepositLabel from '../atoms/DepositLabel';
 
 interface IEquityCurve {
-	data: (EquityPoint & { spy?: number | null })[];
+	data: EquityPoint[];
+	deposits: Deposit[];
 }
 
-function EquityCurve({ data }: IEquityCurve) {
-	const [showSpy, setShowSpy] = useState(true);
-	const [relative, setRelative] = useState(true);
+function EquityCurve({ data, deposits }: IEquityCurve) {
+	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
+	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
 
-	const getDate = useCallback((d: EquityPoint) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
+	const {
+		value: range,
+		setValue: setRange,
+		filteredData,
+	} = useFilterWithStorage<EquityPoint, Range>({
+		storageKey: 'equity-curve-range',
+		data,
+		defaultValue: '3M',
+		allValues: RANGES,
+		filterFn: (d, range) => {
+			const cutoff = cutoffDate(range);
+			if (!cutoff) return true;
+
+			const dt = DateTime.fromISO(d.date).startOf('day');
+			return dt >= cutoff.startOf('day');
+		},
+	});
 
 	const chartData = useMemo(() => {
 		if (!filteredData.length) return [];
@@ -40,6 +65,16 @@ function EquityCurve({ data }: IEquityCurve) {
 				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
 	}, [filteredData, relative]);
+
+	const rebalanceIndexes = useMemo(() => {
+		if (!chartData.length) return [];
+
+		const result: number[] = [];
+		for (let i = 0; i < chartData.length; i += REBALANCE_DAYS) {
+			result.push(i);
+		}
+		return result;
+	}, [chartData]);
 
 	const startValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
@@ -56,23 +91,17 @@ function EquityCurve({ data }: IEquityCurve) {
 	const tickInterval = Math.ceil(chartData.length / 6);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-baseline justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>equity curve</p>
-				</div>
-
-				<p className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'}`}>
-					{relative
-						? `${(currentValue - 100).toFixed(2)}%`
-						: new Intl.NumberFormat('en-US', {
-								style: 'currency',
-								currency: 'USD',
-							}).format(currentValue)}
-				</p>
-			</div>
-
+		<Card
+			title='equity curve'
+			badge={
+				<button
+					onClick={() => setRelative((prev) => !prev)}
+					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'} cursor-pointer`}
+				>
+					{relative ? `${(currentValue - 100).toFixed(2)}%` : usd(currentValue)}
+				</button>
+			}
+		>
 			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
 				<DateRangeFilter range={range} setRange={setRange} />
 
@@ -113,8 +142,8 @@ function EquityCurve({ data }: IEquityCurve) {
 				</div>
 			</div>
 
-			<ResponsiveContainer width='100%' height={200}>
-				<AreaChart data={chartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+			<ResponsiveContainer width='100%' height={240}>
+				<AreaChart data={chartData} margin={{ top: 10, right: 4, left: 0, bottom: 0 }}>
 					<defs>
 						<linearGradient id='equityGradient' x1='0' y1='0' x2='0' y2='1'>
 							<stop offset='5%' stopColor={color} stopOpacity={0.15} />
@@ -148,6 +177,26 @@ function EquityCurve({ data }: IEquityCurve) {
 						strokeDasharray='4 4'
 					/>
 
+					{rebalanceIndexes.map((i) => (
+						<ReferenceLine
+							key={i}
+							x={chartData[i]?.date}
+							stroke='rgba(255,255,255,0.1)'
+							strokeDasharray='2 4'
+							strokeWidth={1}
+						/>
+					))}
+
+					{deposits.map((d) => (
+						<ReferenceLine
+							key={d.date}
+							x={d.date}
+							stroke='rgba(168,85,247,0.4)'
+							strokeDasharray='3 3'
+							label={<DepositLabel value={`+${usd(d.amount)}`} />}
+						/>
+					))}
+
 					<Tooltip
 						content={<EquityTooltip positive={isPos} showSpy={showSpy} relative={relative} />}
 					/>
@@ -176,11 +225,12 @@ function EquityCurve({ data }: IEquityCurve) {
 							strokeWidth={1.2}
 							dot={false}
 							strokeDasharray='5 5'
+							isAnimationActive={false}
 						/>
 					)}
 				</AreaChart>
 			</ResponsiveContainer>
-		</div>
+		</Card>
 	);
 }
 

@@ -1,14 +1,15 @@
+import EntryRowLayout from '@/shared/components/atoms/EntryRowLayout';
 import type { StopHistoryEntry } from '@/shared/types/stops';
 import { usd } from '@/shared/utils/currency';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
-interface IStopHistoryEntryRow {
+interface IStopEntry {
 	entry: StopHistoryEntry;
 	color: string;
 	isLast: boolean;
 }
 
-function StopHistoryEntryRow({ entry, color, isLast }: IStopHistoryEntryRow) {
+function StopEntry({ entry, color, isLast }: IStopEntry) {
 	const isFirst = entry.old_stop === 0;
 	const isRaise = entry.new_stop > entry.old_stop;
 
@@ -17,23 +18,12 @@ function StopHistoryEntryRow({ entry, color, isLast }: IStopHistoryEntryRow) {
 	const valueColor = isFirst ? 'text-white/50' : isRaise ? 'text-green-400' : 'text-red-400';
 
 	return (
-		<div className='flex gap-2.5'>
-			<div className='flex flex-col items-center w-3 shrink-0'>
-				<div
-					className='w-2 h-2 rounded-full mt-1.75 shrink-0 z-10'
-					style={{ backgroundColor: color, opacity: isRaise || isFirst ? 1 : 0.55 }}
-				/>
-				{!isLast && (
-					<div className='w-px flex-1 min-h-2' style={{ backgroundColor: color, opacity: 0.2 }} />
-				)}
-			</div>
-
-			<div
-				className={`flex-1 flex items-start justify-between min-w-0 ${
-					isLast ? '' : 'border-b border-white/5'
-				}`}
-			>
-				<div className='min-w-0'>
+		<EntryRowLayout
+			color={color}
+			isLast={isLast}
+			dotOpacity={isRaise || isFirst ? 1 : 0.55}
+			renderLeft={
+				<>
 					<div className='flex items-center gap-1.5'>
 						<span className={`text-[10px] font-medium uppercase shrink-0 ${labelColor}`}>
 							{label}
@@ -46,14 +36,13 @@ function StopHistoryEntryRow({ entry, color, isLast }: IStopHistoryEntryRow) {
 						)}
 					</div>
 					<p className='text-[11px] text-white/25 mt-0.5'>{entry.date}</p>
-				</div>
-
-				<div className='text-right shrink-0 ml-2'>
-					<span className={`text-xs font-medium ${valueColor}`}>{usd(entry.new_stop)}</span>
-				</div>
-			</div>
-		</div>
+				</>
+			}
+			renderRight={
+				<span className={`text-xs font-medium ${valueColor}`}>{usd(entry.new_stop)}</span>
+			}
+		/>
 	);
 }
 
-export default StopHistoryEntryRow;
+export default StopEntry;

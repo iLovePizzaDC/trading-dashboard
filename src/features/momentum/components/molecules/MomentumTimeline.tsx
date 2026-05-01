@@ -1,9 +1,13 @@
 import MomentumTooltip from '@/features/momentum/components/atoms/MomentumTooltip';
 import { calcMomentumTimeline } from '@/features/momentum/components/utils/momentum';
+import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import { useDateRangeFilter } from '@/shared/hooks/useDateRangeFilter';
+import { RANGES, type Range } from '@/shared/constants/date-range';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
-import { useCallback, useMemo } from 'react';
+import { cutoffDate } from '@/shared/utils/date-range';
+import { DateTime } from 'luxon';
+import { useMemo } from 'react';
 import {
 	CartesianGrid,
 	Line,
@@ -14,23 +18,38 @@ import {
 	YAxis,
 } from 'recharts';
 
+const EXCLUDED_RANGES: Range[] = ['1W', '1M'];
+
 interface IMomentumTimeline {
 	data: DecisionEntry[];
 }
 
 function MomentumTimeline({ data }: IMomentumTimeline) {
-	const getDate = useCallback((d: DecisionEntry) => d.date, []);
-	const { range, setRange, filteredData } = useDateRangeFilter(data, getDate);
+	const {
+		value: range,
+		setValue: setRange,
+		filteredData,
+	} = useFilterWithStorage<DecisionEntry, Range>({
+		storageKey: 'momentum-timeline',
+		data,
+		defaultValue: '6M',
+		allValues: RANGES,
+		excludedValues: EXCLUDED_RANGES,
+		filterFn: (decision, range) => {
+			const cutoff = cutoffDate(range);
+			if (!cutoff) return true;
+
+			const dt = DateTime.fromISO(decision.date).startOf('day');
+			return dt >= cutoff.startOf('day');
+		},
+	});
 
 	const timeline = useMemo(() => calcMomentumTimeline(filteredData), [filteredData]);
 
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-4 flex items-center justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>momentum timeline</p>
-				</div>
+		<Card
+			title='momentum timeline'
+			badge={
 				<div className='flex items-center gap-4 text-[10px] text-white/30'>
 					<span className='flex items-center gap-1'>
 						<span className='inline-block h-px w-4 bg-purple-400' /> avg
@@ -39,14 +58,15 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 						<span className='inline-block h-px w-4 bg-white/20' /> top
 					</span>
 				</div>
-			</div>
-			<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-				<DateRangeFilter range={range} setRange={setRange} />
+			}
+		>
+			<div className='mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+				<DateRangeFilter range={range} setRange={setRange} excludedRanges={EXCLUDED_RANGES} />
 			</div>
 			{timeline.length < 2 ? (
 				<p className='py-6 text-center text-xs text-white/30'>Not enough rebalance data yet.</p>
 			) : (
-				<div className='h-40'>
+				<div className='h-48'>
 					<ResponsiveContainer width='100%' height='100%'>
 						<LineChart data={timeline} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
 							<CartesianGrid
@@ -87,12 +107,13 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 								strokeDasharray='4 4'
 								dot={false}
 								activeDot={false}
+								isAnimationActive={false}
 							/>
 						</LineChart>
 					</ResponsiveContainer>
 				</div>
 			)}
-		</div>
+		</Card>
 	);
 }
 

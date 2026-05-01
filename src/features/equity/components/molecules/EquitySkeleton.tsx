@@ -8,7 +8,7 @@ function SkeletonBox({ className }: { className?: string }) {
 
 function EquitySkeleton() {
 	return (
-		<div className='grid grid-cols-1 gap-4 lg:grid-cols-[3fr_2fr] items-start'>
+		<div className='grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr] items-start'>
 			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
 				<div className='mb-4 flex items-baseline justify-between'>
 					<SkeletonBox className='h-3 w-24' />
@@ -33,7 +33,7 @@ function EquitySkeleton() {
 			</div>
 
 			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-				<div className='flex justify-center mb-4'>
+				<div className='flex justify-start mb-4'>
 					<SkeletonBox className='h-3 w-32' />
 				</div>
 

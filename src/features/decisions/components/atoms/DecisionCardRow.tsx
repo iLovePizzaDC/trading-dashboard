@@ -7,7 +7,8 @@ interface IDecisionCardRow {
 
 function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 	const { symbol, momentum, passes_trend, selected, rejected_reason } = candidate;
-	const pct = momentum !== null ? (momentum * 100).toFixed(1) : null;
+	const pctLabel =
+		momentum !== null ? (momentum * 100 > 100 ? '>100' : (momentum * 100).toFixed(1)) : null;
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
 
 	const reasonLabel: Record<string, string> = {
@@ -29,7 +30,12 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 					style={{ width: `${barWidth}%` }}
 				/>
 			</div>
-			<p className='w-10 text-right text-xs text-white/40'>{pct ?? '—'}%</p>
+			<p
+				className='w-10 text-right text-xs text-white/40'
+				title={momentum?.toString() ?? undefined}
+			>
+				{pctLabel ?? '—'}%
+			</p>
 			<p className='w-24 text-right text-xs'>
 				{selected ? (
 					<span className='text-green-400'>selected</span>

@@ -1,18 +1,25 @@
 import type { Range } from '@/shared/constants/date-range';
+import { DateTime } from 'luxon';
 
-export function cutoffDate(range: Range): Date | null {
-	const now = new Date();
+export function cutoffDate(range: Range): DateTime | null {
+	const now = DateTime.now();
+
 	switch (range) {
 		case '1W':
-			return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+			return now.minus({ weeks: 1 });
+
 		case '1M':
-			return new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+			return now.minus({ months: 1 });
+
 		case '3M':
-			return new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
+			return now.minus({ months: 3 });
+
 		case '6M':
-			return new Date(now.getFullYear(), now.getMonth() - 6, now.getDate());
+			return now.minus({ months: 6 });
+
 		case 'YTD':
-			return new Date(now.getFullYear(), 0, 1);
+			return now.startOf('year');
+
 		case 'ALL':
 			return null;
 	}

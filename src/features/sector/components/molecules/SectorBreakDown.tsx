@@ -1,10 +1,12 @@
 import { SORT_LABELS } from '@/features/sector/constants/sectors';
 import type { SortKey } from '@/features/sector/types/sector-breakdown';
 import { calcSectorStats } from '@/features/sector/utils/sector-breakdown';
+import Card from '@/shared/components/atoms/Card';
+import Dropdown from '@/shared/components/atoms/Dropdown';
+import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
-import { useState } from 'react';
 
 interface ISectorBreakdown {
 	decisions: DecisionEntry[];
@@ -12,35 +14,33 @@ interface ISectorBreakdown {
 }
 
 function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
-	const [sortBy, setSortBy] = useState<SortKey>('timesSelected');
+	const { value: sortBy, setValue: setSortBy } = useFilterWithStorage({
+		storageKey: 'sector-breakdown',
+		data: trades,
+		defaultValue: 'timesSelected',
+		allValues: Object.keys(SORT_LABELS) as SortKey[],
+	});
 
 	const stats = calcSectorStats(decisions, trades);
+	const maxSelected = Math.max(...stats.map((s) => s.timesSelected), 1);
 	const sorted = [...stats].sort((a, b) => b[sortBy] - a[sortBy]);
 
-	const maxSelected = Math.max(...stats.map((s) => s.timesSelected), 1);
-
 	return (
-		<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4 transition-colors duration-300 hover:border-white/20'>
-			<div className='mb-3 flex items-center justify-between'>
-				<div className='flex items-center gap-2'>
-					<span className='w-1 h-4 bg-purple-500 rounded-full' />
-					<p className='text-xs uppercase tracking-wider text-white/40'>sector breakdown</p>
-				</div>
-				<div className='flex rounded-lg bg-linear-to-br from-white/5 to-white/0'>
-					{(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
-						<button
-							key={key}
-							onClick={() => setSortBy(key)}
-							className={`rounded-md px-2 py-px text-[10px] transition-all cursor-pointer ${
-								sortBy === key ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/60'
-							}`}
-						>
-							{SORT_LABELS[key]}
-						</button>
-					))}
-				</div>
-			</div>
-
+		<Card
+			title='sector breakdown'
+			badge={
+				<Dropdown
+					trigger={<span>{SORT_LABELS[sortBy]}</span>}
+					items={(Object.keys(SORT_LABELS) as SortKey[]).map((key) => ({
+						key,
+						label: SORT_LABELS[key],
+						active: key === sortBy,
+						onClick: () => setSortBy(key),
+					}))}
+					width='w-32'
+				/>
+			}
+		>
 			<div className='space-y-2'>
 				{sorted.map((s) => (
 					<div key={s.symbol} className='flex items-center gap-3'>
@@ -75,7 +75,7 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 					</div>
 				))}
 			</div>
-		</div>
+		</Card>
 	);
 }
 
