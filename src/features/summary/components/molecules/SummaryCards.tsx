@@ -2,7 +2,7 @@ import MetricItem from '@/features/summary/components/atoms/MetricItem';
 import { type TabType } from '@/features/summary/types/tab';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { Summary } from '@/shared/types/summary';
-import { isPos, usd } from '@/shared/utils/currency';
+import { fmt, isPos, usd } from '@/shared/utils/currency';
 import { useEffect, useRef, useState } from 'react';
 import SummaryCardsShell from './SummaryCardsShell';
 
@@ -55,8 +55,6 @@ function SummaryCards({ summary }: ISummaryCards) {
 		}
 	};
 
-	const pct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`; // TODO refactor everywhere into shared utils
-
 	const spy4wDiff =
 		summary.rolling_4w !== null && summary.spy_4w !== null
 			? summary.rolling_4w - summary.spy_4w
@@ -81,21 +79,21 @@ function SummaryCards({ summary }: ISummaryCards) {
 						<div className='grid grid-cols-2 gap-4 md:grid-cols-3'>
 							<MetricItem
 								label='total return'
-								value={pct(summary.total_return)}
+								value={fmt(summary.total_return)}
 								sub='since inception'
 								positive={isPos(summary.total_return)}
 							/>
 
 							<MetricItem
 								label='CAGR'
-								value={pct(summary.cagr)}
+								value={fmt(summary.cagr)}
 								sub='annualised'
 								positive={isPos(summary.cagr)}
 							/>
 
 							<MetricItem
 								label='max drawdown'
-								value={pct(summary.max_dd)}
+								value={fmt(summary.max_dd)}
 								sub='worst peak-to-trough'
 								positive={isPos(summary.max_dd)}
 							/>
@@ -109,14 +107,14 @@ function SummaryCards({ summary }: ISummaryCards) {
 
 							<MetricItem
 								label='4-week return'
-								value={summary.rolling_4w !== null ? pct(summary.rolling_4w) : 'n/a'}
+								value={summary.rolling_4w !== null ? fmt(summary.rolling_4w) : 'n/a'}
 								sub='recent momentum'
 								positive={summary.rolling_4w !== null ? isPos(summary.rolling_4w) : undefined}
 							/>
 
 							<MetricItem
 								label='vs SPY'
-								value={spy4wDiff !== null ? pct(spy4wDiff) : 'n/a'}
+								value={spy4wDiff !== null ? fmt(spy4wDiff) : 'n/a'}
 								sub='4-week delta'
 								positive={spy4wDiff !== null ? isPos(spy4wDiff) : undefined}
 							/>
@@ -148,7 +146,7 @@ function SummaryCards({ summary }: ISummaryCards) {
 
 							<MetricItem
 								label='ROI'
-								value={pct(roiPercent)}
+								value={fmt(roiPercent)}
 								sub='profit / invested'
 								positive={isPos(roiPercent)}
 							/>
@@ -162,12 +160,12 @@ function SummaryCards({ summary }: ISummaryCards) {
 								<div className='space-y-3'>
 									<MetricItem
 										label='4-week return'
-										value={summary.rolling_4w !== null ? pct(summary.rolling_4w) : 'n/a'}
+										value={summary.rolling_4w !== null ? fmt(summary.rolling_4w) : 'n/a'}
 										positive={summary.rolling_4w !== null ? isPos(summary.rolling_4w) : undefined}
 									/>
 									<MetricItem
 										label='SPY return'
-										value={summary.spy_4w !== null ? pct(summary.spy_4w) : 'n/a'}
+										value={summary.spy_4w !== null ? fmt(summary.spy_4w) : 'n/a'}
 										positive={summary.spy_4w !== null ? isPos(summary.spy_4w) : undefined}
 									/>
 								</div>
@@ -178,7 +176,7 @@ function SummaryCards({ summary }: ISummaryCards) {
 								<div className='space-y-3'>
 									<MetricItem
 										label='max drawdown'
-										value={pct(summary.max_dd)}
+										value={fmt(summary.max_dd)}
 										positive={isPos(summary.max_dd)}
 									/>
 									<MetricItem

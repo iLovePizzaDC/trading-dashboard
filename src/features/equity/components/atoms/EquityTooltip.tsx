@@ -34,12 +34,12 @@ function EquityTooltip({
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
 			<p className='text-white/40'>{label}</p>
 			<p className={`font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
-				{relative ? `Bot: ${fmt(bot - 100)}%` : `Bot: ${fmt(botAbsDelta)}`}
+				{relative ? `Bot: ${fmt(bot - 100, relative)}` : `Bot: ${fmt(botAbsDelta, relative)}`}
 			</p>
 
 			{showSpy && spy && (
 				<p className='text-white/60'>
-					{relative ? `SPY: ${fmt(spy - 100)}%` : `SPY: ${fmt(spyAbsDelta)}`}
+					{relative ? `SPY: ${fmt(spy - 100, relative)}` : `SPY: ${fmt(spyAbsDelta, relative)}`}
 				</p>
 			)}
 		</div>
