@@ -83,7 +83,7 @@ function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 			</div>
 
 			<div
-				className={`grid transition-all duration-300 ease-in-out ${
+				className={`grid transition-all duration-300 ease-in-out mb-1 ${
 					selected ? 'grid-rows-[1fr] mt-3' : 'grid-rows-[0fr]'
 				}`}
 			>

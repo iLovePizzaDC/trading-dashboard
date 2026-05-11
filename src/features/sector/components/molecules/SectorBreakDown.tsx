@@ -41,7 +41,7 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 				/>
 			}
 		>
-			<div className='space-y-2'>
+			<div className='space-y-2 mb-2'>
 				{sorted.map((s) => (
 					<div key={s.symbol} className='flex items-center gap-3'>
 						<p className='w-10 text-xs font-semibold text-white/75 tracking-widest shrink-0'>
