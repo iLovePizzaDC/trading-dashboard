@@ -200,7 +200,14 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 					))}
 
 					<Tooltip
-						content={<EquityTooltip positive={isPos} showSpy={showSpy} relative={relative} />}
+						content={
+							<EquityTooltip
+								positive={isPos}
+								showSpy={showSpy}
+								relative={relative}
+								startValue={startValue}
+							/>
+						}
 					/>
 
 					<Area

@@ -1,4 +1,5 @@
 import type { PayloadItem } from '@/features/equity/types/equity';
+import { fmt } from '@/shared/utils/currency';
 
 interface IEquityTooltip {
 	active?: boolean;
@@ -7,9 +8,18 @@ interface IEquityTooltip {
 	positive?: boolean;
 	showSpy?: boolean;
 	relative?: boolean;
+	startValue?: number;
 }
 
-function EquityTooltip({ active, payload, label, positive, showSpy, relative }: IEquityTooltip) {
+function EquityTooltip({
+	active,
+	payload,
+	label,
+	positive,
+	showSpy,
+	relative,
+	startValue = 0,
+}: IEquityTooltip) {
 	if (!active || !payload?.length) return null;
 
 	const bot = payload.find((p: PayloadItem) => p.dataKey === 'equity')?.value;
@@ -17,16 +27,19 @@ function EquityTooltip({ active, payload, label, positive, showSpy, relative }: 
 
 	if (!bot) return null;
 
+	const botAbsDelta = bot - startValue;
+	const spyAbsDelta = spy != null ? spy - startValue : 0;
+
 	return (
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
 			<p className='text-white/40'>{label}</p>
 			<p className={`font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
-				Bot: {relative ? `${(bot - 100).toFixed(2)}%` : `$${bot.toFixed(2)}`}
+				{relative ? `Bot: ${fmt(bot - 100)}%` : `Bot: ${fmt(botAbsDelta)}`}
 			</p>
 
 			{showSpy && spy && (
 				<p className='text-white/60'>
-					SPY: {relative ? `${(spy - 100).toFixed(2)}%` : `$${spy.toFixed(2)}`}
+					{relative ? `SPY: ${fmt(spy - 100)}%` : `SPY: ${fmt(spyAbsDelta)}`}
 				</p>
 			)}
 		</div>
