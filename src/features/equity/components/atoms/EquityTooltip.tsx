@@ -25,21 +25,18 @@ function EquityTooltip({
 	const bot = payload.find((p: PayloadItem) => p.dataKey === 'equity')?.value;
 	const spy = payload.find((p: PayloadItem) => p.dataKey === 'spy')?.value;
 
-	if (!bot) return null;
-
-	const botAbsDelta = bot - startValue;
-	const spyAbsDelta = spy != null ? spy - startValue : 0;
+	if (bot == null) return null;
 
 	return (
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
 			<p className='text-white/40'>{label}</p>
 			<p className={`font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
-				{relative ? `Bot: ${fmt(bot - 100, relative)}` : `Bot: ${fmt(botAbsDelta, relative)}`}
+				{relative ? `Bot: ${fmt(bot - 100, true)}` : `Bot: ${fmt(bot - startValue, false)}`}
 			</p>
 
-			{showSpy && spy && (
+			{showSpy && spy != null && (
 				<p className='text-white/60'>
-					{relative ? `SPY: ${fmt(spy - 100, relative)}` : `SPY: ${fmt(spyAbsDelta, relative)}`}
+					{relative ? `SPY: ${fmt(spy - 100, true)}` : `SPY: ${fmt(spy - startValue, false)}`}
 				</p>
 			)}
 		</div>

@@ -2,6 +2,7 @@ import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
 import { useMemo } from 'react';
 
+import DepositLabel from '@/features/equity/components/atoms/DepositLabel';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { REBALANCE_DAYS } from '@/shared/constants/bot';
@@ -23,7 +24,6 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
-import DepositLabel from '../atoms/DepositLabel';
 
 interface IEquityCurve {
 	data: EquityPoint[];
@@ -78,9 +78,10 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 		return result;
 	}, [chartData]);
 
-	const startValue = chartData[0]?.equity ?? 0;
+	const unfilteredStartValue = data[0]?.equity ?? 0;
+	const filteredStartValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
-	const isPos = currentValue >= startValue;
+	const isPos = currentValue >= filteredStartValue;
 	const color = isPos ? '#4ade80' : '#f87171';
 
 	const allVals = chartData.flatMap((d) =>
@@ -174,7 +175,7 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 					/>
 
 					<ReferenceLine
-						y={relative ? 100 : startValue}
+						y={relative ? 100 : unfilteredStartValue}
 						stroke='rgba(255,255,255,0.15)'
 						strokeDasharray='4 4'
 					/>
@@ -205,7 +206,7 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 								positive={isPos}
 								showSpy={showSpy}
 								relative={relative}
-								startValue={startValue}
+								startValue={unfilteredStartValue}
 							/>
 						}
 					/>
