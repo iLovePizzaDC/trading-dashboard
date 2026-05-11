@@ -34,11 +34,7 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
 	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
 
-	const {
-		value: range,
-		setValue: setRange,
-		filteredData,
-	} = useFilterWithStorage<EquityPoint, Range>({
+	const { value: range, setValue: setRange } = useFilterWithStorage<EquityPoint, Range>({
 		storageKey: 'equity-curve-range',
 		data,
 		defaultValue: '3M',
@@ -46,25 +42,31 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 		filterFn: (d, range) => {
 			const cutoff = cutoffDate(range);
 			if (!cutoff) return true;
-
-			const dt = DateTime.fromISO(d.date).startOf('day');
-			return dt >= cutoff.startOf('day');
+			return DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day');
 		},
 	});
 
-	const chartData = useMemo(() => {
-		if (!filteredData.length) return [];
+	const allChartData = useMemo(() => {
+		if (!data.length) return [];
 
-		const botStart = filteredData[0].equity;
-		const spyStart = filteredData.find((d) => d.spy != null)?.spy ?? null;
+		const botStart = data[0].equity;
+		const spyStart = data.find((d) => d.spy != null)?.spy ?? null;
 
-		return filteredData.map((d) => ({
+		return data.map((d) => ({
 			date: d.date,
 			equity: relative ? (d.equity / botStart) * 100 : d.equity,
 			spy:
 				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
-	}, [filteredData, relative]);
+	}, [data, relative]);
+
+	const chartData = useMemo(() => {
+		const cutoff = cutoffDate(range);
+		if (!cutoff) return allChartData;
+		return allChartData.filter(
+			(d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'),
+		);
+	}, [allChartData, range]);
 
 	const rebalanceIndexes = useMemo(() => {
 		if (!chartData.length) return [];
