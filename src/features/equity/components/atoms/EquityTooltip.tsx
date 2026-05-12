@@ -1,5 +1,6 @@
 import type { PayloadItem } from '@/features/equity/types/equity';
 import { fmt } from '@/shared/utils/currency';
+import { useEffect } from 'react';
 
 interface IEquityTooltip {
 	active?: boolean;
@@ -9,6 +10,7 @@ interface IEquityTooltip {
 	showSpy?: boolean;
 	relative?: boolean;
 	startValue?: number;
+	onHover?: (value: number | null) => void;
 }
 
 function EquityTooltip({
@@ -19,13 +21,17 @@ function EquityTooltip({
 	showSpy,
 	relative,
 	startValue = 0,
+	onHover,
 }: IEquityTooltip) {
-	if (!active || !payload?.length) return null;
+	const bot = payload?.find((p: PayloadItem) => p.dataKey === 'equity')?.value ?? null;
+	const spy = payload?.find((p: PayloadItem) => p.dataKey === 'spy')?.value ?? null;
 
-	const bot = payload.find((p: PayloadItem) => p.dataKey === 'equity')?.value;
-	const spy = payload.find((p: PayloadItem) => p.dataKey === 'spy')?.value;
+	useEffect(() => {
+		if (active && bot != null) onHover?.(bot);
+		else onHover?.(null);
+	}, [active, bot]); // eslint-disable-line react-hooks/exhaustive-deps
 
-	if (bot == null) return null;
+	if (!active || !payload?.length || bot == null) return null;
 
 	return (
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>

@@ -1,6 +1,6 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import DepositLabel from '@/features/equity/components/atoms/DepositLabel';
 import Card from '@/shared/components/atoms/Card';
@@ -33,6 +33,7 @@ interface IEquityCurve {
 function EquityCurve({ data, deposits }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
 	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
+	const [hoveredValue, setHoveredValue] = useState<number | null>(null);
 
 	const { value: range, setValue: setRange } = useFilterWithStorage<EquityPoint, Range>({
 		storageKey: 'equity-curve-range',
@@ -81,6 +82,8 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 	const unfilteredStartValue = data[0]?.equity ?? 0;
 	const filteredStartValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
+
+	const displayValue = hoveredValue ?? currentValue;
 	const isPos = currentValue >= filteredStartValue;
 	const color = isPos ? '#4ade80' : '#f87171';
 
@@ -99,9 +102,9 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 			badge={
 				<button
 					onClick={() => setRelative((prev) => !prev)}
-					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'} cursor-pointer`}
+					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'} cursor-pointer transition-all`}
 				>
-					{relative ? `${(currentValue - 100).toFixed(2)}%` : usd(currentValue)}
+					{relative ? `${(displayValue - 100).toFixed(2)}%` : usd(displayValue)}
 				</button>
 			}
 		>
@@ -170,8 +173,10 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 						tickLine={false}
 						axisLine={false}
 						domain={[minVal - padding, maxVal + padding]}
-						tickFormatter={(val) => (relative ? `${val.toFixed(0)}` : `$${val.toFixed(0)}`)}
-						width={52}
+						tickFormatter={(val) =>
+							relative ? `${(val - 100).toFixed(1)}%` : `$${val.toFixed(0)}`
+						}
+						width={relative ? 58 : 52}
 					/>
 
 					<ReferenceLine
@@ -207,6 +212,7 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 								showSpy={showSpy}
 								relative={relative}
 								startValue={unfilteredStartValue}
+								onHover={setHoveredValue}
 							/>
 						}
 					/>
