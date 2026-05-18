@@ -1,4 +1,5 @@
 import type { BotStatus } from '@/features/header/types/bot-status';
+import { nextBusinessDay } from '@/features/header/utils/time-helper';
 import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/shared/constants/bot';
 import type { MarketStatus } from '@/shared/types/market.status';
 import { DateTime } from 'luxon';
@@ -16,7 +17,7 @@ export function useBotStatus(
 		const nowUTC = DateTime.now().toUTC();
 
 		const lastReb = DateTime.fromISO(lastRebalance.trim(), { zone: 'utc' });
-		const nextReb = lastReb.plus({ days: REBALANCE_DAYS });
+		const nextReb = nextBusinessDay(lastReb.plus({ days: REBALANCE_DAYS }));
 
 		const elapsedReb = Math.floor(nowUTC.diff(lastReb, 'days').days);
 
@@ -59,7 +60,7 @@ export function useBotStatus(
 
 		return {
 			rebalanceDaysLeft: Math.max(0, Math.round(nextReb.diff(nowUTC, 'days').days)),
-			rebalanceNextDate: nextReb.toFormat('yyyy-MM-dd'),
+			rebalanceNextDate: nextReb.setZone('Europe/Berlin').toFormat('yyyy-MM-dd'),
 			rebalancePct: Math.min(100, Math.round((elapsedReb / REBALANCE_DAYS) * 100)),
 			isRunning,
 			ranToday,
