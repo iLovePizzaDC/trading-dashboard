@@ -7,8 +7,7 @@ interface IDecisionCardRow {
 
 function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 	const { symbol, momentum, passes_trend, selected, rejected_reason } = candidate;
-	const pctLabel =
-		momentum !== null ? (momentum * 100 > 100 ? '>100' : (momentum * 100).toFixed(1)) : null;
+	const pctLabel = momentum !== null ? (momentum * 100).toFixed(1) : null;
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
 
 	const reasonLabel: Record<string, string> = {
