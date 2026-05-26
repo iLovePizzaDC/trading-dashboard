@@ -29,7 +29,7 @@ function BotStatusGrid({
 	nextClose,
 	lastUpdated,
 }: IBotStatusGrid) {
-	const statusCard = getStatusCard(isRunning, ranToday, isTradingDay);
+	const statusCard = getStatusCard(isRunning, ranToday, isTradingDay, nextOpen);
 
 	return (
 		<div className='flex flex-col gap-2 pt-3'>
