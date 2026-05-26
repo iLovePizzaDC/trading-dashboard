@@ -1,7 +1,8 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
+import DepositLabel from '@/features/equity/components/atoms/DepositLabel';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { REBALANCE_DAYS } from '@/shared/constants/bot';
@@ -23,7 +24,6 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
-import DepositLabel from '../atoms/DepositLabel';
 
 interface IEquityCurve {
 	data: EquityPoint[];
@@ -33,12 +33,9 @@ interface IEquityCurve {
 function EquityCurve({ data, deposits }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
 	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
+	const [hoveredValue, setHoveredValue] = useState<number | null>(null);
 
-	const {
-		value: range,
-		setValue: setRange,
-		filteredData,
-	} = useFilterWithStorage<EquityPoint, Range>({
+	const { value: range, setValue: setRange } = useFilterWithStorage<EquityPoint, Range>({
 		storageKey: 'equity-curve-range',
 		data,
 		defaultValue: '3M',
@@ -46,25 +43,31 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 		filterFn: (d, range) => {
 			const cutoff = cutoffDate(range);
 			if (!cutoff) return true;
-
-			const dt = DateTime.fromISO(d.date).startOf('day');
-			return dt >= cutoff.startOf('day');
+			return DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day');
 		},
 	});
 
-	const chartData = useMemo(() => {
-		if (!filteredData.length) return [];
+	const allChartData = useMemo(() => {
+		if (!data.length) return [];
 
-		const botStart = filteredData[0].equity;
-		const spyStart = filteredData.find((d) => d.spy != null)?.spy ?? null;
+		const botStart = data[0].equity;
+		const spyStart = data.find((d) => d.spy != null)?.spy ?? null;
 
-		return filteredData.map((d) => ({
+		return data.map((d) => ({
 			date: d.date,
 			equity: relative ? (d.equity / botStart) * 100 : d.equity,
 			spy:
 				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
 		}));
-	}, [filteredData, relative]);
+	}, [data, relative]);
+
+	const chartData = useMemo(() => {
+		const cutoff = cutoffDate(range);
+		if (!cutoff) return allChartData;
+		return allChartData.filter(
+			(d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'),
+		);
+	}, [allChartData, range]);
 
 	const rebalanceIndexes = useMemo(() => {
 		if (!chartData.length) return [];
@@ -76,9 +79,12 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 		return result;
 	}, [chartData]);
 
-	const startValue = chartData[0]?.equity ?? 0;
+	const unfilteredStartValue = data[0]?.equity ?? 0;
+	const filteredStartValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
-	const isPos = currentValue >= startValue;
+
+	const displayValue = hoveredValue ?? currentValue;
+	const isPos = currentValue >= filteredStartValue;
 	const color = isPos ? '#4ade80' : '#f87171';
 
 	const allVals = chartData.flatMap((d) =>
@@ -96,9 +102,9 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 			badge={
 				<button
 					onClick={() => setRelative((prev) => !prev)}
-					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'} cursor-pointer`}
+					className={`text-sm font-medium ${isPos ? 'text-green-400' : 'text-red-400'} cursor-pointer transition-all`}
 				>
-					{relative ? `${(currentValue - 100).toFixed(2)}%` : usd(currentValue)}
+					{relative ? `${(displayValue - 100).toFixed(2)}%` : usd(displayValue)}
 				</button>
 			}
 		>
@@ -167,12 +173,14 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 						tickLine={false}
 						axisLine={false}
 						domain={[minVal - padding, maxVal + padding]}
-						tickFormatter={(val) => (relative ? `${val.toFixed(0)}` : `$${val.toFixed(0)}`)}
-						width={52}
+						tickFormatter={(val) =>
+							relative ? `${(val - 100).toFixed(1)}%` : `$${val.toFixed(0)}`
+						}
+						width={relative ? 58 : 52}
 					/>
 
 					<ReferenceLine
-						y={relative ? 100 : startValue}
+						y={relative ? 100 : unfilteredStartValue}
 						stroke='rgba(255,255,255,0.15)'
 						strokeDasharray='4 4'
 					/>
@@ -198,7 +206,15 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 					))}
 
 					<Tooltip
-						content={<EquityTooltip positive={isPos} showSpy={showSpy} relative={relative} />}
+						content={
+							<EquityTooltip
+								positive={isPos}
+								showSpy={showSpy}
+								relative={relative}
+								startValue={unfilteredStartValue}
+								onHover={setHoveredValue}
+							/>
+						}
 					/>
 
 					<Area

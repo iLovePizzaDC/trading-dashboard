@@ -64,6 +64,8 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 			</div>
 
 			{hasMore && <ShowMoreButton toggle={toggle} expanded={expanded} hiddenCount={hiddenCount} />}
+
+			<div className='w-1 mb-1' />
 		</Card>
 	);
 }

@@ -1,6 +1,6 @@
 import { MONTHS } from '@/features/equity/constants/heatmap';
 import type { MonthlyReturn } from '@/features/equity/types/heatmap';
-import { usd } from '@/shared/utils/currency';
+import { fmt, usd } from '@/shared/utils/currency';
 
 interface IDetailPanel {
 	entry: MonthlyReturn;
@@ -23,8 +23,7 @@ function DetailPanel({ entry }: IDetailPanel) {
 				<p
 					className={`text-xs font-medium tabular-nums ${entry.return >= 0 ? 'text-green-400' : 'text-red-400'}`}
 				>
-					{entry.return >= 0 ? '+' : ''}
-					{entry.return.toFixed(2)}%
+					{fmt(entry.return)}
 				</p>
 			</div>
 
@@ -33,8 +32,7 @@ function DetailPanel({ entry }: IDetailPanel) {
 				<p
 					className={`text-xs font-medium tabular-nums ${abs >= 0 ? 'text-green-400' : 'text-red-400'}`}
 				>
-					{abs >= 0 ? '+' : ''}
-					{usd(abs)}
+					{fmt(abs, false)}
 				</p>
 			</div>
 

@@ -5,3 +5,7 @@ export function usd(n: number) {
 export function isPos(n: number) {
 	return n >= 0;
 }
+
+export function fmt(n: number, relative: boolean = true) {
+	return `${n >= 0 ? '+' : '-'}${relative ? '' : '$'}${Math.abs(n).toFixed(2)}${relative ? '%' : ''}`;
+}

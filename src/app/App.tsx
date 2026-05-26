@@ -13,7 +13,7 @@ import { DataVersionProvider } from '@/shared/context/DataVersionContext';
 function App() {
 	return (
 		<DataVersionProvider>
-			<main className='min-h-screen p-4 md:p-8 cursor-default'>
+			<main className='min-h-screen p-4 sm:pb-10 md:p-5 cursor-default'>
 				<div className='mx-auto max-w-7xl space-y-6'>
 					<Header />
 					<Summary />

@@ -54,3 +54,9 @@ export function getWeekdayFromISO(iso: string): string {
 
 	return dt.setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
 }
+
+export function nextBusinessDay(date: DateTime): DateTime {
+	if (date.weekday === 6) return date.plus({ days: 2 });
+	if (date.weekday === 7) return date.plus({ days: 1 });
+	return date;
+}
