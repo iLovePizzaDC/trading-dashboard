@@ -5,9 +5,11 @@ export function getStatusCard(
 	isRunning: boolean,
 	ranToday: boolean,
 	isTradingDay: boolean,
+	nextOpen: string | null,
 ): { value: string; sub: string; progress: number; color: 'green' | 'amber' | 'blue' } {
 	const runTime = getBotRunTimeDE();
 	const day = getWeekdayNow();
+	const nextDay = nextOpen ? DateTime.fromISO(nextOpen).toFormat('ccc').toLowerCase() : 'mon';
 
 	if (isRunning) {
 		return { value: 'running now', sub: `started at ${runTime}`, progress: 100, color: 'green' };
@@ -25,7 +27,7 @@ export function getStatusCard(
 	}
 	return {
 		value: `${day} — resting`,
-		sub: `resumes mon ${runTime}`,
+		sub: `resumes ${nextDay} ${runTime}`,
 		color: 'amber',
 		progress: 100,
 	};
