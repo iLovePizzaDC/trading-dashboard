@@ -17,14 +17,14 @@ const Divider = () => (
 
 function OpenPositions({ stops, trades }: IOpenPositions) {
 	const symbols = Object.keys(stops);
-	if (symbols.length === 0) return <PositionsEmpty />;
-
 	const lastBuy = trades.reduce<Record<string, Trade>>((acc, t) => {
 		if (t.action === 'buy') acc[t.symbol] = t;
 		return acc;
 	}, {});
 
 	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(symbols.length, 2);
+
+	if (symbols.length === 0) return <PositionsEmpty />;
 
 	const preview = symbols.slice(0, previewCount);
 	const extra = symbols.slice(previewCount);

@@ -6,7 +6,7 @@ import { calcMonthlyReturns } from '@/features/equity/utils/performance';
 import Card from '@/shared/components/atoms/Card';
 import type { Deposit } from '@/shared/types/deposits';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface IMonthlyHeatmap {
 	data: EquityPoint[];
@@ -14,26 +14,23 @@ interface IMonthlyHeatmap {
 }
 
 function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
-	const [selected, setSelected] = useState<MonthlyReturn | null>(null);
-	const [displayed, setDisplayed] = useState<MonthlyReturn | null>(null);
 	const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	useEffect(() => {
-		if (closeTimer.current) clearTimeout(closeTimer.current);
-
-		if (selected) {
-			setDisplayed(selected);
-		} else {
-			closeTimer.current = setTimeout(() => setDisplayed(null), 300);
-		}
-
-		return () => {
-			if (closeTimer.current) clearTimeout(closeTimer.current);
-		};
-	}, [selected]);
+	const [displayed, setDisplayed] = useState<MonthlyReturn | null>(null);
 
 	const monthly = calcMonthlyReturns(data, deposits);
 	const years = [...new Set(monthly.map((m) => m.year))].sort((a, b) => b - a);
+
+	const handleSelect = (entry: MonthlyReturn) => {
+		if (closeTimer.current) clearTimeout(closeTimer.current);
+
+		const isSame = displayed?.year === entry.year && displayed?.month === entry.month;
+
+		if (isSame) {
+			closeTimer.current = setTimeout(() => setDisplayed(null), 300);
+		} else {
+			setDisplayed(entry);
+		}
+	};
 
 	return (
 		<Card title='monthly heatmap'>
@@ -63,12 +60,8 @@ function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 									<MonthCell
 										key={`${entry.year}-${entry.month}`}
 										entry={entry}
-										selected={selected?.year === entry.year && selected?.month === entry.month}
-										onClick={() =>
-											setSelected((prev) =>
-												prev?.year === entry.year && prev?.month === entry.month ? null : entry,
-											)
-										}
+										selected={displayed?.year === entry.year && displayed?.month === entry.month}
+										onClick={() => handleSelect(entry)}
 									/>
 								) : (
 									<div
@@ -84,7 +77,7 @@ function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 
 			<div
 				className={`grid transition-all duration-300 ease-in-out mb-1 ${
-					selected ? 'grid-rows-[1fr] mt-3' : 'grid-rows-[0fr]'
+					displayed ? 'grid-rows-[1fr] mt-3' : 'grid-rows-[0fr]'
 				}`}
 			>
 				<div className='overflow-hidden'>{displayed && <DetailPanel entry={displayed} />}</div>

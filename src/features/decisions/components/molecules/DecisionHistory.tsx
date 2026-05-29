@@ -1,7 +1,7 @@
 import DecisionHistoryRow from '@/features/decisions/components/atoms/DecisionHistoryRow';
+import { useDecisionVirtualizer } from '@/features/decisions/hooks/useDecisionVirtualizer';
 import Card from '@/shared/components/atoms/Card';
 import type { DecisionEntry } from '@/shared/types/decisions';
-import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
 
 interface IDecisionHistory {
@@ -19,12 +19,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 
 	const sorted = [...data].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
 
-	const rowVirtualizer = useVirtualizer({
-		count: sorted.length,
-		getScrollElement: () => parentRef.current,
-		estimateSize: () => ROW_HEIGHT,
-		overscan: 6,
-	});
+	const rowVirtualizer = useDecisionVirtualizer(sorted.length, parentRef, ROW_HEIGHT);
 
 	const canScroll = rowVirtualizer.getTotalSize() > MAX_HEIGHT;
 
@@ -35,7 +30,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 		>
 			<div
 				ref={parentRef}
-				className='max-h-64 overflow-y-auto [scrollbar-width:thin] px-3 -mx-3'
+				className='max-h-64 overflow-y-auto scrollbar-thin px-3 -mx-3'
 				style={
 					canScroll
 						? {
