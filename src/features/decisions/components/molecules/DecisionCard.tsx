@@ -10,11 +10,11 @@ interface IDecisionsCard {
 
 function DecisionsCard({ data }: IDecisionsCard) {
 	const latest = data[data.length - 1];
-	if (!latest) return null;
-
 	const sorted = [...latest.candidates].sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0));
 
 	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(sorted.length, 3);
+
+	if (!latest) return null;
 
 	const preview = sorted.slice(0, previewCount);
 	const extra = sorted.slice(previewCount);

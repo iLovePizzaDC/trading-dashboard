@@ -1,21 +1,19 @@
-import { useVersion } from '@/shared/context/DataVersionContext';
-import { useEffect, useState } from 'react';
+import { useDataVersion } from '@/shared/hooks/useDataVersion';
+import { fetchReducer, initialFetchState } from '@/shared/hooks/useFetch.reducer';
+import { useEffect, useReducer } from 'react';
 
 export function useFetch<T>(fetcher: (version: string) => Promise<T>) {
-	const version = useVersion();
-	const [data, setData] = useState<T | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<Error | null>(null);
+	const version = useDataVersion();
+	const [state, dispatch] = useReducer(fetchReducer<T>, initialFetchState);
 
 	useEffect(() => {
 		if (version === null) return;
-		setLoading(true);
-		setError(null);
+		dispatch({ type: 'fetch' });
 		fetcher(version)
-			.then(setData)
-			.catch(setError)
-			.finally(() => setLoading(false));
+			.then((data) => dispatch({ type: 'success', payload: data }))
+			.catch((error) => dispatch({ type: 'error', payload: error }));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [version]);
 
-	return { data, loading, error };
+	return state;
 }

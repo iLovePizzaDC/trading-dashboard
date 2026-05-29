@@ -13,7 +13,7 @@ interface ITradesCard {
 }
 
 function TradesCard({ data, stopHistory }: ITradesCard) {
-	const groups = useMemo(() => groupTrades(data, stopHistory), [data]);
+	const groups = useMemo(() => groupTrades(data, stopHistory), [data, stopHistory]);
 
 	const totalPnl = data
 		.filter((t) => t.pnl !== undefined)

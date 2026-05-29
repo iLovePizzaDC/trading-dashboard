@@ -25,8 +25,6 @@ interface ITradeScatter {
 }
 
 function TradeScatter({ data }: ITradeScatter) {
-	if (!data) return;
-
 	const {
 		value: range,
 		setValue: setRange,
@@ -45,6 +43,8 @@ function TradeScatter({ data }: ITradeScatter) {
 			return dt >= cutoff.startOf('day');
 		},
 	});
+
+	if (!data) return null;
 
 	const points = buildScatterData(filteredData);
 	const wins = points.filter((p) => p.pnl >= 0);
