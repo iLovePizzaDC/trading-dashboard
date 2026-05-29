@@ -8,7 +8,7 @@ import Sector from '@/features/sector/components/organisms/Sector';
 import Stops from '@/features/stops/components/organisms/Stops';
 import Summary from '@/features/summary/components/organisms/Summary';
 import Trades from '@/features/trades/components/organisms/Trades';
-import { DataVersionProvider } from '@/shared/context/DataVersionContext';
+import { DataVersionProvider } from '@/shared/context/DataVersionProvider';
 
 function App() {
 	return (
