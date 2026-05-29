@@ -78,7 +78,7 @@ jobs:
                 cp -r /var/www/trading /var/www/trading.bak || true
             - name: Copy dist to nginx
               run: |
-                rm -rf /var/www/trading/*
+                find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
                 cp -r dist/* /var/www/trading/
             - name: Health Check
               id: healthcheck
@@ -86,7 +86,7 @@ jobs:
             - name: Rollback on failure
               if: failure()
               run: |
-                rm -rf /var/www/trading/*
+                find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
                 cp -r /var/www/trading.bak/* /var/www/trading/
                 echo "Rollback completed"
 
