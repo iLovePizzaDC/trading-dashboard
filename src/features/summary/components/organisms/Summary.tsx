@@ -6,24 +6,16 @@ import { fetchSummary } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 function Summary() {
-	const {
-		data: summaryData,
-		loading: summaryLoading,
-		error: summaryError,
-	} = useFetch(fetchSummary);
+	const { data, loading, error } = useFetch(fetchSummary);
 
-	if (summaryLoading) return <SummarySkeleton />;
+	if (loading) return <SummarySkeleton />;
 
-	if (summaryError || !summaryData) return <SummaryError />;
+	if (error || !data) return <SummaryError />;
 
 	return (
 		<div className='space-y-4'>
-			<HeroCards
-				portfolioValue={summaryData.portfolio_value}
-				profit={summaryData.profit}
-				regime={summaryData.regime}
-			/>
-			<SummaryCards summary={summaryData} />
+			<HeroCards portfolioValue={data.portfolio_value} profit={data.profit} regime={data.regime} />
+			<SummaryCards summary={data} />
 		</div>
 	);
 }

@@ -2,16 +2,18 @@ import TradeGroupRow from '@/features/trades/components/atoms/TradeGroupRow';
 import { groupTrades } from '@/features/trades/utils/trades-card';
 import Card from '@/shared/components/atoms/Card';
 import ScrollableGroupList from '@/shared/components/molecules/ScrollableGroupList';
+import type { StopHistory } from '@/shared/types/stops';
 import type { Trade } from '@/shared/types/trades';
 import { isPos, usd } from '@/shared/utils/currency';
 import { useMemo } from 'react';
 
 interface ITradesCard {
 	data: Trade[];
+	stopHistory: StopHistory;
 }
 
-function TradesCard({ data }: ITradesCard) {
-	const groups = useMemo(() => groupTrades(data), [data]);
+function TradesCard({ data, stopHistory }: ITradesCard) {
+	const groups = useMemo(() => groupTrades(data, stopHistory), [data]);
 
 	const totalPnl = data
 		.filter((t) => t.pnl !== undefined)
