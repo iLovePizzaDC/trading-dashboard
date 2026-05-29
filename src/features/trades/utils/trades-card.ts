@@ -1,8 +1,19 @@
 import type { TradeGroup } from '@/features/trades/types/trades-card';
+import type { StopHistory } from '@/shared/types/stops';
 import type { Trade } from '@/shared/types/trades';
 import { symbolColor } from '@/shared/utils/symbol-colors';
 
-export function groupTrades(data: Trade[]): TradeGroup[] {
+export function getCurrentStop(
+	symbol: string,
+	fallbackStop: number,
+	stopHistory: StopHistory,
+): number {
+	const history = stopHistory[symbol];
+	if (!history || history.length === 0) return fallbackStop;
+	return [...history].sort((a, b) => b.date.localeCompare(a.date))[0].new_stop;
+}
+
+export function groupTrades(data: Trade[], stopHistory: StopHistory): TradeGroup[] {
 	const map = new Map<string, Trade[]>();
 
 	for (const t of data) {
@@ -10,7 +21,6 @@ export function groupTrades(data: Trade[]): TradeGroup[] {
 		map.get(t.symbol)!.push(t);
 	}
 
-	let colorIdx = 0;
 	const groups: TradeGroup[] = [];
 
 	for (const [symbol, trades] of map) {
@@ -20,15 +30,22 @@ export function groupTrades(data: Trade[]): TradeGroup[] {
 			.reduce((s, t) => s + (t.pnl ?? 0), 0);
 		const buyCount = entries.filter((t) => t.action === 'buy').length;
 		const sellCount = entries.filter((t) => t.action === 'sell').length;
+		const isOpen = buyCount > sellCount;
+
+		const lastBuy = [...entries].filter((t) => t.action === 'buy').at(-1);
+		const currentStop =
+			isOpen && lastBuy?.stop_price != null
+				? getCurrentStop(symbol, lastBuy.stop_price, stopHistory)
+				: undefined;
 
 		groups.push({
 			symbol,
 			color: symbolColor(symbol),
 			entries,
 			closedPnl,
-			isOpen: buyCount > sellCount,
+			isOpen,
+			currentStop,
 		});
-		colorIdx++;
 	}
 
 	return groups.sort((a, b) => {

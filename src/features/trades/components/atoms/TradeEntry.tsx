@@ -7,10 +7,13 @@ interface ITradeEntry {
 	trade: Trade;
 	color: string;
 	isLast: boolean;
+	currentStop?: number;
 }
 
-function TradeEntry({ trade, color, isLast }: ITradeEntry) {
+function TradeEntry({ trade, color, isLast, currentStop }: ITradeEntry) {
 	const isBuy = trade.action === 'buy';
+
+	const displayStop = isBuy ? (currentStop ?? trade.stop_price) : undefined;
 
 	return (
 		<EntryRowLayout
@@ -41,8 +44,8 @@ function TradeEntry({ trade, color, isLast }: ITradeEntry) {
 					>
 						{usd(trade.pnl)}
 					</span>
-				) : trade.stop_price ? (
-					<span className='text-xs text-white/30'>stop {usd(trade.stop_price)}</span>
+				) : displayStop ? (
+					<span className='text-xs text-white/30'>stop {usd(displayStop)}</span>
 				) : null
 			}
 		/>
