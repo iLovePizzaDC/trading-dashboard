@@ -1,10 +1,11 @@
 import MetricItem from '@/features/summary/components/atoms/MetricItem';
+import { fadeReducer } from '@/features/summary/components/molecules/SummaryCards.reducer';
+import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell';
 import { type TabType } from '@/features/summary/types/tab';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { Summary } from '@/shared/types/summary';
 import { fmt, isPos, usd } from '@/shared/utils/currency';
-import { useEffect, useRef, useState } from 'react';
-import SummaryCardsShell from './SummaryCardsShell';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 interface ISummaryCards {
 	summary: Summary;
@@ -13,20 +14,21 @@ interface ISummaryCards {
 function SummaryCards({ summary }: ISummaryCards) {
 	// TODO outsource into hooks
 	const [activeTab, setActiveTab] = useLocalStorage<TabType>('summary-active-tab', 'overview');
-	const [displayedTab, setDisplayedTab] = useState<TabType>('overview');
-	const [isFading, setIsFading] = useState(false);
+	const [{ displayedTab, isFading }, dispatch] = useReducer(fadeReducer, {
+		displayedTab: 'overview',
+		isFading: false,
+	});
 	const [height, setHeight] = useState<number | 'auto'>('auto');
 	const contentRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (activeTab !== displayedTab) {
-			setIsFading(true);
-			const fadeTimeout = setTimeout(() => {
-				setDisplayedTab(activeTab);
-				setIsFading(false);
-			}, 150);
-			return () => clearTimeout(fadeTimeout);
-		}
+		if (activeTab === displayedTab) return;
+		const fadeOut = setTimeout(() => dispatch({ type: 'start_fade' }), 0);
+		const fadeIn = setTimeout(() => dispatch({ type: 'finish_fade', tab: activeTab }), 150);
+		return () => {
+			clearTimeout(fadeOut);
+			clearTimeout(fadeIn);
+		};
 	}, [activeTab, displayedTab]);
 
 	useEffect(() => {

@@ -1,8 +1,8 @@
-import { useVersion } from '@/shared/context/DataVersionContext';
+import { useDataVersion } from '@/shared/hooks/useDataVersion';
 import { DateTime } from 'luxon';
 
 export function useLastUpdated(): string | null {
-	const version = useVersion();
+	const version = useDataVersion();
 	if (!version) return null;
 
 	return DateTime.fromSeconds(parseInt(version), { zone: 'utc' })
