@@ -6,4 +6,5 @@ export type TradeGroup = {
 	entries: Trade[];
 	closedPnl: number;
 	isOpen: boolean;
+	currentStop?: number;
 };

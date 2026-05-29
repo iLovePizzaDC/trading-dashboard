@@ -35,7 +35,7 @@ function TradeGroupRow({ group }: ITradeGroupRow) {
 				</>
 			)}
 			renderEntry={(trade, color, isLast) => (
-				<TradeEntry trade={trade} color={color} isLast={isLast} />
+				<TradeEntry trade={trade} color={color} isLast={isLast} currentStop={group.currentStop} />
 			)}
 		/>
 	);
