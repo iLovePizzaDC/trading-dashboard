@@ -8,15 +8,7 @@ import type { DecisionEntry } from '@/shared/types/decisions';
 import { cutoffDate } from '@/shared/utils/date-range';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
-import {
-	CartesianGrid,
-	Line,
-	LineChart,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from 'recharts';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 const EXCLUDED_RANGES: Range[] = ['1W', '1M'];
 
@@ -73,20 +65,6 @@ function MomentumTimeline({ data }: IMomentumTimeline) {
 								strokeDasharray='3 3'
 								stroke='rgba(255,255,255,0.05)'
 								vertical={false}
-							/>
-							<XAxis
-								dataKey='date'
-								tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
-								tickLine={false}
-								axisLine={false}
-								tickFormatter={(v) => v.slice(5)}
-							/>
-							<YAxis
-								tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
-								tickLine={false}
-								axisLine={false}
-								tickFormatter={(v) => `${v}%`}
-								width={36}
 							/>
 							<Tooltip content={<MomentumTooltip />} />
 							<Line
