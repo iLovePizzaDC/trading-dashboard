@@ -21,8 +21,6 @@ import {
 	ReferenceLine,
 	ResponsiveContainer,
 	Tooltip,
-	XAxis,
-	YAxis,
 } from 'recharts';
 
 interface IEquityCurve {
@@ -86,16 +84,6 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 	const displayValue = hoveredValue ?? currentValue;
 	const isPos = currentValue >= filteredStartValue;
 	const color = isPos ? '#4ade80' : '#f87171';
-
-	const allVals = chartData.flatMap((d) =>
-		showSpy && d.spy != null ? [d.equity, d.spy] : [d.equity],
-	);
-	const minVal = Math.min(...allVals);
-	const maxVal = Math.max(...allVals);
-	const padding = (maxVal - minVal) * 0.1 || 1;
-
-	const tickInterval = Math.ceil(chartData.length / 6);
-
 	return (
 		<Card
 			title='equity curve'
@@ -158,26 +146,6 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 					</defs>
 
 					<CartesianGrid strokeDasharray='3 3' stroke='rgba(255,255,255,0.05)' vertical={false} />
-
-					<XAxis
-						dataKey='date'
-						tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }}
-						tickLine={false}
-						axisLine={false}
-						interval={tickInterval}
-						tickFormatter={(val) => val.slice(5)}
-					/>
-
-					<YAxis
-						tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }}
-						tickLine={false}
-						axisLine={false}
-						domain={[minVal - padding, maxVal + padding]}
-						tickFormatter={(val) =>
-							relative ? `${(val - 100).toFixed(1)}%` : `$${val.toFixed(0)}`
-						}
-						width={relative ? 58 : 52}
-					/>
 
 					<ReferenceLine
 						y={relative ? 100 : unfilteredStartValue}
