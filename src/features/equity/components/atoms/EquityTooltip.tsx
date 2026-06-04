@@ -1,5 +1,6 @@
 import type { PayloadItem } from '@/features/equity/types/equity';
 import { fmt } from '@/shared/utils/currency';
+import { DateTime } from 'luxon';
 import { useEffect } from 'react';
 
 interface IEquityTooltip {
@@ -16,7 +17,6 @@ interface IEquityTooltip {
 function EquityTooltip({
 	active,
 	payload,
-	label,
 	positive,
 	showSpy,
 	relative,
@@ -25,6 +25,8 @@ function EquityTooltip({
 }: IEquityTooltip) {
 	const bot = payload?.find((p: PayloadItem) => p.dataKey === 'equity')?.value ?? null;
 	const spy = payload?.find((p: PayloadItem) => p.dataKey === 'spy')?.value ?? null;
+	const date = payload?.[0]?.payload?.date ?? null;
+	const formattedDate = date ? DateTime.fromISO(date).toFormat('dd MMM yyyy') : '';
 
 	useEffect(() => {
 		if (active && bot != null) onHover?.(bot);
@@ -35,7 +37,7 @@ function EquityTooltip({
 
 	return (
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
-			<p className='text-white/40'>{label}</p>
+			<p className='text-white/40'>{formattedDate}</p>
 			<p className={`font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
 				{relative ? `Bot: ${fmt(bot - 100, true)}` : `Bot: ${fmt(bot - startValue, false)}`}
 			</p>
