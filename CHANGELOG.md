@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.0.0...v1.0.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* calculate pnl based on given data ([52d45dd](https://github.com/iLovePizzaDC/trading-dashboard/commit/52d45dd13158b927a987feb3be9de789549f9b46))
+* calculate pnl based on given data ([c4fabd5](https://github.com/iLovePizzaDC/trading-dashboard/commit/c4fabd5c186b18ce5fcab33fa25da66f3344cc37))
+
 ## 1.0.0 (2026-05-29)
 
 
