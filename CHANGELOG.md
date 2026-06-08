@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.0.1...v1.0.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* add and hide x/y axis ([#23](https://github.com/iLovePizzaDC/trading-dashboard/issues/23)) ([3cd98c1](https://github.com/iLovePizzaDC/trading-dashboard/commit/3cd98c1ebdfd21ab1aaeab3af0d4a298d777b653))
+* fix trade statistics calculation ([#24](https://github.com/iLovePizzaDC/trading-dashboard/issues/24)) ([e13d19e](https://github.com/iLovePizzaDC/trading-dashboard/commit/e13d19e2028719424719bae3c4240f140120d05d))
+
 ## [1.0.1](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.0.0...v1.0.1) (2026-06-08)
 
 
