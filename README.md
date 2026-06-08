@@ -4,7 +4,7 @@ Real-time monitoring dashboard for the Sector Rotation Trading Bot. Displays liv
 
 ## 🎯 Overview
 
-This frontend dashboard connects to the trading bot's output data and visualizes:
+This frontend dashboard connects to the [trading bot's](https://github.com/iLovePizzaDC/tradingbotv2) output data and visualizes:
 
 - Portfolio performance
 - Trade history and analysis
@@ -263,4 +263,4 @@ Ensure data endpoint (usually `/data/`) is accessible from the web server.
 
 ---
 
-**Dashboard for Sector Rotation Trading Bot**
+**Dashboard for [Sector Rotation Trading Bot](https://github.com/iLovePizzaDC/tradingbotv2)**
