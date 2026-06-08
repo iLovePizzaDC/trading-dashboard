@@ -21,6 +21,8 @@ import {
 	ReferenceLine,
 	ResponsiveContainer,
 	Tooltip,
+	XAxis,
+	YAxis,
 } from 'recharts';
 
 interface IEquityCurve {
@@ -147,6 +149,10 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 
 					<CartesianGrid strokeDasharray='3 3' stroke='rgba(255,255,255,0.05)' vertical={false} />
 
+					<XAxis dataKey='date' hide />
+
+					<YAxis tick={false} axisLine={false} width={0} domain={['dataMin', 'dataMax']} />
+
 					<ReferenceLine
 						y={relative ? 100 : unfilteredStartValue}
 						stroke='rgba(255,255,255,0.15)'
@@ -169,7 +175,7 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 							x={d.date}
 							stroke='rgba(168,85,247,0.4)'
 							strokeDasharray='3 3'
-							label={<DepositLabel value={`+${usd(d.amount)}`} />}
+							label={<DepositLabel value={`+${usd(d.amount)}`} />} // TODO label not visible
 						/>
 					))}
 
