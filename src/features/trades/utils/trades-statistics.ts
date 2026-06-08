@@ -1,52 +1,71 @@
+import type { ClosedTrade } from '@/features/trades/types/trade-statistics';
 import type { Trade } from '@/shared/types/trades';
 import { DateTime } from 'luxon';
 
 export function computeTradeStats(trades: Trade[]) {
-	const closedTrades = trades.filter((t) => t.action === 'sell' && t.pnl !== undefined);
+	const sorted = [...trades].sort(
+		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+	);
 
-	if (!closedTrades.length) return null;
+	const openPositions = new Map<string, Trade[]>();
+	const closedTrades: ClosedTrade[] = [];
 
-	const wins = closedTrades.filter((t) => t.pnl! > 0);
-	const losses = closedTrades.filter((t) => t.pnl! < 0);
+	for (const t of sorted) {
+		if (t.action === 'buy') {
+			const list = openPositions.get(t.symbol) ?? [];
+			list.push(t);
+			openPositions.set(t.symbol, list);
+		}
+
+		if (t.action === 'sell') {
+			const queue = openPositions.get(t.symbol);
+
+			if (!queue || queue.length === 0) continue;
+
+			const buy = queue.shift();
+			if (!buy) continue;
+
+			const pnl = (t.price - buy.price) * t.shares;
+
+			closedTrades.push({
+				...t,
+				pnl,
+				openDate: buy.date,
+				closeDate: t.date,
+			});
+		}
+	}
+
+	if (closedTrades.length === 0) return null;
+
+	const wins = closedTrades.filter((t) => t.pnl > 0);
+	const losses = closedTrades.filter((t) => t.pnl < 0);
 
 	const totalTrades = closedTrades.length;
 	const winRate = wins.length / totalTrades;
 
-	const avgWin = wins.reduce((acc, t) => acc + t.pnl!, 0) / (wins.length || 1);
-	const avgLoss = losses.reduce((acc, t) => acc + t.pnl!, 0) / (losses.length || 1);
+	const avgWin = wins.reduce((acc, t) => acc + t.pnl, 0) / (wins.length || 1);
 
-	const grossWin = wins.reduce((acc, t) => acc + t.pnl!, 0);
-	const grossLoss = Math.abs(losses.reduce((acc, t) => acc + t.pnl!, 0));
+	const avgLoss = losses.reduce((acc, t) => acc + t.pnl, 0) / (losses.length || 1);
 
-	const profitFactor = grossLoss === 0 ? Infinity : grossWin / grossLoss;
+	const grossWin = wins.reduce((acc, t) => acc + t.pnl, 0);
+	const grossLoss = Math.abs(losses.reduce((acc, t) => acc + t.pnl, 0));
 
-	const bestTrade = Math.max(...closedTrades.map((t) => t.pnl!));
-	const worstTrade = Math.min(...closedTrades.map((t) => t.pnl!));
+	const profitFactor = grossLoss === 0 ? (grossWin > 0 ? grossWin : 0) : grossWin / grossLoss;
+
+	const bestTrade = Math.max(...closedTrades.map((t) => t.pnl));
+	const worstTrade = Math.min(...closedTrades.map((t) => t.pnl));
 
 	const durations: number[] = [];
-	const openMap = new Map<string, Trade>();
 
-	trades.forEach((t) => {
-		if (t.action === 'buy') {
-			openMap.set(t.symbol, t);
+	for (const t of closedTrades) {
+		const start = DateTime.fromISO(t.openDate);
+		const end = DateTime.fromISO(t.closeDate);
+
+		if (start.isValid && end.isValid) {
+			durations.push(end.diff(start, 'days').days);
 		}
-
-		if (t.action === 'sell') {
-			const open = openMap.get(t.symbol);
-
-			if (open) {
-				const start = DateTime.fromISO(open.date);
-				const end = DateTime.fromISO(t.date);
-
-				if (start.isValid && end.isValid) {
-					const days = end.diff(start, 'days').days;
-					durations.push(days);
-				}
-
-				openMap.delete(t.symbol);
-			}
-		}
-	});
+	}
 
 	const avgDuration = durations.reduce((a, b) => a + b, 0) / (durations.length || 1);
 
