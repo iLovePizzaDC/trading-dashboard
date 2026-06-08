@@ -13,7 +13,7 @@ export function buildScatterData(trades: Trade[]): ScatterPoint[] {
 				symbol: sell.symbol,
 				entryPrice: buy.price,
 				exitPrice: sell.price,
-				pnl: sell.pnl ?? 0,
+				pnl: (sell.price - buy.price) * sell.shares,
 				date: sell.date,
 			};
 		})
