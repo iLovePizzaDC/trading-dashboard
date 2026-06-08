@@ -36,7 +36,9 @@ function TradeStatistics({ data }: ITradeStatistics) {
 
 					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
 						<p className='text-xs text-white/40'>Profit Factor</p>
-						<p className={`text-lg font-semibold ${pfColor}`}>{stats.profitFactor.toFixed(2)}</p>
+						<p className={`text-lg font-semibold ${pfColor}`}>
+							{stats.profitFactor === Infinity ? '∞' : stats.profitFactor.toFixed(2)}
+						</p>
 					</div>
 
 					<div className='rounded-lg bg-linear-to-br from-white/5 to-white/0 p-3'>
