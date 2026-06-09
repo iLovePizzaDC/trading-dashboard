@@ -2,8 +2,9 @@ name: Release Please
 
 on:
     push:
-        branches:
-            - main
+        branches: [main]
+        paths-ignore:
+        - '.github/**'
 
 permissions:
     contents: write
@@ -12,13 +13,8 @@ permissions:
 jobs:
     release-please:
         runs-on: ubuntu-latest
-
+        if: startsWith(github.ref, 'refs/tags/') == false
         steps:
-            - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-
             - uses: googleapis/release-please-action@v4
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
-                  release-type: simple
