@@ -2,10 +2,12 @@ name: CI & Deploy
 
 on:
     push:
-        branches: [main, develop]
+        branches: [main]
+        tags:
+            - "v*"
     pull_request:
         branches: [main, develop]
-    workflow_dispatch:
+
 permissions:
     contents: read
 
@@ -16,8 +18,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run type-check
 
@@ -27,8 +29,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run lint
 
@@ -38,9 +40,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
-            - run: npm ci
+                node-version: 20
+                cache: npm
             - run: npm audit --audit-level=high --omit=dev
 
     build:
@@ -50,33 +51,31 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run build
             - uses: actions/upload-artifact@v4
               with:
-                  name: dist
-                  path: dist
-                  retention-days: 1
+                name: dist
+                path: dist
 
     deploy:
         needs: build
         runs-on: self-hosted
-        if: |
-            github.ref == 'refs/heads/main' &&
-            github.event_name == 'push' &&
-            github.actor == 'google-release-please[bot]'
+        if: startsWith(github.ref, 'refs/tags/v')
         steps:
             - uses: actions/download-artifact@v4
               with:
                 name: dist
                 path: dist
-            - name: Backup current deployment
+
+            - name: Backup
               run: |
                 rm -rf /var/www/trading.bak
-                cp -r /var/www/trading /var/www/trading.bak || true
-            - name: Copy dist to nginx
+                cp -r /var/www/trading /var/www/trading.bak
+
+            - name: Deploy
               run: |
                 find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
                 cp -r dist/* /var/www/trading/
@@ -89,21 +88,3 @@ jobs:
                 find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
                 cp -r /var/www/trading.bak/* /var/www/trading/
                 echo "Rollback completed"
-
-    release:
-        needs: deploy
-        permissions:
-            contents: write
-            pull-requests: write
-        runs-on: ubuntu-latest
-        if: |
-            always() &&
-            needs.deploy.result == 'success'
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-            - uses: googleapis/release-please-action@v4
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  release-type: simple
