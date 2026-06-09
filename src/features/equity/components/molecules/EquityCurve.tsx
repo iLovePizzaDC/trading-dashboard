@@ -5,10 +5,10 @@ import { useMemo, useState } from 'react';
 import DepositLabel from '@/features/equity/components/atoms/DepositLabel';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import { REBALANCE_DAYS } from '@/shared/constants/bot';
 import { RANGES, type Range } from '@/shared/constants/date-range';
 import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Deposit } from '@/shared/types/deposits';
 import { usd } from '@/shared/utils/currency';
 import { cutoffDate } from '@/shared/utils/date-range';
@@ -28,9 +28,10 @@ import {
 interface IEquityCurve {
 	data: EquityPoint[];
 	deposits: Deposit[];
+	decisions: DecisionEntry[];
 }
 
-function EquityCurve({ data, deposits }: IEquityCurve) {
+function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
 	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
 	const [hoveredValue, setHoveredValue] = useState<number | null>(null);
@@ -72,12 +73,12 @@ function EquityCurve({ data, deposits }: IEquityCurve) {
 	const rebalanceIndexes = useMemo(() => {
 		if (!chartData.length) return [];
 
-		const result: number[] = [];
-		for (let i = 0; i < chartData.length; i += REBALANCE_DAYS) {
-			result.push(i);
-		}
-		return result;
-	}, [chartData]);
+		const decisionDateSet = new Set(decisions.map((d) => d.date));
+
+		return chartData
+			.map((point, i) => (decisionDateSet.has(point.date) ? i : -1))
+			.filter((i) => i !== -1);
+	}, [chartData, decisions]);
 
 	const unfilteredStartValue = data[0]?.equity ?? 0;
 	const filteredStartValue = chartData[0]?.equity ?? 0;

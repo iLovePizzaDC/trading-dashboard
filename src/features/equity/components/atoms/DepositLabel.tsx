@@ -7,17 +7,15 @@ interface IDepositLabel {
 }
 
 function DepositLabel({ viewBox, value }: IDepositLabel) {
-	if (!viewBox?.x || !viewBox?.y) return null;
+	if (viewBox?.x == null) return null;
 
-	const { x, y } = viewBox;
+	const x = viewBox.x;
+	const y = 8;
 
 	return (
-		<g className='pt-2'>
-			<circle cx={x} cy={y} r={3} fill='rgb(168,85,247)' />
-
-			<rect x={x + 6} y={y - 10} width={64} height={16} rx={4} fill='rgba(168,85,247,0.15)' />
-
-			<text x={x + 10} y={y + 2} fontSize={10} fill='rgba(255,255,255,0.8)'>
+		<g>
+			<rect x={x + 6} y={y} width={64} height={16} rx={4} fill='rgba(168,85,247,0.15)' />
+			<text x={x + 10} y={y + 11} fontSize={10} fill='rgba(255,255,255,0.8)'>
 				{value}
 			</text>
 		</g>
