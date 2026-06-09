@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.3.0...v1.4.0) (2026-06-09)
+
+
+### Features
+
+* adjust release please header ([#59](https://github.com/iLovePizzaDC/trading-dashboard/issues/59)) ([97680f3](https://github.com/iLovePizzaDC/trading-dashboard/commit/97680f36c242b5a237da268f4b7525fc08564917))
+* adjust release please header ([#59](https://github.com/iLovePizzaDC/trading-dashboard/issues/59)) ([d23faf6](https://github.com/iLovePizzaDC/trading-dashboard/commit/d23faf6a916b57974a407c3c41000fdd17487409))
+
 ## [1.3.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.2.0...v1.3.0) (2026-06-09)
 
 
