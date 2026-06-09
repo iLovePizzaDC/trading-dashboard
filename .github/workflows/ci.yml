@@ -65,8 +65,7 @@ jobs:
         runs-on: self-hosted
         if: |
             github.ref == 'refs/heads/main' &&
-            github.event_name == 'push' &&
-            github.actor == 'google-release-please[bot]'
+            github.event_name == 'push'
         steps:
             - uses: actions/download-artifact@v4
               with:
