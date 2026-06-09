@@ -1,3 +1,6 @@
 #!/bin/bash
+set -e
+
 npm run build
-rsync -av --exclude='data/' dist/ nicob@luna:/var/www/trading/
+
+rsync -r --delete --exclude='data/' dist/ nicob@luna:/var/www/trading/
