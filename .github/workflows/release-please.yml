@@ -3,8 +3,6 @@ name: Release Please
 on:
     push:
         branches: [main]
-        paths-ignore:
-        - '.github/**'
 
 permissions:
     contents: write
