@@ -1,4 +1,4 @@
-export interface Trade {
+export type Trade = {
 	date: string;
 	symbol: string;
 	action: 'buy' | 'sell';
@@ -7,4 +7,4 @@ export interface Trade {
 	stop_price?: number;
 	pnl?: number;
 	reason?: string;
-}
+};

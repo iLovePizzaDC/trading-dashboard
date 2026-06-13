@@ -1,4 +1,4 @@
-export interface BotStatus {
+export type BotStatus = {
 	rebalanceDaysLeft: number;
 	rebalanceNextDate: string;
 	rebalancePct: number;
@@ -6,4 +6,4 @@ export interface BotStatus {
 	ranToday: boolean;
 	isTradingDay: boolean;
 	marketIsOpen: boolean;
-}
+};

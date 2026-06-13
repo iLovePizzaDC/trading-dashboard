@@ -1,6 +1,6 @@
 import type { Regime } from '@/shared/constants/regime';
 
-export interface Summary {
+export type Summary = {
 	last_run: string;
 	portfolio_value: number;
 	total_return: number;
@@ -16,4 +16,4 @@ export interface Summary {
 	winrate: number;
 	avg_win: number;
 	avg_loss: number;
-}
+};
