@@ -32,12 +32,7 @@ function GroupRowLayout<T>({
 
 	return (
 		<div>
-			<button
-				onClick={() => hasMultiple && setExpanded((v) => !v)}
-				className={`w-full flex items-center justify-between mb-2 mt-1 group/header ${
-					hasMultiple ? 'cursor-pointer' : 'cursor-default'
-				}`}
-			>
+			<div className='w-full flex items-center justify-between mb-2 mt-1'>
 				<div className='flex items-center gap-2 min-w-0'>
 					<span className='w-2 h-2 rounded-full shrink-0' style={{ backgroundColor: color }} />
 					<div className='w-12 shrink-0'>
@@ -45,16 +40,28 @@ function GroupRowLayout<T>({
 							{symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
 						</p>
 					</div>
-					{hasMultiple && (
-						<ChevronDownIcon
-							className={`w-3 h-3 text-white/25 shrink-0 transition-all duration-300 group-hover/header:text-white/50 ${
-								expanded ? 'rotate-180' : ''
-							}`}
-						/>
-					)}
+					<button
+						onClick={() => hasMultiple && setExpanded((v) => !v)}
+						disabled={!hasMultiple}
+						className={`flex items-center gap-2 -m-1 p-1 ${
+							hasMultiple ? 'cursor-pointer' : 'cursor-default'
+						}`}
+					>
+						{hasMultiple && (
+							<ChevronDownIcon
+								className={`w-3 h-3 text-white/25 shrink-0 transition-all duration-300 hover:text-white/50 ${
+									expanded ? 'rotate-180' : ''
+								}`}
+							/>
+						)}
+					</button>
 				</div>
 
-				<div className='flex items-center gap-2'>
+				<button
+					onClick={() => hasMultiple && setExpanded((v) => !v)}
+					disabled={!hasMultiple}
+					className={`flex items-center gap-2 ${hasMultiple ? 'cursor-pointer' : 'cursor-default'}`}
+				>
 					{!expanded && hasMultiple && (
 						<div className='text-[9px] text-white/20 transition-opacity duration-200'>
 							<span className='hidden sm:inline'>+{olderEntries.length} older</span>
@@ -62,8 +69,8 @@ function GroupRowLayout<T>({
 						</div>
 					)}
 					{renderBadge(expanded)}
-				</div>
-			</button>
+				</button>
+			</div>
 
 			<div className='pl-1'>
 				{renderEntry(latestEntry, color, !expanded || olderEntries.length === 0)}
