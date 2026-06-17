@@ -46,7 +46,7 @@ function BotStatusGrid({
 				/>
 				<StatCard
 					label='Rebalance'
-					value={`in ${rebalanceDaysLeft}d`}
+					value={rebalanceDaysLeft === 0 ? 'today' : `in ${rebalanceDaysLeft}d`}
 					sub={rebalanceNextDate}
 					progress={rebalancePct}
 					color='green'
