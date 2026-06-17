@@ -1,3 +1,4 @@
+import Tooltip from '@/shared/components/atoms/Tooltip';
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -39,15 +40,10 @@ function GroupRowLayout<T>({
 			>
 				<div className='flex items-center gap-2 min-w-0'>
 					<span className='w-2 h-2 rounded-full shrink-0' style={{ backgroundColor: color }} />
-					<div className='flex flex-col min-w-0'>
-						<span className='text-[11px] font-semibold tracking-widest text-white/75 leading-tight'>
-							{symbol}
-						</span>
-						{symbolName && (
-							<span className='text-[10px] text-white/30 font-normal tracking-normal leading-tight truncate'>
-								{symbolName}
-							</span>
-						)}
+					<div className='w-12 shrink-0'>
+						<p className='text-left text-xs font-medium text-white'>
+							{symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
+						</p>
 					</div>
 					{hasMultiple && (
 						<ChevronDownIcon
