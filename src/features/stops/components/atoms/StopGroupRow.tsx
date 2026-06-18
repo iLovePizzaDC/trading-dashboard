@@ -1,6 +1,6 @@
 import StopEntry from '@/features/stops/components/atoms/StopEntry';
 import type { StopHistoryGroup } from '@/features/stops/types/stop-history';
-import GroupRowLayout from '@/shared/components/molecules/GroupRowLayout'; // TODO [architecture] molecule in atom
+import GroupRowLayout from '@/shared/components/layouts/GroupRowLayout';
 import { usd } from '@/shared/utils/currency';
 
 interface IStopGroupRow {

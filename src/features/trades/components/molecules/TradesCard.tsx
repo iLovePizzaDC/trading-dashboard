@@ -1,7 +1,7 @@
 import TradeGroupRow from '@/features/trades/components/atoms/TradeGroupRow';
 import { groupTrades } from '@/features/trades/utils/trades-card';
 import Card from '@/shared/components/atoms/Card';
-import ScrollableGroupList from '@/shared/components/molecules/ScrollableGroupList'; // TODO [architecture] molecule in molecule
+import ScrollableGroupList from '@/shared/components/layouts/ScrollableGroupList';
 import type { StopHistory } from '@/shared/types/stops';
 import type { Trade } from '@/shared/types/trades';
 import { isPos, usd } from '@/shared/utils/currency';
