@@ -24,6 +24,7 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
+import type { EquityCurveMode } from '../../constants/equity';
 
 interface IEquityCurve {
 	data: EquityPoint[];
@@ -31,9 +32,11 @@ interface IEquityCurve {
 	decisions: DecisionEntry[];
 }
 
+// TODO refactor
 function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
 	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
+	const [curveMode, setCurveMode] = useLocalStorage<EquityCurveMode>('equity-curve-mode', 'zoom');
 	const [hoveredValue, setHoveredValue] = useState<number | null>(null);
 
 	const { value: range, setValue: setRange } = useFilterWithStorage<EquityPoint, Range>({
@@ -65,10 +68,33 @@ function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 	const chartData = useMemo(() => {
 		const cutoff = cutoffDate(range);
 		if (!cutoff) return allChartData;
-		return allChartData.filter(
+
+		const filtered = allChartData.filter(
 			(d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'),
 		);
-	}, [allChartData, range]);
+
+		if (curveMode === 'zoom') {
+			return filtered;
+		} else {
+			if (!filtered.length) return [];
+
+			const baseBotValue = filtered[0].equity;
+			const baseSpyValue = filtered[0].spy;
+
+			return filtered.map((d) => ({
+				...d,
+				equity: relative
+					? d.equity - baseBotValue + 100
+					: d.equity - baseBotValue + (data[0]?.equity ?? 0),
+				spy:
+					d.spy != null && baseSpyValue != null
+						? relative
+							? d.spy - baseSpyValue + 100
+							: d.spy - baseSpyValue + (data.find((dp) => dp.spy != null)?.spy ?? 0)
+						: null,
+			}));
+		}
+	}, [allChartData, range, curveMode, relative, data]);
 
 	const rebalanceIndexes = useMemo(() => {
 		if (!chartData.length) return [];
@@ -87,6 +113,7 @@ function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 	const displayValue = hoveredValue ?? currentValue;
 	const isPos = currentValue >= filteredStartValue;
 	const color = isPos ? '#4ade80' : '#f87171';
+
 	return (
 		<Card
 			title='equity curve'
@@ -128,6 +155,18 @@ function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 							}
 						/>
 						SPY
+					</button>
+
+					<button
+						onClick={() => setCurveMode((prev) => (prev === 'zoom' ? 'period' : 'zoom'))}
+						className='text-white/40 hover:text-white/70 transition cursor-pointer'
+						title={
+							curveMode === 'zoom'
+								? 'Zoom Mode: Filter by date range'
+								: 'Period Mode: Show period performance'
+						}
+					>
+						{curveMode === 'zoom' ? '🔍' : '📊'}
 					</button>
 
 					<button
@@ -176,7 +215,7 @@ function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 							x={d.date}
 							stroke='rgba(168,85,247,0.4)'
 							strokeDasharray='3 3'
-							label={<DepositLabel value={`+${usd(d.amount)}`} />} // TODO label not visible
+							label={<DepositLabel value={`+${usd(d.amount)}`} />}
 						/>
 					))}
 
