@@ -13,8 +13,8 @@ function TradeTooltipContent({ trade }: ITradeTooltipContent) {
 	const openDate = DateTime.fromISO(trade.openDate);
 	const closeDate = DateTime.fromISO(trade.closeDate);
 
-	const openLabel = openDate.isValid ? openDate.toFormat('dd.MM.yyyy') : trade.openDate;
-	const closeLabel = closeDate.isValid ? closeDate.toFormat('dd.MM.yyyy') : trade.closeDate;
+	const openLabel = openDate.isValid ? openDate.toFormat('dd MMM yyyy') : trade.openDate;
+	const closeLabel = closeDate.isValid ? closeDate.toFormat('dd MMM yyyy') : trade.closeDate;
 
 	return (
 		<div className='space-y-0.5'>
