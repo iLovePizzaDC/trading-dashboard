@@ -1,18 +1,14 @@
 import EquityTooltip from '@/features/equity/components/atoms/EquityTooltip';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useMemo, useState } from 'react';
 
 import DepositLabel from '@/features/equity/components/atoms/DepositLabel';
+import { useEquityChartData } from '@/features/equity/hooks/useEquityChartData';
+import { useEquitySettings } from '@/features/equity/hooks/useEquitySettings';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
-import { RANGES, type Range } from '@/shared/constants/date-range';
-import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
-import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Deposit } from '@/shared/types/deposits';
 import { usd } from '@/shared/utils/currency';
-import { cutoffDate } from '@/shared/utils/date-range';
-import { DateTime } from 'luxon';
 import {
 	Area,
 	AreaChart,
@@ -24,7 +20,6 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
-import type { EquityCurveMode } from '../../constants/equity';
 
 interface IEquityCurve {
 	data: EquityPoint[];
@@ -32,79 +27,26 @@ interface IEquityCurve {
 	decisions: DecisionEntry[];
 }
 
-// TODO refactor
 function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
-	const [showSpy, setShowSpy] = useLocalStorage<boolean>('equity-curve-spy', true);
-	const [relative, setRelative] = useLocalStorage<boolean>('equity-curve-relative', true);
-	const [curveMode, setCurveMode] = useLocalStorage<EquityCurveMode>('equity-curve-mode', 'zoom');
-	const [hoveredValue, setHoveredValue] = useState<number | null>(null);
-
-	const { value: range, setValue: setRange } = useFilterWithStorage<EquityPoint, Range>({
-		storageKey: 'equity-curve-range',
+	const {
+		showSpy,
+		setShowSpy,
+		relative,
+		setRelative,
+		curveMode,
+		setCurveMode,
+		hoveredValue,
+		setHoveredValue,
+		range,
+		setRange,
+	} = useEquitySettings(data);
+	const { chartData, rebalanceIndexes } = useEquityChartData(
 		data,
-		defaultValue: '3M',
-		allValues: RANGES,
-		filterFn: (d, range) => {
-			const cutoff = cutoffDate(range);
-			if (!cutoff) return true;
-			return DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day');
-		},
-	});
-
-	const allChartData = useMemo(() => {
-		if (!data.length) return [];
-
-		const botStart = data[0].equity;
-		const spyStart = data.find((d) => d.spy != null)?.spy ?? null;
-
-		return data.map((d) => ({
-			date: d.date,
-			equity: relative ? (d.equity / botStart) * 100 : d.equity,
-			spy:
-				relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
-		}));
-	}, [data, relative]);
-
-	const chartData = useMemo(() => {
-		const cutoff = cutoffDate(range);
-		if (!cutoff) return allChartData;
-
-		const filtered = allChartData.filter(
-			(d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'),
-		);
-
-		if (curveMode === 'zoom') {
-			return filtered;
-		} else {
-			if (!filtered.length) return [];
-
-			const baseBotValue = filtered[0].equity;
-			const baseSpyValue = filtered[0].spy;
-
-			return filtered.map((d) => ({
-				...d,
-				equity: relative
-					? d.equity - baseBotValue + 100
-					: d.equity - baseBotValue + (data[0]?.equity ?? 0),
-				spy:
-					d.spy != null && baseSpyValue != null
-						? relative
-							? d.spy - baseSpyValue + 100
-							: d.spy - baseSpyValue + (data.find((dp) => dp.spy != null)?.spy ?? 0)
-						: null,
-			}));
-		}
-	}, [allChartData, range, curveMode, relative, data]);
-
-	const rebalanceIndexes = useMemo(() => {
-		if (!chartData.length) return [];
-
-		const decisionDateSet = new Set(decisions.map((d) => d.date));
-
-		return chartData
-			.map((point, i) => (decisionDateSet.has(point.date) ? i : -1))
-			.filter((i) => i !== -1);
-	}, [chartData, decisions]);
+		decisions,
+		relative,
+		curveMode,
+		range,
+	);
 
 	const unfilteredStartValue = data[0]?.equity ?? 0;
 	const filteredStartValue = chartData[0]?.equity ?? 0;
