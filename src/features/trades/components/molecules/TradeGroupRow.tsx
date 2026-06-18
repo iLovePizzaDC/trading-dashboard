@@ -1,4 +1,4 @@
-import TradeEntry from '@/features/trades/components/atoms/TradeEntry'; // TODO [architecture] atom in atom
+import TradeEntry from '@/features/trades/components/atoms/TradeEntry';
 import type { TradeGroup } from '@/features/trades/types/trades-card';
 import GroupRowLayout from '@/shared/components/layouts/GroupRowLayout';
 import { usd } from '@/shared/utils/currency';

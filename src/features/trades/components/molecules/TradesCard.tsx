@@ -1,4 +1,4 @@
-import TradeGroupRow from '@/features/trades/components/atoms/TradeGroupRow';
+import TradeGroupRow from '@/features/trades/components/molecules/TradeGroupRow'; // TODO [architecture] molecule in molecule
 import { groupTrades } from '@/features/trades/utils/trades-card';
 import Card from '@/shared/components/atoms/Card';
 import ScrollableGroupList from '@/shared/components/layouts/ScrollableGroupList';
