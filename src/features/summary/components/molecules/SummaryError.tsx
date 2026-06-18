@@ -1,4 +1,4 @@
-import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell';
+import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell'; // TODO [architecture] molecule in molecule
 import type { TabType } from '@/features/summary/types/tab';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 

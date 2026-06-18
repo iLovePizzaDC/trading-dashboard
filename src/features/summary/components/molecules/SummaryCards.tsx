@@ -1,6 +1,6 @@
 import MetricItem from '@/features/summary/components/atoms/MetricItem';
-import { fadeReducer } from '@/features/summary/components/molecules/SummaryCards.reducer';
-import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell';
+import { fadeReducer } from '@/features/summary/components/molecules/SummaryCards.reducer'; // TODO [architecture] molecule in molecule
+import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell'; // TODO [architecture] molecule in molecule
 import { type TabType } from '@/features/summary/types/tab';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { Summary } from '@/shared/types/summary';

@@ -1,6 +1,6 @@
-import TradeEntry from '@/features/trades/components/atoms/TradeEntry';
+import TradeEntry from '@/features/trades/components/atoms/TradeEntry'; // TODO [architecture] atom in atom
 import type { TradeGroup } from '@/features/trades/types/trades-card';
-import GroupRowLayout from '@/shared/components/molecules/GroupRowLayout';
+import GroupRowLayout from '@/shared/components/molecules/GroupRowLayout'; // TODO [architecture] molecule in atom
 import { usd } from '@/shared/utils/currency';
 
 interface ITradeGroupRow {
