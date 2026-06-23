@@ -6,7 +6,7 @@ import { calcMonthlyReturns } from '@/features/equity/utils/performance';
 import Card from '@/shared/components/atoms/Card';
 import type { Deposit } from '@/shared/types/deposits';
 import type { EquityPoint } from '@/shared/types/equity';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 interface IMonthlyHeatmap {
 	data: EquityPoint[];
@@ -14,23 +14,25 @@ interface IMonthlyHeatmap {
 }
 
 function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
-	const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const [displayed, setDisplayed] = useState<MonthlyReturn | null>(null);
+	const [lastEntry, setLastEntry] = useState<MonthlyReturn | null>(null);
+	const [contentHeight, setContentHeight] = useState(0);
+	const contentRef = useRef<HTMLDivElement>(null);
 
 	const monthly = calcMonthlyReturns(data, deposits);
 	const years = [...new Set(monthly.map((m) => m.year))].sort((a, b) => b - a);
 
 	const handleSelect = (entry: MonthlyReturn) => {
-		if (closeTimer.current) clearTimeout(closeTimer.current);
-
 		const isSame = displayed?.year === entry.year && displayed?.month === entry.month;
-
-		if (isSame) {
-			closeTimer.current = setTimeout(() => setDisplayed(null), 300);
-		} else {
-			setDisplayed(entry);
-		}
+		if (!isSame) setLastEntry(entry);
+		setDisplayed(isSame ? null : entry);
 	};
+
+	useLayoutEffect(() => {
+		if (contentRef.current) {
+			setContentHeight(contentRef.current.scrollHeight);
+		}
+	}, [lastEntry]);
 
 	return (
 		<Card title='monthly heatmap'>
@@ -76,11 +78,14 @@ function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 			</div>
 
 			<div
-				className={`grid transition-all duration-300 ease-in-out mb-1 ${
-					displayed ? 'grid-rows-[1fr] mt-3' : 'grid-rows-[0fr]'
-				}`}
+				className='overflow-hidden transition-all duration-300 ease-in-out'
+				style={{
+					maxHeight: displayed ? contentHeight : 0,
+					marginTop: displayed ? '0.75rem' : '0',
+					opacity: displayed ? 1 : 0,
+				}}
 			>
-				<div className='overflow-hidden'>{displayed && <DetailPanel entry={displayed} />}</div>
+				<div ref={contentRef}>{lastEntry && <DetailPanel entry={lastEntry} />}</div>
 			</div>
 		</Card>
 	);
