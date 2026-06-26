@@ -53,18 +53,8 @@ export function computeTradeStats(trades: Trade[]) {
 
 	const profitFactor = grossLoss === 0 ? (grossWin > 0 ? grossWin : 0) : grossWin / grossLoss;
 
-	const bestTradeDetails = closedTrades.reduce<ClosedTrade | null>(
-		(best, t) => (best === null || t.pnl > best.pnl ? t : best),
-		null,
-	);
-
-	const worstTradeDetails = closedTrades.reduce<ClosedTrade | null>(
-		(worst, t) => (worst === null || t.pnl < worst.pnl ? t : worst),
-		null,
-	);
-
-	const bestTrade = bestTradeDetails?.pnl ?? 0;
-	const worstTrade = worstTradeDetails?.pnl ?? 0;
+	const bestTrade = Math.max(...closedTrades.map((t) => t.pnl));
+	const worstTrade = Math.min(...closedTrades.map((t) => t.pnl));
 
 	const durations: number[] = [];
 
@@ -86,8 +76,6 @@ export function computeTradeStats(trades: Trade[]) {
 		profitFactor,
 		bestTrade,
 		worstTrade,
-		bestTradeDetails,
-		worstTradeDetails,
 		avgDuration,
 		totalTrades,
 	};

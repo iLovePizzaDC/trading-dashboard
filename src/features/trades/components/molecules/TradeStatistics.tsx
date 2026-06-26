@@ -1,7 +1,5 @@
-import TradeTooltipContent from '@/features/trades/components/atoms/TradeTooltipContent';
 import { computeTradeStats } from '@/features/trades/utils/trades-statistics';
 import Card from '@/shared/components/atoms/Card';
-import Tooltip from '@/shared/components/atoms/Tooltip';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
 
@@ -69,24 +67,12 @@ function TradeStatistics({ data }: ITradeStatistics) {
 				<div className='grid grid-cols-2 gap-3'>
 					<div className='rounded-lg border border-green-500/10 bg-linear-to-br from-green-500/5 to-green-500/0 p-3'>
 						<p className='text-xs text-green-400/70'>Best Trade</p>
-						{stats.bestTradeDetails ? (
-							<Tooltip content={<TradeTooltipContent trade={stats.bestTradeDetails} />}>
-								<p className='text-sm font-semibold text-green-400'>{usd(stats.bestTrade)}</p>
-							</Tooltip>
-						) : (
-							<p className='text-sm font-semibold text-green-400'>{usd(stats.bestTrade)}</p>
-						)}
+						<p className='text-sm font-semibold text-green-400'>{usd(stats.bestTrade)}</p>
 					</div>
 
 					<div className='rounded-lg border border-red-500/10 bg-linear-to-br from-red-500/5 to-red-500/0 p-3'>
 						<p className='text-xs text-red-400/70'>Worst Trade</p>
-						{stats.worstTradeDetails ? (
-							<Tooltip content={<TradeTooltipContent trade={stats.worstTradeDetails} />}>
-								<p className='text-sm font-semibold text-red-400'>{usd(stats.worstTrade)}</p>
-							</Tooltip>
-						) : (
-							<p className='text-sm font-semibold text-red-400'>{usd(stats.worstTrade)}</p>
-						)}
+						<p className='text-sm font-semibold text-red-400'>{usd(stats.worstTrade)}</p>
 					</div>
 				</div>
 			</div>

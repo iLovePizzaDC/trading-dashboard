@@ -7,8 +7,6 @@ export interface TradeStats {
 	profitFactor: number;
 	bestTrade: number;
 	worstTrade: number;
-	bestTradeDetails: ClosedTrade | null;
-	worstTradeDetails: ClosedTrade | null;
 	avgDuration: number;
 	totalTrades: number;
 }

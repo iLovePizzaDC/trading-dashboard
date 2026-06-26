@@ -7,7 +7,6 @@ interface ITooltip {
 	className?: string;
 }
 
-// TODO refactor
 function Tooltip({ content, children, className = '' }: ITooltip) {
 	const [open, setOpen] = useState(false);
 	const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -42,10 +41,9 @@ function Tooltip({ content, children, className = '' }: ITooltip) {
 
 		function updatePosition() {
 			const rect = anchorRef.current!.getBoundingClientRect();
-
 			setCoords({
 				top: rect.bottom + window.scrollY + 4,
-				left: rect.left + window.scrollX + rect.width / 2,
+				left: rect.left + window.scrollX,
 			});
 		}
 
@@ -83,16 +81,11 @@ function Tooltip({ content, children, className = '' }: ITooltip) {
 					<div
 						ref={popupRef}
 						role='tooltip'
-						style={{
-							top: coords.top,
-							left: coords.left,
-							position: 'absolute',
-							transform: 'translateX(-50%)',
-						}}
-						className='z-50 min-w-max rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-[10px] text-white/80 shadow-lg shadow-black/40'
+						style={{ top: coords.top, left: coords.left, position: 'absolute' }}
+						className='z-50 whitespace-nowrap rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-[10px] text-white/80 shadow-lg shadow-black/40'
 					>
 						{content}
-						<span className='absolute -top-1 left-1/2 -translate-x-1/2 block h-2 w-2 rotate-45 border-l border-t border-white/10 bg-neutral-900' />{' '}
+						<span className='absolute -top-1 left-3 block h-2 w-2 rotate-45 border-l border-t border-white/10 bg-neutral-900' />
 					</div>,
 					document.body,
 				)}
