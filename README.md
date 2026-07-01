@@ -95,7 +95,7 @@ The dashboard fetches data from an external data source (typically `/data/` dire
 
 ```typescript
 // src/shared/types/my-feature.ts
-export interface MyData {
+export type MyData {
 	date: string;
 	value: number;
 }

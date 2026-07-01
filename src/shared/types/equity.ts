@@ -1,5 +1,5 @@
-export interface EquityPoint {
+export type EquityPoint = {
 	date: string;
 	equity: number;
 	spy: number | null;
-}
+};
