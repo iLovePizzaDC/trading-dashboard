@@ -1,6 +1,6 @@
 import MetricItem from '@/features/summary/components/atoms/MetricItem';
+import SummaryCardsShell from '@/features/summary/components/layouts/SummaryCardsShell';
 import { fadeReducer } from '@/features/summary/components/molecules/SummaryCards.reducer';
-import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell';
 import { type TabType } from '@/features/summary/types/tab';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { Summary } from '@/shared/types/summary';

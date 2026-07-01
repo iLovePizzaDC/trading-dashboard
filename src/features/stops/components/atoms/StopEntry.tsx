@@ -1,4 +1,4 @@
-import EntryRowLayout from '@/shared/components/atoms/EntryRowLayout';
+import EntryRowLayout from '@/shared/components/layouts/EntryRowLayout';
 import type { StopHistoryEntry } from '@/shared/types/stops';
 import { usd } from '@/shared/utils/currency';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';

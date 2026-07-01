@@ -1,5 +1,7 @@
+import Tooltip from '@/shared/components/atoms/Tooltip';
+import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { Trade } from '@/shared/types/trades';
-import { usd } from '@/shared/utils/currency';
+import { isPos, usd } from '@/shared/utils/currency';
 
 interface IPositionRow {
 	symbol: string;
@@ -10,12 +12,15 @@ interface IPositionRow {
 
 function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
 	const entryValue = trade ? trade.shares * trade.price : null;
-	const stopPct = trade ? (((stop - trade.price) / trade.price) * 100).toFixed(1) : null;
+	const stopPct = trade ? ((stop - trade.price) / trade.price) * 100 : null;
+	const symbolName = SECTOR_MAP[symbol];
 
 	return (
 		<div className={`flex items-center justify-between ${isLast ? 'pt-3' : 'py-3'}`}>
 			<div>
-				<p className='text-sm font-medium text-white'>{symbol}</p>
+				<p className='text-sm font-medium text-white'>
+					{symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
+				</p>
 				{trade && (
 					<p className='text-xs text-white/40'>
 						{trade.shares.toFixed(4)} shares @ {usd(trade.price)}
@@ -25,7 +30,11 @@ function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
 			</div>
 			<div className='text-right'>
 				<p className='text-sm text-white/70'>stop {usd(stop)}</p>
-				{stopPct && <p className='text-xs text-red-400/70'>{stopPct}% from entry</p>}
+				{stopPct !== null && (
+					<p className={`text-xs ${isPos(stopPct) ? 'text-green-400/70' : 'text-red-400/70'}`}>
+						{stopPct.toFixed(1)}% from entry
+					</p>
+				)}
 			</div>
 		</div>
 	);

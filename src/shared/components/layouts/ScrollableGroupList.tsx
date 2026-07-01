@@ -28,7 +28,7 @@ function ScrollableGroupList<T extends { symbol: string }>({
 	return (
 		<div
 			ref={scrollRef}
-			className='max-h-64 overflow-y-auto pr-3 -mr-3 [scrollbar-width:thin]'
+			className='max-h-64 overflow-y-auto pr-3 -mr-3 scrollbar-thin'
 			style={
 				canScroll
 					? {

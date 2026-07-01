@@ -1,3 +1,5 @@
+import Tooltip from '@/shared/components/atoms/Tooltip';
+import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { Candidate } from '@/shared/types/decisions';
 
 interface IDecisionCardRow {
@@ -9,6 +11,7 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 	const { symbol, momentum, passes_trend, selected, rejected_reason } = candidate;
 	const pctLabel = momentum !== null ? (momentum * 100).toFixed(1) : null;
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
+	const symbolName = SECTOR_MAP[symbol];
 
 	const reasonLabel: Record<string, string> = {
 		not_in_top_ranked: 'not top',
@@ -20,7 +23,11 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 
 	return (
 		<div className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}>
-			<p className='w-12 text-xs font-medium text-white'>{symbol}</p>
+			<div className='w-12 shrink-0'>
+				<p className='text-left text-xs font-medium text-white'>
+					{symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
+				</p>
+			</div>
 			<div className='flex-1 overflow-hidden rounded-full bg-linear-to-br from-white/5 to-white/0 h-1'>
 				<div
 					className={`h-full rounded-full transition-all ${

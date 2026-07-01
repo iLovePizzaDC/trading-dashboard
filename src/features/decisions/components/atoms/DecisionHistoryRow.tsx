@@ -1,4 +1,6 @@
 import { getMomentumColor } from '@/features/decisions/utils/decision-history-row';
+import Tooltip from '@/shared/components/atoms/Tooltip';
+import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { Candidate, DecisionEntry } from '@/shared/types/decisions';
 
 interface IDecisionHistoryRow {
@@ -27,20 +29,26 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 				</div>
 			</div>
 
-			<div className='flex gap-2 px-1 -mx-1 py-2 -my-2 overflow-y-hidden overflow-x-auto [scrollbar-width:thin]'>
-				{top.map((c, i) => (
-					<div
-						key={c.symbol}
-						className={`
-							px-2 py-1 rounded-md text-xs border whitespace-nowrap shrink-0
-							${getMomentumColor(c.momentum ?? undefined)}
-							${i === 0 ? 'ring-1 ring-green-400/40 shadow-[0_0_8px_rgba(34,197,94,0.3)]' : ''}
-						`}
-					>
-						<span className='font-medium'>{c.symbol}</span>
-						{c.momentum !== undefined && <span className='ml-1 opacity-70'>{pct(c)}%</span>}
-					</div>
-				))}
+			<div className='flex gap-2 px-1 -mx-1 py-2 -my-2 overflow-y-hidden overflow-x-auto scrollbar-thin'>
+				{top.map((c, i) => {
+					const symbolName = SECTOR_MAP[c.symbol];
+
+					return (
+						<div
+							key={c.symbol}
+							className={`
+								px-2 py-1 rounded-md text-xs border whitespace-nowrap shrink-0
+								${getMomentumColor(c.momentum ?? undefined)}
+								${i === 0 ? 'ring-1 ring-green-400/40 shadow-[0_0_8px_rgba(34,197,94,0.3)]' : ''}
+							`}
+						>
+							<span className='font-medium'>
+								{symbolName ? <Tooltip content={symbolName}>{c.symbol}</Tooltip> : c.symbol}
+							</span>
+							{c.momentum !== undefined && <span className='ml-1 opacity-70'>{pct(c)}%</span>}
+						</div>
+					);
+				})}
 			</div>
 
 			<div className='h-3'>

@@ -1,4 +1,4 @@
-import SummaryCardsShell from '@/features/summary/components/molecules/SummaryCardsShell';
+import SummaryCardsShell from '@/features/summary/components/layouts/SummaryCardsShell';
 import type { TabType } from '@/features/summary/types/tab';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 
