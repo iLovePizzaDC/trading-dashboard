@@ -1,7 +1,7 @@
 import StopGroupRow from '@/features/stops/components/atoms/StopGroupRow';
 import type { StopHistoryGroup } from '@/features/stops/types/stop-history';
 import Card from '@/shared/components/atoms/Card';
-import ScrollableGroupList from '@/shared/components/molecules/ScrollableGroupList';
+import ScrollableGroupList from '@/shared/components/layouts/ScrollableGroupList';
 import type { StopHistory } from '@/shared/types/stops';
 import { symbolColor } from '@/shared/utils/symbol-colors';
 import { useMemo } from 'react';

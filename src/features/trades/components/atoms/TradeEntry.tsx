@@ -1,5 +1,5 @@
 import { REASON_LABEL } from '@/features/trades/constants/trades-card';
-import EntryRowLayout from '@/shared/components/atoms/EntryRowLayout';
+import EntryRowLayout from '@/shared/components/layouts/EntryRowLayout';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
 
