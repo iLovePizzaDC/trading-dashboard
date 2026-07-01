@@ -59,7 +59,10 @@ export function useBotStatus(
 			nowUTC < nextClose;
 
 		return {
-			rebalanceDaysLeft: Math.max(0, Math.round(nextReb.diff(nowUTC, 'days').days)),
+			rebalanceDaysLeft: Math.max(
+				0,
+				Math.ceil(nextReb.startOf('day').diff(nowUTC.startOf('day'), 'days').days),
+			),
 			rebalanceNextDate: nextReb.setZone('Europe/Berlin').toFormat('yyyy-MM-dd'),
 			rebalancePct: Math.min(100, Math.round((elapsedReb / REBALANCE_DAYS) * 100)),
 			isRunning,
