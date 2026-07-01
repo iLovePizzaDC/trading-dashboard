@@ -10,7 +10,7 @@ interface IScatterTooltip {
 function ScatterTooltip({ active, payload }: IScatterTooltip) {
 	const scatterPoint = payload?.[0]?.payload;
 
-	const { displayName, visible } = useRotateSectorName(scatterPoint.symbol);
+	const { displayName, visible } = useRotateSectorName(scatterPoint?.symbol);
 
 	if (!active || !scatterPoint) return null;
 

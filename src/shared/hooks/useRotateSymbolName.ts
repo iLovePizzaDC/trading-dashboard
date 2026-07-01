@@ -2,29 +2,38 @@ import { ROTATE_INTERVAL_MS } from '@/features/trades/constants/scatter-tooltip'
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import { useEffect, useState } from 'react';
 
-export function useRotateSectorName(symbol: string) {
-	const sectorName = SECTOR_MAP[symbol];
-	const labels = sectorName ? [sectorName, symbol] : [symbol];
+export function useRotateSectorName(symbol: string | undefined) {
+	const sectorName = symbol ? SECTOR_MAP[symbol] : undefined;
+	const labels = symbol === undefined ? [] : sectorName ? [sectorName, symbol] : [symbol];
 
 	const [index, setIndex] = useState(0);
 	const [visible, setVisible] = useState(true);
+	const [prevSymbol, setPrevSymbol] = useState(symbol);
 
-	useEffect(() => {
+	if (symbol !== prevSymbol) {
+		setPrevSymbol(symbol);
 		setIndex(0);
 		setVisible(true);
+	}
 
+	useEffect(() => {
 		if (labels.length < 2) return;
 
-		const id = setInterval(() => {
+		let timeoutId: ReturnType<typeof setTimeout>;
+
+		const intervalId = setInterval(() => {
 			setVisible(false);
-			setTimeout(() => {
+			timeoutId = setTimeout(() => {
 				setIndex((prev) => (prev + 1) % labels.length);
 				setVisible(true);
-			}, 300);
+			}, 250);
 		}, ROTATE_INTERVAL_MS);
 
-		return () => clearInterval(id);
-	}, [symbol]);
+		return () => {
+			clearInterval(intervalId);
+			clearTimeout(timeoutId);
+		};
+	}, [symbol, labels.length]);
 
 	return {
 		displayName: labels[index],
