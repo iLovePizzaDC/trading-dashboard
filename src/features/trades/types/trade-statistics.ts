@@ -1,6 +1,6 @@
 import type { Trade } from '@/shared/types/trades';
 
-export interface TradeStats {
+export type TradeStats = {
 	winRate: number;
 	avgWin: number;
 	avgLoss: number;
@@ -11,6 +11,6 @@ export interface TradeStats {
 	worstTradeDetails: ClosedTrade | null;
 	avgDuration: number;
 	totalTrades: number;
-}
+};
 
 export type ClosedTrade = Trade & { pnl: number; openDate: string; closeDate: string };

@@ -1,6 +1,6 @@
 export type SortKey = 'timesSelected' | 'totalPnl' | 'winRate' | 'avgMomentumWhenSelected';
 
-export interface SectorStat {
+export type SectorStat = {
 	symbol: string;
 	sector: string;
 	timesSelected: number;
@@ -8,4 +8,4 @@ export interface SectorStat {
 	trades: number;
 	winRate: number;
 	avgMomentumWhenSelected: number;
-}
+};
