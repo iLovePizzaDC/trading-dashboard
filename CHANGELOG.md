@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.5.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.4.0...v1.5.0) (2026-07-01)
+
+
+### Features
+
+* add detailed info to trade stats ([763431b](https://github.com/iLovePizzaDC/trading-dashboard/commit/763431b2d24fb33fde05dc5d34ae59e2dacd34c7))
+* add detailed info to trade stats ([bdd1b62](https://github.com/iLovePizzaDC/trading-dashboard/commit/bdd1b62fca91b9483fd21b31cc3afc33c13ceac1))
+* add detailed info to trade stats ([13a3157](https://github.com/iLovePizzaDC/trading-dashboard/commit/13a315726e0a19d143bc59a742008a1a4d4d89c2))
+* add detailed info to trade stats ([5d8d3e9](https://github.com/iLovePizzaDC/trading-dashboard/commit/5d8d3e9e453c22dd6651c00747d3336923480b58))
+* add symbol name to decision card ([998dc5e](https://github.com/iLovePizzaDC/trading-dashboard/commit/998dc5e0cc140e261933f22c5d88d013eb7726e3))
+* add symbol name to decision card ([d8b0c40](https://github.com/iLovePizzaDC/trading-dashboard/commit/d8b0c40c24c796bef3f6327b81ab2b206b9adf00))
+* add symbol name to decision card ([5c7c21f](https://github.com/iLovePizzaDC/trading-dashboard/commit/5c7c21f4aaf9a53a38655df1f9a8a250a123ec71))
+* add symbol name to decision card ([#64](https://github.com/iLovePizzaDC/trading-dashboard/issues/64)) ([787d045](https://github.com/iLovePizzaDC/trading-dashboard/commit/787d045686659af168b82e5a8a2a8b962adb9959))
+* dynamic color for stop percentage in open positions ([39a302c](https://github.com/iLovePizzaDC/trading-dashboard/commit/39a302cc7020108507032fcb4e109d4e79ee16fb))
+
+
+### Bug Fixes
+
+* detail panel of monthly heatmap is lagging ([#67](https://github.com/iLovePizzaDC/trading-dashboard/issues/67)) ([074d19c](https://github.com/iLovePizzaDC/trading-dashboard/commit/074d19c2aeedfd3ff3f16fd1409619fe705d90e1))
+* fix merge conflicts ([#70](https://github.com/iLovePizzaDC/trading-dashboard/issues/70)) ([4814e13](https://github.com/iLovePizzaDC/trading-dashboard/commit/4814e13738a028e39c0238a3457ff448386e5550))
+* interface type mismatch ([#62](https://github.com/iLovePizzaDC/trading-dashboard/issues/62)) ([3520983](https://github.com/iLovePizzaDC/trading-dashboard/commit/352098355c5748015970ff5e7d28087bf445a9c6))
+* timezone in rebalance status card ([#63](https://github.com/iLovePizzaDC/trading-dashboard/issues/63)) ([c49cd52](https://github.com/iLovePizzaDC/trading-dashboard/commit/c49cd526086c16c49bf0004e4cb27cf8aa62abef))
+
 ## [1.4.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.3.0...v1.4.0) (2026-06-09)
 
 
