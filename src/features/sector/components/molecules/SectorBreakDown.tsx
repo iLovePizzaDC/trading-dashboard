@@ -13,6 +13,7 @@ interface ISectorBreakdown {
 	trades: Trade[];
 }
 
+// TODO refactor into row like in DecisionCardRow
 function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 	const { value: sortBy, setValue: setSortBy } = useFilterWithStorage({
 		storageKey: 'sector-breakdown',
