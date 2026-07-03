@@ -99,5 +99,6 @@ jobs:
       - name: Rollback on failure
         if: failure()
         run: |
+          find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
           rm -rf /var/www/trading/*
           cp -r /var/www/trading.bak/* /var/www/trading/
