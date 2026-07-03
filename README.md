@@ -85,6 +85,25 @@ npm run lint
 - **Vite** - Build tool & dev server
 - **Papa Parse** - CSV parsing (for parsing bot data)
 
+## ⚙️ CI/CD
+
+This project uses GitHub Actions with a self-hosted runner on a Raspberry Pi (Luna).
+
+**On every push and pull request to main/develop:**
+
+- Type checking
+- Linting
+- Security audit (`npm audit`)
+
+**On release tag (`v*`):**
+
+- Builds the project
+- Deploys the `dist` folder to Luna (preserving the `data` directory)
+- Runs a health check against `https://trading.migrainetracker.de`
+- Automatically rolls back on failure
+
+Releases are managed via [release-please](https://github.com/googleapis/release-please-action) and main is automatically synced to develop after every merge.
+
 ## 📊 Data Integration
 
 The dashboard fetches data from an external data source (typically `/data/` directory served by a web server).
@@ -94,10 +113,9 @@ The dashboard fetches data from an external data source (typically `/data/` dire
 1. **Define a type** in `src/shared/types/`
 
 ```typescript
-// src/shared/types/my-feature.ts
 export type MyData {
-	date: string;
-	value: number;
+    date: string;
+    value: number;
 }
 ```
 
@@ -113,103 +131,10 @@ export async function fetchMyData(): Promise<MyData[]> {
 3. **Use in component** with the `useFetch` hook
 
 ```typescript
-import { useFetch } from '@/shared/hooks/useFetch';
-import { fetchMyData } from '@/shared/api/data';
-
-function MyComponent() {
-  const { data, loading, error } = useFetch(fetchMyData);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
-
-  return <div>{/* render data */}</div>;
-}
-```
-
-## 🎨 Adding Features
-
-### Create a New Feature
-
-```bash
-# Create feature folder structure
-mkdir -p src/features/my-feature/components/{atoms,molecules,organisms}
-mkdir src/features/my-feature/types
-mkdir src/features/my-feature/utils
-```
-
-### File Template: Feature Component
-
-```typescript
-// src/features/my-feature/components/organisms/MyFeature.tsx
-import { useFetch } from '@/shared/hooks/useFetch';
-import { fetchMyData } from '@/shared/api/data';
-
-export function MyFeature() {
-  const { data, loading, error } = useFetch(fetchMyData);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return (
-    <section className="rounded-lg border border-gray-200 bg-white p-4">
-      {/* Render feature */}
-    </section>
-  );
-}
-
-export default MyFeature;
-```
-
-### Add Feature to App
-
-Edit `src/app/App.tsx`:
-
-```typescript
-import MyFeature from '@/features/my-feature/components/organisms/MyFeature';
-
-function App() {
-  return (
-    <main className='min-h-screen p-4 md:p-8'>
-      <div className='mx-auto max-w-7xl space-y-4'>
-        <MyFeature />
-        {/* Other features */}
-      </div>
-    </main>
-  );
-}
-```
-
-## 🧩 Shared Components
-
-Reusable UI atoms in `src/shared/components/atoms/`:
-
-- Use these components across features for consistency
-- Example: buttons, cards, badges, loading states
-
-When creating a new atom:
-
-```typescript
-// src/shared/components/atoms/MyButton.tsx
-interface MyButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-}
-
-export function MyButton({ children, onClick }: MyButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600"
-    >
-      {children}
-    </button>
-  );
-}
+const { data, loading, error } = useFetch(fetchMyData);
 ```
 
 ## 🪝 Custom Hooks
-
-Located in `src/shared/hooks/`:
 
 ### useFetch
 
@@ -235,24 +160,14 @@ const { isExpanded, toggle } = useExpandable();
 4. **Centralize data fetching** - All fetch functions in `src/shared/api/`
 5. **Responsive design** - Use Tailwind's responsive classes (md:, lg:, etc.)
 
-## 🔧 Styling
-
-- **Framework**: Tailwind CSS
-- **Responsive**: Mobile-first approach with `md:`, `lg:` breakpoints
-- **Theme**: Customize in Tailwind config if needed
-
 ## 📦 Building & Deployment
 
 ```bash
-# Production build
 npm run build
-
 # Output: dist/ directory
 ```
 
-Serve the `dist/` folder with a web server (Nginx, Apache, etc.).
-
-Ensure data endpoint (usually `/data/`) is accessible from the web server.
+Serve the `dist/` folder with a web server. Ensure the `/data/` directory is accessible from the web server.
 
 ## 📚 Resources
 
