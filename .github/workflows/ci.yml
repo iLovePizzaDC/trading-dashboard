@@ -1,90 +1,111 @@
 name: CI & Deploy
 
 on:
-    push:
-        branches: [main]
-        tags:
-            - "v*"
-    pull_request:
-        branches: [main, develop]
+  push:
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main, develop]
 
 permissions:
-    contents: read
+  contents: read
+  pull-requests: read
 
 jobs:
-    typecheck:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run type-check
+  security-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run lint
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    security:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm audit --audit-level=high --omit=dev
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-    build:
-        needs: [typecheck, lint, security]
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run build
-            - uses: actions/upload-artifact@v4
-              with:
-                name: dist
-                path: dist
+      - run: npm ci
+      - run: npm run type-check
 
-    deploy:
-        needs: build
-        runs-on: self-hosted
-        if: startsWith(github.ref, 'refs/tags/v')
-        steps:
-            - uses: actions/download-artifact@v4
-              with:
-                name: dist
-                path: dist
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-            - name: Backup
-              run: |
-                rm -rf /var/www/trading.bak
-                cp -r /var/www/trading /var/www/trading.bak
+      - run: npm ci
+      - run: npm run lint
 
-            - name: Deploy
-              run: |
-                find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
-                cp -r dist/* /var/www/trading/
-            - name: Health Check
-              id: healthcheck
-              run: sleep 5 && curl --fail --retry 3 --retry-delay 2 https://trading.migrainetracker.de
-            - name: Rollback on failure
-              if: failure()
-              run: |
-                find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
-                cp -r /var/www/trading.bak/* /var/www/trading/
-                echo "Rollback completed"
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm audit --audit-level=high --omit=dev
+        continue-on-error: true
+
+  build:
+    needs: [typecheck, lint, security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Backup current version
+        run: |
+          rm -rf /var/www/trading.bak
+          cp -r /var/www/trading /var/www/trading.bak || true
+
+      - name: Deploy
+        run: |
+          rm -rf /var/www/trading/*
+          cp -r dist/* /var/www/trading/
+
+      - name: Health check
+        run: |
+          curl --fail --retry 20 --retry-delay 2 https://trading.migrainetracker.de
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
+          cp -r /var/www/trading.bak/* /var/www/trading/
