@@ -26,7 +26,7 @@ describe('<DecisionsSkeleton />', () => {
 	it('renders 3 placeholder rows in the first card (decisions list)', () => {
 		const { container } = render(<DecisionsSkeleton />);
 
-		const [firstCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 		const rows = firstCard.querySelectorAll(':scope > .border-b, :scope > .last\\:border-0');
 
 		expect(rows).toHaveLength(3);
@@ -35,10 +35,10 @@ describe('<DecisionsSkeleton />', () => {
 	it('renders 4 SkeletonBoxes per row in the first card', () => {
 		const { container } = render(<DecisionsSkeleton />);
 
-		const [firstCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 		const rows = firstCard.querySelectorAll('.flex.items-center.gap-3');
 
-		rows.forEach((row) => {
+		rows.forEach((row: Element) => {
 			const boxes = row.querySelectorAll('.bg-white\\/10');
 			expect(boxes).toHaveLength(4);
 		});
@@ -47,7 +47,7 @@ describe('<DecisionsSkeleton />', () => {
 	it('renders a centered button placeholder in the first card', () => {
 		const { container } = render(<DecisionsSkeleton />);
 
-		const [firstCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 		const buttonWrapper = firstCard.querySelector('.mt-3.flex.justify-center');
 
 		expect(buttonWrapper).toBeInTheDocument();
@@ -57,7 +57,11 @@ describe('<DecisionsSkeleton />', () => {
 	it('renders 3 skeleton entries in the second card (decision history)', () => {
 		const { container } = render(<DecisionsSkeleton />);
 
-		const [, secondCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
+
+		expect(cards).toHaveLength(2);
+
+		const secondCard = cards[1]!;
 		const entries = secondCard.querySelectorAll('.rounded-lg');
 
 		expect(entries).toHaveLength(3);
@@ -66,10 +70,10 @@ describe('<DecisionsSkeleton />', () => {
 	it('renders 5 SkeletonBoxes per entry in the second card', () => {
 		const { container } = render(<DecisionsSkeleton />);
 
-		const [, secondCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const secondCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 		const entries = secondCard.querySelectorAll('.rounded-lg');
 
-		entries.forEach((entry) => {
+		entries.forEach((entry: Element) => {
 			const boxes = entry.querySelectorAll('.bg-white\\/10');
 			expect(boxes).toHaveLength(5);
 		});

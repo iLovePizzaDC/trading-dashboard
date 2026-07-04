@@ -26,7 +26,7 @@ describe('<EquitySkeleton />', () => {
 	it('renders the header, range filter row, and chart placeholder in the first card', () => {
 		const { container } = render(<EquitySkeleton />);
 
-		const [firstCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 
 		const header = firstCard.querySelector('.mb-4.flex.items-baseline.justify-between');
 		expect(header?.querySelectorAll('.bg-white\\/10')).toHaveLength(2);
@@ -41,7 +41,7 @@ describe('<EquitySkeleton />', () => {
 	it('renders a single chart placeholder box in the first card', () => {
 		const { container } = render(<EquitySkeleton />);
 
-		const [firstCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 		const chartBox = firstCard.querySelector('.h-44.w-full');
 
 		expect(chartBox).toBeInTheDocument();
@@ -50,17 +50,29 @@ describe('<EquitySkeleton />', () => {
 	it('renders 12 SkeletonBoxes plus 1 empty cell in the month header row of the second card', () => {
 		const { container } = render(<EquitySkeleton />);
 
-		const [, secondCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
+
+		expect(cards).toHaveLength(2);
+
+		const secondCard = cards[1];
 		const headerRow = secondCard.querySelector('.mb-2.grid');
 
-		expect(headerRow?.children).toHaveLength(13);
-		expect(headerRow?.querySelectorAll('.bg-white\\/10')).toHaveLength(12);
+		expect(headerRow).not.toBeNull();
+
+		const row = headerRow as HTMLElement;
+
+		expect(row.children).toHaveLength(13);
+		expect(row.querySelectorAll('.bg-white\\/10')).toHaveLength(12);
 	});
 
 	it('renders 4 placeholder rows in the monthly grid of the second card', () => {
 		const { container } = render(<EquitySkeleton />);
 
-		const [, secondCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
+
+		expect(cards).toHaveLength(2);
+
+		const secondCard = cards[1]!;
 		const rows = secondCard.querySelectorAll('.space-y-1 > div');
 
 		expect(rows).toHaveLength(4);
@@ -69,10 +81,10 @@ describe('<EquitySkeleton />', () => {
 	it('renders a label box plus 12 month boxes per row in the second card', () => {
 		const { container } = render(<EquitySkeleton />);
 
-		const [, secondCard] = container.querySelectorAll(':scope > div > .rounded-xl');
+		const secondCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
 		const rows = secondCard.querySelectorAll('.space-y-1 > div');
 
-		rows.forEach((row) => {
+		rows.forEach((row: Element) => {
 			expect(row.children).toHaveLength(13);
 			expect(row.querySelectorAll('.bg-white\\/10')).toHaveLength(13);
 		});
