@@ -19,7 +19,7 @@ vi.mock('@/features/equity/components/molecules/EquityCurve', () => ({
 	),
 }));
 
-vi.mock('@/features/equity/components/molecules/MonthlyHeatMap', () => ({
+vi.mock('@/features/equity/components/molecules/MonthlyHeatmap', () => ({
 	default: ({ data, deposits }: any) => (
 		<div data-testid='monthly-heatmap' data-length={data.length} data-deposits={deposits.length} />
 	),
