@@ -1,9 +1,9 @@
+import Decisions from '@/features/decisions/components/organisms/Decisions';
 import { fetchDecisions } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Decisions from './Decisions';
 
 vi.mock('@/features/decisions/components/molecules/DecisionsCard', () => ({
 	default: ({ data }: { data: DecisionEntry[] }) => (

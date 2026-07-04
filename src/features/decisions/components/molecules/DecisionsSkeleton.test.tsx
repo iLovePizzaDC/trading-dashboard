@@ -1,6 +1,6 @@
+import DecisionsSkeleton from '@/features/decisions/components/molecules/DecisionsSkeleton';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import DecisionsSkeleton from './DecisionsSkeleton';
 
 describe('<DecisionsSkeleton />', () => {
 	it('renders two skeleton cards side by side', () => {

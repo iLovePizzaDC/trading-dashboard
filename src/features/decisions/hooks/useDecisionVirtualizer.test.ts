@@ -1,7 +1,7 @@
+import { useDecisionVirtualizer } from '@/features/decisions/hooks/useDecisionVirtualizer';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useDecisionVirtualizer } from './useDecisionVirtualizer';
 
 vi.mock('@tanstack/react-virtual', () => ({
 	useVirtualizer: vi.fn(() => ({
