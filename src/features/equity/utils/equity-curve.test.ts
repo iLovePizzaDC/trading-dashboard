@@ -1,11 +1,15 @@
 import type { ChartPoint } from '@/features/equity/types/equity';
+import {
+	applyRangeAndMode,
+	findRebalanceIndexes,
+	normalizeToRelative,
+} from '@/features/equity/utils/equity-curve';
 import type { Range } from '@/shared/constants/date-range';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { EquityPoint } from '@/shared/types/equity';
 import { cutoffDate } from '@/shared/utils/date-range';
 import { DateTime } from 'luxon';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { applyRangeAndMode, findRebalanceIndexes, normalizeToRelative } from './equity-curve';
 
 vi.mock('@/shared/utils/date-range', () => ({
 	cutoffDate: vi.fn(),
@@ -245,17 +249,18 @@ describe('applyRangeAndMode', () => {
 			expect(result[1].spy).toBeNull();
 		});
 
-		it('keeps spy null for all points when the filtered start has no spy value', () => {
+		it('rebases spy using the first non-null spy value in the filtered window, even if the very first point has no spy data', () => {
 			vi.mocked(cutoffDate).mockReturnValue(null);
 
 			const chartData: ChartPoint[] = [
 				{ date: '2026-01-01', equity: 150, spy: null },
 				{ date: '2026-01-02', equity: 165, spy: 132 },
+				{ date: '2026-01-03', equity: 170, spy: 138 },
 			];
 
 			const result = applyRangeAndMode(chartData, 'ALL' as Range, 'period', true, []);
 
-			expect(result.map((d) => d.spy)).toEqual([null, null]);
+			expect(result.map((d) => d.spy)).toEqual([null, 100, 106]);
 		});
 	});
 });

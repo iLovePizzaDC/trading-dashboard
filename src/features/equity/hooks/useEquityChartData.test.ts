@@ -1,4 +1,5 @@
 import type { EquityCurveMode } from '@/features/equity/constants/equity';
+import { useEquityChartData } from '@/features/equity/hooks/useEquityChartData';
 import {
 	applyRangeAndMode,
 	findRebalanceIndexes,
@@ -9,7 +10,6 @@ import type { DecisionEntry } from '@/shared/types/decisions';
 import type { EquityPoint } from '@/shared/types/equity';
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useEquityChartData } from './useEquityChartData';
 
 vi.mock('@/features/equity/utils/equity-curve', () => ({
 	normalizeToRelative: vi.fn(),

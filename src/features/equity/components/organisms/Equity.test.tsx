@@ -1,3 +1,4 @@
+import Equity from '@/features/equity/components/organisms/Equity';
 import { fetchBotEquity, fetchDecisions, fetchDeposits, fetchSpyEquity } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 import type { DecisionEntry } from '@/shared/types/decisions';
@@ -5,7 +6,6 @@ import type { Deposit } from '@/shared/types/deposits';
 import type { EquityPoint } from '@/shared/types/equity';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Equity from './Equity';
 
 vi.mock('@/features/equity/components/molecules/EquityCurve', () => ({
 	default: ({ data, deposits, decisions }: any) => (

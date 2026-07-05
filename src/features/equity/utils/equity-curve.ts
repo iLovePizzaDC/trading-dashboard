@@ -34,7 +34,7 @@ function rebaseToFilteredStart(
 	if (!filtered.length) return [];
 
 	const baseBotValue = filtered[0].equity;
-	const baseSpyValue = filtered[0].spy;
+	const baseSpyValue = filtered.find((d) => d.spy != null)?.spy ?? null;
 	const fallbackBotValue = originalData[0]?.equity ?? 0;
 	const fallbackSpyValue = originalData.find((dp) => dp.spy != null)?.spy ?? 0;
 

@@ -1,4 +1,5 @@
 import type { EquityCurveMode } from '@/features/equity/constants/equity';
+import { useEquitySettings } from '@/features/equity/hooks/useEquitySettings';
 import { RANGES, type Range } from '@/shared/constants/date-range';
 import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
@@ -8,7 +9,6 @@ import { renderHook } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useEquitySettings } from './useEquitySettings';
 
 vi.mock('@/shared/hooks/useLocalStorage', () => ({
 	useLocalStorage: vi.fn(),
