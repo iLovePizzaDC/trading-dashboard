@@ -7,23 +7,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/features/equity/constants/heatmap', () => ({
-	MONTHS: [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	],
-}));
-
 vi.mock('@/features/equity/utils/performance', () => ({
 	calcMonthlyReturns: vi.fn(),
 }));

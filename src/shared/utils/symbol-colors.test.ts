@@ -1,27 +1,20 @@
 import { symbolColor } from '@/shared/utils/symbol-colors';
-import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/shared/constants/symbol-colors', () => ({
-	BRAND_COLORS: {
-		AAPL: '#555555',
-		TSLA: '#e82127',
-	} as Record<string, string>,
-}));
+import { describe, expect, it } from 'vitest';
 
 describe('symbolColor', () => {
 	it('returns the brand color when the symbol exists in BRAND_COLORS', () => {
-		expect(symbolColor('AAPL')).toBe('#555555');
+		expect(symbolColor('XLK')).toBe('#6366f1');
 	});
 
 	it('returns a different brand color for a different known symbol', () => {
-		expect(symbolColor('TSLA')).toBe('#e82127');
+		expect(symbolColor('XLE')).toBe('#f59e0b');
+	});
+
+	it('returns an hex color string for a symbol not in BRAND_COLORS', () => {
+		expect(symbolColor('ABC')).toBe('hsl(138, 65%, 60%)');
 	});
 
 	it('returns an hsl string for a symbol not in BRAND_COLORS', () => {
-		expect(symbolColor('XLK')).toMatch(/^hsl\(\d+, 65%, 60%\)$/);
-	});
-
-	it('returns the same hsl color for the same symbol on repeated calls (deterministic)', () => {
 		const first = symbolColor('XLK');
 		const second = symbolColor('XLK');
 
@@ -29,7 +22,7 @@ describe('symbolColor', () => {
 	});
 
 	it('returns different hsl colors for different symbols (in general)', () => {
-		expect(symbolColor('XLK')).not.toBe(symbolColor('XLF'));
+		expect(symbolColor('XLK')).not.toBe(symbolColor('XLE'));
 	});
 
 	it('produces a hue between 0 and 359 inclusive', () => {
@@ -45,8 +38,8 @@ describe('symbolColor', () => {
 	});
 
 	it('is case-sensitive when checking BRAND_COLORS (lowercase does not match)', () => {
-		expect(symbolColor('aapl')).not.toBe('#555555');
-		expect(symbolColor('aapl')).toMatch(/^hsl\(/);
+		expect(symbolColor('xlk')).not.toBe('#6366f1');
+		expect(symbolColor('xlk')).toMatch(/^hsl\(/);
 	});
 
 	it('produces a stable, hardcoded hue for a specific known symbol', () => {

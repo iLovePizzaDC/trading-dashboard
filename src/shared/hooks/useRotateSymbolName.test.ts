@@ -4,17 +4,6 @@ import { renderHook } from '@testing-library/react';
 import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/features/trades/constants/scatter-tooltip', () => ({
-	ROTATE_INTERVAL_MS: 2000,
-}));
-
-vi.mock('@/shared/constants/sectors', () => ({
-	SECTOR_MAP: {
-		XLK: 'Technology',
-		XLF: 'Financials',
-	} as Record<string, string>,
-}));
-
 describe('useRotateSectorName', () => {
 	beforeEach(() => {
 		vi.useFakeTimers();

@@ -73,14 +73,17 @@ describe('getLocalStorageItem', () => {
 	});
 
 	it('returns the fallback and warns when localStorage.getItem throws', () => {
-		vi.spyOn(window.localStorage, 'getItem').mockImplementation(() => {
+		vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
 			throw new Error('access denied');
 		});
 
 		const result = getLocalStorageItem('any-key', 'fallback');
 
 		expect(result).toBe('fallback');
-		expect(console.warn).toHaveBeenCalled(); // TODO failed
+		expect(console.warn).toHaveBeenCalledWith(
+			expect.stringContaining('any-key'),
+			expect.any(Error),
+		);
 	});
 
 	it('returns the fallback when window is undefined (SSR)', () => {
@@ -116,12 +119,16 @@ describe('setLocalStorageItem', () => {
 	});
 
 	it('warns and does not throw when localStorage.setItem throws', () => {
-		vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+		vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
 			throw new Error('quota exceeded');
 		});
 
 		expect(() => setLocalStorageItem('any-key', 'value')).not.toThrow();
-		expect(console.warn).toHaveBeenCalled(); // TODO failed
+
+		expect(console.warn).toHaveBeenCalledWith(
+			expect.stringContaining('any-key'),
+			expect.any(Error),
+		);
 	});
 
 	it('does nothing when window is undefined (SSR)', () => {
@@ -156,12 +163,16 @@ describe('removeLocalStorageItem', () => {
 	});
 
 	it('warns and does not throw when localStorage.removeItem throws', () => {
-		vi.spyOn(window.localStorage, 'removeItem').mockImplementation(() => {
+		vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
 			throw new Error('access denied');
 		});
 
 		expect(() => removeLocalStorageItem('any-key')).not.toThrow();
-		expect(console.warn).toHaveBeenCalled(); // TODO failed
+
+		expect(console.warn).toHaveBeenCalledWith(
+			expect.stringContaining('any-key'),
+			expect.any(Error),
+		);
 	});
 
 	it('does nothing when window is undefined (SSR)', () => {

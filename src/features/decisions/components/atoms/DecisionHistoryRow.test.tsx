@@ -16,13 +16,6 @@ vi.mock('@/shared/components/atoms/Tooltip', () => ({
 	),
 }));
 
-vi.mock('@/shared/constants/sectors', () => ({
-	SECTOR_MAP: {
-		XLK: 'Technology',
-		XLF: 'Financials',
-	} as Record<string, string>,
-}));
-
 function buildCandidate(overrides: Partial<Candidate> = {}): Candidate {
 	return {
 		symbol: 'XLK',

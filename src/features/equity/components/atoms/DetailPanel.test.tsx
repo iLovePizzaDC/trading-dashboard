@@ -4,23 +4,6 @@ import { fmt, usd } from '@/shared/utils/currency';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/features/equity/constants/heatmap', () => ({
-	MONTHS: [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	],
-}));
-
 vi.mock('@/shared/utils/currency', () => ({
 	fmt: vi.fn((value: number, withSign = true) => `fmt(${value},${withSign})`),
 	usd: vi.fn((value: number) => `$${value}`),
@@ -41,19 +24,19 @@ describe('<DetailPanel />', () => {
 	it('renders the correct month name and year in the period section', () => {
 		render(<DetailPanel entry={buildEntry({ month: 7, year: 2026 })} />);
 
-		expect(screen.getByText('July 2026')).toBeInTheDocument();
+		expect(screen.getByText('Jul 2026')).toBeInTheDocument();
 	});
 
 	it('maps month 1 to the first entry in MONTHS', () => {
 		render(<DetailPanel entry={buildEntry({ month: 1, year: 2025 })} />);
 
-		expect(screen.getByText('January 2025')).toBeInTheDocument();
+		expect(screen.getByText('Jan 2025')).toBeInTheDocument();
 	});
 
 	it('maps month 12 to the last entry in MONTHS', () => {
 		render(<DetailPanel entry={buildEntry({ month: 12, year: 2025 })} />);
 
-		expect(screen.getByText('December 2025')).toBeInTheDocument();
+		expect(screen.getByText('Dec 2025')).toBeInTheDocument();
 	});
 
 	it('formats the return using fmt with the default sign parameter', () => {
