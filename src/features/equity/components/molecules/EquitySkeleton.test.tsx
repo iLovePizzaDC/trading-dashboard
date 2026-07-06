@@ -1,5 +1,5 @@
 import EquitySkeleton from '@/features/equity/components/molecules/EquitySkeleton';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 describe('<EquitySkeleton />', () => {
@@ -24,76 +24,37 @@ describe('<EquitySkeleton />', () => {
 	});
 
 	it('renders the header, range filter row, and chart placeholder in the first card', () => {
-		const { container } = render(<EquitySkeleton />);
+		render(<EquitySkeleton />);
 
-		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
+		const firstCard = screen.getByTestId('equity-card');
+		const header = screen.getByTestId('equity-header');
+		expect(within(header).getAllByTestId('equity-skeleton-box')).toHaveLength(2);
 
-		const header = firstCard.querySelector('.mb-4.flex.items-baseline.justify-between');
-		expect(header?.querySelectorAll('.bg-white\\/10')).toHaveLength(2);
+		const rangeButtons = screen.getByTestId('equity-range-buttons');
+		expect(within(rangeButtons).getAllByTestId('equity-skeleton-box')).toHaveLength(6);
 
-		const rangeButtons = firstCard.querySelectorAll('.flex.gap-1 > .bg-white\\/10');
-		expect(rangeButtons).toHaveLength(6);
-
-		const rightControls = firstCard.querySelector('.sm\\:justify-end');
-		expect(rightControls?.querySelectorAll(':scope > .bg-white\\/10')).toHaveLength(3);
+		const rightControls = screen.getByTestId('equity-right-controls');
+		expect(within(rightControls).getAllByTestId('equity-skeleton-box')).toHaveLength(3);
+		expect(within(firstCard).getByTestId('equity-chart-placeholder')).toBeInTheDocument();
 	});
 
-	it('renders a single chart placeholder box in the first card', () => {
-		const { container } = render(<EquitySkeleton />);
+	it('renders 12 skeleton boxes in the month header row and 4 placeholder rows in the second card', () => {
+		render(<EquitySkeleton />);
 
-		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
-		const chartBox = firstCard.querySelector('.h-44.w-full');
+		const headerRow = screen.getByTestId('heatmap-header-row');
+		expect(within(headerRow).getAllByTestId('equity-skeleton-box')).toHaveLength(12);
 
-		expect(chartBox).toBeInTheDocument();
-	});
-
-	it('renders 12 SkeletonBoxes plus 1 empty cell in the month header row of the second card', () => {
-		const { container } = render(<EquitySkeleton />);
-
-		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
-
-		expect(cards).toHaveLength(2);
-
-		const secondCard = cards[1];
-		const headerRow = secondCard.querySelector('.mb-2.grid');
-
-		expect(headerRow).not.toBeNull();
-
-		const row = headerRow as HTMLElement;
-
-		expect(row.children).toHaveLength(13);
-		expect(row.querySelectorAll('.bg-white\\/10')).toHaveLength(12);
-	});
-
-	it('renders 4 placeholder rows in the monthly grid of the second card', () => {
-		const { container } = render(<EquitySkeleton />);
-
-		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
-
-		expect(cards).toHaveLength(2);
-
-		const secondCard = cards[1]!;
-		const rows = secondCard.querySelectorAll('.space-y-1 > div');
-
+		const rows = screen.getAllByTestId('heatmap-row-placeholder');
 		expect(rows).toHaveLength(4);
-	});
 
-	it('renders a label box plus 12 month boxes per row in the second card', () => {
-		const { container } = render(<EquitySkeleton />);
-
-		const secondCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
-		const rows = secondCard.querySelectorAll('.space-y-1 > div');
-
-		rows.forEach((row: Element) => {
-			expect(row.children).toHaveLength(13);
-			expect(row.querySelectorAll('.bg-white\\/10')).toHaveLength(13);
+		rows.forEach((row) => {
+			expect(within(row).getAllByTestId('equity-skeleton-box')).toHaveLength(13);
 		});
 	});
 
 	it('renders a total of 77 SkeletonBoxes across both cards', () => {
-		const { container } = render(<EquitySkeleton />);
+		render(<EquitySkeleton />);
 
-		const skeletonBoxes = container.querySelectorAll('.bg-white\\/10');
-		expect(skeletonBoxes).toHaveLength(77);
+		expect(screen.getAllByTestId('equity-skeleton-box')).toHaveLength(77);
 	});
 });

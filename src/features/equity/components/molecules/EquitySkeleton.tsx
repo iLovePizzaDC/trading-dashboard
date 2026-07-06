@@ -22,7 +22,7 @@ function EquitySkeleton() {
 				</div>
 
 				<div className='mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-					<div className='flex gap-1'>
+					<div className='flex gap-1' data-testid='equity-range-buttons'>
 						{Array.from({ length: 6 }).map((_, i) => (
 							<SkeletonBox key={i} className='h-5 w-8 rounded' />
 						))}
@@ -38,7 +38,9 @@ function EquitySkeleton() {
 					</div>
 				</div>
 
-				<SkeletonBox className='h-44 w-full rounded-lg' />
+				<div data-testid='equity-chart-placeholder'>
+					<SkeletonBox className='h-44 w-full rounded-lg' />
+				</div>
 			</div>
 
 			<div
@@ -49,7 +51,10 @@ function EquitySkeleton() {
 					<SkeletonBox className='h-3 w-32' />
 				</div>
 
-				<div className='mb-2 grid grid-cols-[2rem_repeat(12,1fr)] gap-1'>
+				<div
+					className='mb-2 grid grid-cols-[2rem_repeat(12,1fr)] gap-1'
+					data-testid='heatmap-header-row'
+				>
 					<div />
 					{Array.from({ length: 12 }).map((_, i) => (
 						<SkeletonBox key={i} className='h-3 w-full' />
@@ -58,7 +63,11 @@ function EquitySkeleton() {
 
 				<div className='space-y-1'>
 					{Array.from({ length: 4 }).map((_, row) => (
-						<div key={row} className='grid grid-cols-[2rem_repeat(12,1fr)] gap-1 items-center'>
+						<div
+							key={row}
+							className='grid grid-cols-[2rem_repeat(12,1fr)] gap-1 items-center'
+							data-testid='heatmap-row-placeholder'
+						>
 							<SkeletonBox className='h-3 w-6' />
 							{Array.from({ length: 12 }).map((_, col) => (
 								<SkeletonBox key={col} className='h-5 w-full rounded-sm' />
