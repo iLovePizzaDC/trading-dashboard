@@ -1,5 +1,5 @@
 import MomentumTooltip from '@/features/momentum/components/atoms/MomentumTooltip';
-import { calcMomentumTimeline } from '@/features/momentum/components/utils/momentum';
+import { calcMomentumTimeline } from '@/features/momentum/utils/momentum';
 import Card from '@/shared/components/atoms/Card';
 import DateRangeFilter from '@/shared/components/atoms/DateRangeFilter';
 import { RANGES, type Range } from '@/shared/constants/date-range';

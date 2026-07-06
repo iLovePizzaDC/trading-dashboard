@@ -25,19 +25,19 @@ describe('<EquityError />', () => {
 	});
 
 	it('renders 4 skeleton rows in the monthly performance grid', () => {
-		const { container } = render(<EquityError />);
+		render(<EquityError />);
 
-		const rows = container.querySelectorAll('.space-y-1 > div');
-		expect(rows).toHaveLength(4);
+		expect(screen.getAllByTestId(/skeleton-row-wrapper-*/)).toHaveLength(4);
 	});
 
 	it('renders 12 month cells plus 1 label cell per row', () => {
-		const { container } = render(<EquityError />);
+		render(<EquityError />);
 
-		const rows = container.querySelectorAll('.space-y-1 > div');
+		const rows = screen.getAllByTestId(/skeleton-row-wrapper-/);
 
-		rows.forEach((row) => {
-			expect(row.children).toHaveLength(13);
+		rows.forEach((_, i) => {
+			expect(screen.getAllByTestId(`skeleton-col-content-${i}`)).toHaveLength(12);
+			expect(screen.getAllByTestId(`skeleton-col-label-${i}`)).toHaveLength(1);
 		});
 	});
 

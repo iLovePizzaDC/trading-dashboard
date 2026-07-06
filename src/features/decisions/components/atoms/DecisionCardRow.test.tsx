@@ -1,5 +1,5 @@
 import DecisionCardRow from '@/features/decisions/components/atoms/DecisionCardRow';
-import { REASON_LABEL } from '@/features/trades/constants/trades-card';
+import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import type { Candidate } from '@/shared/types/decisions';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
@@ -64,53 +64,41 @@ describe('<DecisionCardRow />', () => {
 	});
 
 	it('caps the bar width at 100% when momentum exceeds 1', () => {
-		const { container } = render(<DecisionCardRow candidate={buildCandidate({ momentum: 2.5 })} />);
+		render(<DecisionCardRow candidate={buildCandidate({ momentum: 2.5 })} />);
 
-		const bar = container.querySelector('.h-full.rounded-full');
-		expect(bar).toHaveStyle({ width: '100%' });
+		expect(screen.getByTestId('decision-progress-bar')).toHaveStyle({ width: '100%' });
 	});
 
 	it('sets the bar width proportionally to momentum when under 100%', () => {
-		const { container } = render(<DecisionCardRow candidate={buildCandidate({ momentum: 0.3 })} />);
+		render(<DecisionCardRow candidate={buildCandidate({ momentum: 0.3 })} />);
 
-		const bar = container.querySelector('.h-full.rounded-full');
-		expect(bar).toHaveStyle({ width: '30%' });
+		expect(screen.getByTestId('decision-progress-bar')).toHaveStyle({ width: '30%' });
 	});
 
 	it('sets the bar width to 0% when momentum is null', () => {
-		const { container } = render(
-			<DecisionCardRow candidate={buildCandidate({ momentum: null })} />,
-		);
+		render(<DecisionCardRow candidate={buildCandidate({ momentum: null })} />);
 
-		const bar = container.querySelector('.h-full.rounded-full');
-		expect(bar).toHaveStyle({ width: '0%' });
+		expect(screen.getByTestId('decision-progress-bar')).toHaveStyle({ width: '0%' });
 	});
 
 	it('colors the bar green when the candidate is selected', () => {
-		const { container } = render(
-			<DecisionCardRow candidate={buildCandidate({ selected: true, passes_trend: true })} />,
-		);
+		render(<DecisionCardRow candidate={buildCandidate({ selected: true, passes_trend: true })} />);
 
-		const bar = container.querySelector('.h-full.rounded-full');
-		expect(bar).toHaveClass('bg-green-400');
+		expect(screen.getByTestId('decision-progress-bar')).toHaveClass('bg-green-400');
 	});
 
 	it('colors the bar red when the candidate fails the trend check', () => {
-		const { container } = render(
+		render(
 			<DecisionCardRow candidate={buildCandidate({ selected: false, passes_trend: false })} />,
 		);
 
-		const bar = container.querySelector('.h-full.rounded-full');
-		expect(bar).toHaveClass('bg-red-400');
+		expect(screen.getByTestId('decision-progress-bar')).toHaveClass('bg-red-400');
 	});
 
 	it('colors the bar neutral when not selected but passing the trend check', () => {
-		const { container } = render(
-			<DecisionCardRow candidate={buildCandidate({ selected: false, passes_trend: true })} />,
-		);
+		render(<DecisionCardRow candidate={buildCandidate({ selected: false, passes_trend: true })} />);
 
-		const bar = container.querySelector('.h-full.rounded-full');
-		expect(bar).toHaveClass('bg-white/15');
+		expect(screen.getByTestId('decision-progress-bar')).toHaveClass('bg-white/15');
 	});
 
 	it('shows "selected" when the candidate is selected', () => {
@@ -120,7 +108,7 @@ describe('<DecisionCardRow />', () => {
 	});
 
 	it('maps every known rejected_reason key correctly', () => {
-		Object.entries(REASON_LABEL).forEach(([reason, label]) => {
+		Object.entries(STOP_REASON_LABEL).forEach(([reason, label]) => {
 			const { unmount } = render(
 				<DecisionCardRow
 					candidate={buildCandidate({ selected: false, rejected_reason: reason })}

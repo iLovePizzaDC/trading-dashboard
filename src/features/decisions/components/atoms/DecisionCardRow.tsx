@@ -1,4 +1,4 @@
-import { REASON_LABEL } from '@/features/trades/constants/trades-card';
+import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import Tooltip from '@/shared/components/atoms/Tooltip';
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { Candidate } from '@/shared/types/decisions';
@@ -27,6 +27,7 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 						selected ? 'bg-green-400' : !passes_trend ? 'bg-red-400' : 'bg-white/15'
 					}`}
 					style={{ width: `${barWidth}%` }}
+					data-testid='decision-progress-bar'
 				/>
 			</div>
 			<p
@@ -40,7 +41,7 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 					<span className='text-green-400'>selected</span>
 				) : (
 					<span className='text-white/30'>
-						{rejected_reason ? (REASON_LABEL[rejected_reason] ?? rejected_reason) : '—'}
+						{rejected_reason ? (STOP_REASON_LABEL[rejected_reason] ?? rejected_reason) : '—'}
 					</span>
 				)}
 			</p>

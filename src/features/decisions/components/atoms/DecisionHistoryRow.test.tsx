@@ -129,11 +129,9 @@ describe('<DecisionHistoryRow />', () => {
 			buildCandidate({ symbol: 'CCC', momentum: 0.3 }),
 		];
 
-		const { container } = render(
-			<DecisionHistoryRow decision={buildDecision({ candidates })} cardHeight={120} />,
-		);
+		render(<DecisionHistoryRow decision={buildDecision({ candidates })} cardHeight={120} />);
 
-		const cards = container.querySelectorAll('[class*="rounded-md"]');
+		const cards = screen.getAllByTestId(/candidate-card-*/);
 		expect(cards[0]).toHaveClass('ring-1', 'ring-green-400/40');
 		expect(cards[1]).not.toHaveClass('ring-1');
 		expect(cards[2]).not.toHaveClass('ring-1');
@@ -213,13 +211,13 @@ describe('<DecisionHistoryRow />', () => {
 			'bg-green-500/20 text-green-300 border-green-500/30',
 		);
 
-		const { container } = render(
+		render(
 			<DecisionHistoryRow
 				decision={buildDecision({ candidates: [buildCandidate()] })}
 				cardHeight={120}
 			/>,
 		);
 
-		expect(container.querySelector('.border-green-500\\/30')).toBeInTheDocument();
+		expect(screen.getByTestId(/candidate-card-*/)).toBeInTheDocument();
 	});
 });

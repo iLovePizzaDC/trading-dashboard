@@ -37,7 +37,9 @@ function EquityTooltip({
 
 	return (
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
-			<p className='text-white/40'>{formattedDate}</p>
+			<p className='text-white/40' data-testid='equity-date-paragraph'>
+				{formattedDate}
+			</p>
 			<p className={`font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
 				{relative ? `Bot: ${fmt(bot - 100, true)}` : `Bot: ${fmt(bot - startValue, false)}`}
 			</p>

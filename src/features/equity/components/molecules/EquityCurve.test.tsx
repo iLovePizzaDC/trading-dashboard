@@ -279,9 +279,7 @@ describe('<EquityCurve />', () => {
 
 		render(<EquityCurve data={[buildEquityPoint()]} deposits={[]} decisions={[]} />);
 
-		const botLabel = screen.getByText('Bot');
-		const dot = botLabel.querySelector('span');
-		expect(dot).toHaveClass('bg-red-400');
+		expect(screen.getByTestId('bot-indicator')).toHaveClass('bg-red-400');
 	});
 
 	it('passes range and setRange to DateRangeFilter', () => {

@@ -117,11 +117,8 @@ describe('<MonthlyHeatmap />', () => {
 
 		render(<MonthlyHeatmap data={[]} deposits={[]} />);
 
-		const yearRow = screen.getByText('2026').closest('.grid');
-		const placeholders = yearRow?.querySelectorAll('.bg-linear-to-br.from-white\\/5.to-white\\/0');
-
 		expect(screen.getAllByTestId('month-cell')).toHaveLength(1);
-		expect(placeholders).toHaveLength(11);
+		expect(screen.getAllByTestId('month-cell-placeholder')).toHaveLength(11);
 	});
 
 	it('selects a month and shows the DetailPanel for it when clicked', async () => {
@@ -171,10 +168,9 @@ describe('<MonthlyHeatmap />', () => {
 	it('collapses the detail wrapper (maxHeight 0, opacity 0) when nothing is selected', () => {
 		mockMonthly([buildMonthlyReturn({ year: 2026, month: 5 })]);
 
-		const { container } = render(<MonthlyHeatmap data={[]} deposits={[]} />);
+		render(<MonthlyHeatmap data={[]} deposits={[]} />);
 
-		const wrapper = container.querySelector('.overflow-hidden.transition-all');
-		expect(wrapper).toHaveStyle({ maxHeight: '0', opacity: '0' });
+		expect(screen.getByTestId('detail-wrapper')).toHaveStyle({ maxHeight: '0', opacity: '0' });
 	});
 
 	it('expands the detail wrapper to the measured content height when a month is selected', async () => {
@@ -183,12 +179,11 @@ describe('<MonthlyHeatmap />', () => {
 		const user = userEvent.setup();
 		mockMonthly([buildMonthlyReturn({ year: 2026, month: 5 })]);
 
-		const { container } = render(<MonthlyHeatmap data={[]} deposits={[]} />);
+		render(<MonthlyHeatmap data={[]} deposits={[]} />);
 
 		await user.click(screen.getByTestId('month-cell'));
 
-		const wrapper = container.querySelector('.overflow-hidden.transition-all');
-		expect(wrapper).toHaveStyle({ maxHeight: '180px', opacity: '1' });
+		expect(screen.getByTestId('detail-wrapper')).toHaveStyle({ maxHeight: '180px', opacity: '1' });
 	});
 
 	it('renders no MonthCell or year rows when there is no monthly data', () => {

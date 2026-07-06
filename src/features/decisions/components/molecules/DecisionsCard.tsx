@@ -35,6 +35,7 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				className={`grid transition-[grid-template-rows] duration-250 ease-in-out ${
 					expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
 				}`}
+				data-testid='decision-grid-container'
 			>
 				<div className='overflow-hidden'>
 					{extra.map((candidate, index) => (

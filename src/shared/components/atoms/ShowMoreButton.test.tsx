@@ -28,19 +28,15 @@ describe('<ShowMoreButton />', () => {
 	});
 
 	it('rotates the chevron down (0deg) when not expanded', () => {
-		const { container } = render(
-			<ShowMoreButton toggle={vi.fn()} expanded={false} hiddenCount={5} />,
-		);
+		render(<ShowMoreButton toggle={vi.fn()} expanded={false} hiddenCount={5} />);
 
-		const chevron = container.querySelector('svg');
-		expect(chevron).toHaveClass('rotate-0');
+		expect(screen.getByTestId('show-more-chevron')).toHaveClass('rotate-0');
 	});
 
 	it('rotates the chevron up (180deg) when expanded', () => {
-		const { container } = render(<ShowMoreButton toggle={vi.fn()} expanded hiddenCount={5} />);
+		render(<ShowMoreButton toggle={vi.fn()} expanded hiddenCount={5} />);
 
-		const chevron = container.querySelector('svg');
-		expect(chevron).toHaveClass('rotate-180');
+		expect(screen.getByTestId('show-more-chevron')).toHaveClass('rotate-180');
 	});
 
 	it('displays a hiddenCount of 0 when provided', () => {

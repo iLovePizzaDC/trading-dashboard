@@ -11,12 +11,6 @@ vi.mock('@/shared/components/atoms/Tooltip', () => ({
 	),
 }));
 
-vi.mock('@/shared/constants/sectors', () => ({
-	SECTOR_MAP: {
-		XLK: 'Technology',
-	} as Record<string, string>,
-}));
-
 type Entry = { id: string; label: string };
 
 function renderEntry(entry: Entry, color: string, isLast: boolean) {
@@ -120,7 +114,7 @@ describe('<GroupRowLayout />', () => {
 	});
 
 	it('disables the expand button and hides the chevron when there is only one entry', () => {
-		const { container } = render(
+		render(
 			<GroupRowLayout
 				symbol='XLK'
 				color='#4ade80'
@@ -133,7 +127,7 @@ describe('<GroupRowLayout />', () => {
 
 		const buttons = screen.getAllByRole('button');
 		buttons.forEach((btn) => expect(btn).toBeDisabled());
-		expect(container.querySelector('svg')).not.toBeInTheDocument();
+		expect(screen.queryByTestId('group-row-chevron')).not.toBeInTheDocument();
 	});
 
 	it('does not show the "older" count when there is only one entry', () => {
@@ -199,7 +193,7 @@ describe('<GroupRowLayout />', () => {
 	});
 
 	it('enables the expand buttons and shows the chevron when there are multiple entries', () => {
-		const { container } = render(
+		render(
 			<GroupRowLayout
 				symbol='XLK'
 				color='#4ade80'
@@ -212,7 +206,7 @@ describe('<GroupRowLayout />', () => {
 
 		const buttons = screen.getAllByRole('button');
 		buttons.forEach((btn) => expect(btn).not.toBeDisabled());
-		expect(container.querySelector('svg')).toBeInTheDocument();
+		expect(screen.getByTestId('group-row-chevron')).toBeInTheDocument();
 	});
 
 	it('expands when the left button is clicked, updating isLast and hiding the "older" count', async () => {

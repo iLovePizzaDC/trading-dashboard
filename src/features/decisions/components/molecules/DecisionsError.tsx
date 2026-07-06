@@ -25,6 +25,7 @@ function DecisionsError() {
 						<div
 							key={i}
 							className='rounded-lg border border-white/10 bg-linear-to-br from-white/5 to-transparent p-3'
+							data-testid={`skeleton-rows-${i}`}
 						>
 							<div className='flex justify-between mb-2'>
 								<div className='h-3 w-20 rounded bg-white/10' />
@@ -32,9 +33,9 @@ function DecisionsError() {
 							</div>
 
 							<div className='flex gap-2'>
-								<div className='h-6 w-12 rounded bg-white/10' />
-								<div className='h-6 w-16 rounded bg-white/10' />
-								<div className='h-6 w-14 rounded bg-white/10' />
+								<div className='h-6 w-12 rounded bg-white/10' data-testid={`skeleton-bar-${i}`} />
+								<div className='h-6 w-16 rounded bg-white/10' data-testid={`skeleton-bar-${i}`} />
+								<div className='h-6 w-14 rounded bg-white/10' data-testid={`skeleton-bar-${i}`} />
 							</div>
 						</div>
 					))}

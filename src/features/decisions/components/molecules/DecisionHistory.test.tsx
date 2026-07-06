@@ -153,11 +153,9 @@ describe('<DecisionHistory />', () => {
 			],
 		});
 
-		const { container } = render(
-			<DecisionHistory data={[buildDecision(), buildDecision({ date: '2026-06-01' })]} />,
-		);
+		render(<DecisionHistory data={[buildDecision(), buildDecision({ date: '2026-06-01' })]} />);
 
-		const rowWrappers = container.querySelectorAll('[style*="position: absolute"]');
+		const rowWrappers = screen.getAllByTestId(/decision-virtualizer-wrapper-*/);
 		expect(rowWrappers[0]).toHaveStyle({ transform: 'translateY(0px)' });
 		expect(rowWrappers[1]).toHaveStyle({ transform: `translateY(${ROW_HEIGHT}px)` });
 	});
@@ -165,19 +163,17 @@ describe('<DecisionHistory />', () => {
 	it('sets the inner spacer height to the total virtualized size', () => {
 		mockVirtualizer({ totalSize: 428, items: [] });
 
-		const { container } = render(<DecisionHistory data={[buildDecision()]} />);
+		render(<DecisionHistory data={[buildDecision()]} />);
 
-		const spacer = container.querySelector('[style*="position: relative"]');
-		expect(spacer).toHaveStyle({ height: '428px' });
+		expect(screen.getByTestId('decision-virtualizer')).toHaveStyle({ height: '428px' });
 	});
 
 	it('applies a mask-image fade when the content exceeds the max height (canScroll)', () => {
 		mockVirtualizer({ totalSize: 300, items: [] });
 
-		const { container } = render(<DecisionHistory data={[buildDecision()]} />);
+		render(<DecisionHistory data={[buildDecision()]} />);
 
-		const scrollContainer = container.querySelector('.max-h-64');
-		expect(scrollContainer).toHaveStyle({
+		expect(screen.getByTestId('decision-scroll-container')).toHaveStyle({
 			maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
 		});
 	});
@@ -185,10 +181,12 @@ describe('<DecisionHistory />', () => {
 	it('does not apply a mask-image fade when the content fits within the max height', () => {
 		mockVirtualizer({ totalSize: 150, items: [] });
 
-		const { container } = render(<DecisionHistory data={[buildDecision()]} />);
+		render(<DecisionHistory data={[buildDecision()]} />);
 
-		const scrollContainer = container.querySelector('.max-h-64');
-		expect(scrollContainer).not.toHaveAttribute('style', expect.stringContaining('maskImage'));
+		expect(screen.getByTestId('decision-scroll-container')).not.toHaveAttribute(
+			'style',
+			expect.stringContaining('maskImage'),
+		);
 	});
 
 	it('renders an empty list without crashing when data is empty', () => {

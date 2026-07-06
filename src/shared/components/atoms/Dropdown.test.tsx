@@ -151,9 +151,9 @@ describe('<Dropdown />', () => {
 	it('rotates the chevron icon when open', async () => {
 		const user = userEvent.setup();
 
-		const { container } = render(<Dropdown trigger='Filter' items={buildItems()} />);
+		render(<Dropdown trigger='Filter' items={buildItems()} />);
 
-		const chevron = container.querySelector('svg');
+		const chevron = screen.getByTestId('dropdown-chevron');
 		expect(chevron).toHaveStyle({ transform: 'rotate(0deg)' });
 
 		await user.click(screen.getByRole('button', { name: /Filter/ }));
@@ -164,11 +164,10 @@ describe('<Dropdown />', () => {
 	it('renders no items when the items array is empty', async () => {
 		const user = userEvent.setup();
 
-		const { container } = render(<Dropdown trigger='Filter' items={[]} />);
+		render(<Dropdown trigger='Filter' items={[]} />);
 
 		await user.click(screen.getByRole('button', { name: /Filter/ }));
 
-		const menu = container.querySelector('.w-36');
-		expect(menu?.children).toHaveLength(0);
+		expect(screen.getByTestId('dropdown-menu').children).toHaveLength(0);
 	});
 });

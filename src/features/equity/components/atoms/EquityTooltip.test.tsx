@@ -75,7 +75,7 @@ describe('<EquityTooltip />', () => {
 	});
 
 	it('renders an empty date when no date is present in the payload', () => {
-		const { container } = render(
+		render(
 			<EquityTooltip
 				active
 				payload={[
@@ -86,8 +86,7 @@ describe('<EquityTooltip />', () => {
 			/>,
 		);
 
-		const dateEl = container.querySelector('p.text-white\\/40');
-		expect(dateEl).toBeEmptyDOMElement();
+		expect(screen.getByTestId('equity-date-paragraph')).toBeEmptyDOMElement();
 	});
 
 	it('colors the bot value green when positive is true', () => {

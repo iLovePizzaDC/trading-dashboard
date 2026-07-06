@@ -220,7 +220,7 @@ describe('<DecisionsCard />', () => {
 	it('expands the grid rows when expanded is true', () => {
 		mockExpandable({ previewCount: 2, expanded: true, hasMore: true, hiddenCount: 2 });
 
-		const { container } = render(
+		render(
 			<DecisionsCard
 				data={[
 					buildDecision({
@@ -234,14 +234,13 @@ describe('<DecisionsCard />', () => {
 			/>,
 		);
 
-		const gridWrapper = container.querySelector('.duration-250');
-		expect(gridWrapper).toHaveClass('grid-rows-[1fr]');
+		expect(screen.getByTestId('decision-grid-container')).toHaveClass('grid-rows-[1fr]');
 	});
 
 	it('collapses the grid rows when expanded is false', () => {
 		mockExpandable({ previewCount: 2, expanded: false, hasMore: true, hiddenCount: 2 });
 
-		const { container } = render(
+		render(
 			<DecisionsCard
 				data={[
 					buildDecision({
@@ -255,8 +254,7 @@ describe('<DecisionsCard />', () => {
 			/>,
 		);
 
-		const gridWrapper = container.querySelector('.duration-250');
-		expect(gridWrapper).toHaveClass('grid-rows-[0fr]');
+		expect(screen.getByTestId('decision-grid-container')).toHaveClass('grid-rows-[0fr]');
 	});
 
 	it('renders the ShowMoreButton when hasMore is true', () => {

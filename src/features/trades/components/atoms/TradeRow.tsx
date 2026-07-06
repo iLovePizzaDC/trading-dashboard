@@ -1,11 +1,6 @@
+import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
-
-const reasonLabel: Record<string, string> = {
-	stop_triggered: 'stop hit',
-	sma200_break: 'sma200 break',
-	momentum_negative: 'momentum drop',
-};
 
 interface ITradeRow {
 	trade: Trade;
@@ -54,7 +49,7 @@ function TradeRow({ trade, isLast = false }: ITradeRow) {
 				)}
 
 				<p className='text-xs text-white/30 truncate'>
-					{trade.reason ? (reasonLabel[trade.reason] ?? trade.reason) : trade.date}
+					{trade.reason ? (STOP_REASON_LABEL[trade.reason] ?? trade.reason) : trade.date}
 				</p>
 			</div>
 		</div>

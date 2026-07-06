@@ -1,4 +1,4 @@
-import { REASON_LABEL } from '@/features/trades/constants/trades-card';
+import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import EntryRowLayout from '@/shared/components/layouts/EntryRowLayout';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
@@ -33,7 +33,7 @@ function TradeEntry({ trade, color, isLast, currentStop }: ITradeEntry) {
 						</span>
 					</div>
 					<p className='text-[11px] text-white/25 mt-0.5 truncate'>
-						{trade.reason ? (REASON_LABEL[trade.reason] ?? trade.reason) : trade.date}
+						{trade.reason ? (STOP_REASON_LABEL[trade.reason] ?? trade.reason) : trade.date}
 					</p>
 				</>
 			}

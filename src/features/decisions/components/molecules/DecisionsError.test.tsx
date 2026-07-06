@@ -24,20 +24,16 @@ describe('<DecisionsError />', () => {
 	});
 
 	it('renders 4 skeleton rows in the decision history placeholder', () => {
-		const { container } = render(<DecisionsError />);
+		render(<DecisionsError />);
 
-		const skeletonRows = container.querySelectorAll('.space-y-3 > div.rounded-lg');
-		expect(skeletonRows).toHaveLength(4);
+		expect(screen.getAllByTestId(/skeleton-rows-*/)).toHaveLength(4);
 	});
 
 	it('renders 3 skeleton bars in each skeleton row', () => {
-		const { container } = render(<DecisionsError />);
+		render(<DecisionsError />);
 
-		const skeletonRows = container.querySelectorAll('.space-y-3 > div.rounded-lg');
-
-		skeletonRows.forEach((row) => {
-			const bars = row.querySelectorAll('.flex.gap-2 > div');
-			expect(bars).toHaveLength(3);
+		screen.getAllByTestId(/skeleton-rows-*/).forEach((_, i) => {
+			expect(screen.getAllByTestId(`skeleton-bar-${i}`)).toHaveLength(3);
 		});
 	});
 

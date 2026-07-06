@@ -40,9 +40,13 @@ function DecisionHistory({ data }: IDecisionHistory) {
 							}
 						: undefined
 				}
+				data-testid='decision-scroll-container'
 			>
-				<div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}>
-					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
+				<div
+					style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}
+					data-testid='decision-virtualizer'
+				>
+					{rowVirtualizer.getVirtualItems().map((virtualRow, i) => {
 						const decision = sorted[virtualRow.index];
 
 						return (
@@ -57,6 +61,7 @@ function DecisionHistory({ data }: IDecisionHistory) {
 									paddingBottom: CARD_GAP,
 									transform: `translateY(${virtualRow.start}px)`,
 								}}
+								data-testid={`decision-virtualizer-wrapper-${i}`}
 							>
 								<DecisionHistoryRow decision={decision} cardHeight={CARD_HEIGHT} />
 							</div>
