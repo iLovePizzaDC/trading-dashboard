@@ -126,7 +126,6 @@ describe('<StopGroupRow />', () => {
 
 		render(<StopGroupRow group={group} />);
 
-		// baseline = oldest entry's old_stop = 200; overallChange = 120 - 200 = -80 (negative -> red)
 		const badge = screen.getByTestId('badge').firstChild;
 		expect(badge).toHaveClass('text-red-400');
 	});

@@ -1,19 +1,19 @@
 import DecisionsSkeleton from '@/features/decisions/components/molecules/DecisionsSkeleton';
-import { render } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 describe('<DecisionsSkeleton />', () => {
 	it('renders two skeleton cards side by side', () => {
-		const { container } = render(<DecisionsSkeleton />);
+		render(<DecisionsSkeleton />);
 
-		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
-		expect(cards).toHaveLength(2);
+		expect(screen.getByTestId('decisions-card')).toBeInTheDocument();
+		expect(screen.getByTestId('decision-history-card')).toBeInTheDocument();
 	});
 
 	it('renders each SkeletonBox with a shimmer overlay', () => {
-		const { container } = render(<DecisionsSkeleton />);
+		render(<DecisionsSkeleton />);
 
-		const skeletonBoxes = container.querySelectorAll('.bg-white\\/10');
+		const skeletonBoxes = screen.getAllByTestId('skeleton-box');
 
 		expect(skeletonBoxes.length).toBeGreaterThan(0);
 
@@ -23,66 +23,49 @@ describe('<DecisionsSkeleton />', () => {
 		});
 	});
 
-	it('renders 3 placeholder rows in the first card (decisions list)', () => {
-		const { container } = render(<DecisionsSkeleton />);
+	it('renders 3 placeholder rows in the decisions card', () => {
+		render(<DecisionsSkeleton />);
 
-		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
-		const rows = firstCard.querySelectorAll(':scope > .border-b, :scope > .last\\:border-0');
-
-		expect(rows).toHaveLength(3);
+		const card = screen.getByTestId('decisions-card');
+		expect(within(card).getAllByTestId('decision-row-placeholder')).toHaveLength(3);
 	});
 
-	it('renders 4 SkeletonBoxes per row in the first card', () => {
-		const { container } = render(<DecisionsSkeleton />);
+	it('renders 4 SkeletonBoxes per row in the decisions card', () => {
+		render(<DecisionsSkeleton />);
 
-		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
-		const rows = firstCard.querySelectorAll('.flex.items-center.gap-3');
+		const rows = screen.getAllByTestId('decision-row-placeholder');
 
-		rows.forEach((row: Element) => {
-			const boxes = row.querySelectorAll('.bg-white\\/10');
-			expect(boxes).toHaveLength(4);
+		rows.forEach((row) => {
+			expect(within(row).getAllByTestId('skeleton-box')).toHaveLength(4);
 		});
 	});
 
-	it('renders a centered button placeholder in the first card', () => {
-		const { container } = render(<DecisionsSkeleton />);
+	it('renders a centered button placeholder in the decisions card', () => {
+		render(<DecisionsSkeleton />);
 
-		const firstCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
-		const buttonWrapper = firstCard.querySelector('.mt-3.flex.justify-center');
-
-		expect(buttonWrapper).toBeInTheDocument();
-		expect(buttonWrapper?.querySelector('.bg-white\\/10')).toBeInTheDocument();
+		const buttonWrapper = screen.getByTestId('button-placeholder');
+		expect(within(buttonWrapper).getAllByTestId('skeleton-box')).toHaveLength(1);
 	});
 
-	it('renders 3 skeleton entries in the second card (decision history)', () => {
-		const { container } = render(<DecisionsSkeleton />);
+	it('renders 3 skeleton entries in the decision history card', () => {
+		render(<DecisionsSkeleton />);
 
-		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
-
-		expect(cards).toHaveLength(2);
-
-		const secondCard = cards[1]!;
-		const entries = secondCard.querySelectorAll('.rounded-lg');
-
-		expect(entries).toHaveLength(3);
+		expect(screen.getAllByTestId('history-entry-placeholder')).toHaveLength(3);
 	});
 
-	it('renders 5 SkeletonBoxes per entry in the second card', () => {
-		const { container } = render(<DecisionsSkeleton />);
+	it('renders 5 SkeletonBoxes per entry in the decision history card', () => {
+		render(<DecisionsSkeleton />);
 
-		const secondCard = container.querySelectorAll(':scope > div > .rounded-xl')[0];
-		const entries = secondCard.querySelectorAll('.rounded-lg');
+		const entries = screen.getAllByTestId('history-entry-placeholder');
 
-		entries.forEach((entry: Element) => {
-			const boxes = entry.querySelectorAll('.bg-white\\/10');
-			expect(boxes).toHaveLength(5);
+		entries.forEach((entry) => {
+			expect(within(entry).getAllByTestId('skeleton-box')).toHaveLength(5);
 		});
 	});
 
 	it('renders a total of 32 SkeletonBoxes across both cards', () => {
-		const { container } = render(<DecisionsSkeleton />);
+		render(<DecisionsSkeleton />);
 
-		const skeletonBoxes = container.querySelectorAll('.bg-white\\/10');
-		expect(skeletonBoxes).toHaveLength(32);
+		expect(screen.getAllByTestId('skeleton-box')).toHaveLength(32);
 	});
 });

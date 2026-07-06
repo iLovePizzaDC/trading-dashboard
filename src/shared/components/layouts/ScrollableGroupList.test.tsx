@@ -1,6 +1,6 @@
+import ScrollableGroupList from '@/shared/components/layouts/ScrollableGroupList';
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import ScrollableGroupList from './ScrollableGroupList';
 
 type Group = { symbol: string; label: string };
 
@@ -51,20 +51,15 @@ describe('<ScrollableGroupList />', () => {
 	});
 
 	it('renders a divider between groups but not after the last one', () => {
-		const { container } = render(
-			<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />,
-		);
+		render(<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />);
 
-		const dividers = container.querySelectorAll('.h-px.my-3');
-		expect(dividers).toHaveLength(2);
+		expect(screen.getAllByTestId('group-divider')).toHaveLength(2);
 	});
 
 	it('renders no divider when there is only a single group', () => {
-		const { container } = render(
-			<ScrollableGroupList groups={buildGroups(1)} renderGroup={renderGroup} />,
-		);
+		render(<ScrollableGroupList groups={buildGroups(1)} renderGroup={renderGroup} />);
 
-		expect(container.querySelectorAll('.h-px.my-3')).toHaveLength(0);
+		expect(screen.queryAllByTestId('group-divider')).toHaveLength(0);
 	});
 
 	it('observes the scroll container with a ResizeObserver', () => {
@@ -88,24 +83,21 @@ describe('<ScrollableGroupList />', () => {
 		vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(100);
 		vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(200);
 
-		const { container } = render(
-			<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />,
-		);
+		render(<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />);
 
-		const scrollContainer = container.querySelector('.max-h-64');
-		expect(scrollContainer).not.toHaveAttribute('style', expect.stringContaining('maskImage'));
+		expect(screen.queryByTestId('group-scroll-container')).not.toHaveAttribute(
+			'style',
+			expect.stringContaining('maskImage'),
+		);
 	});
 
 	it('applies a mask-image fade when content overflows (scrollHeight > clientHeight)', () => {
 		vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(500);
 		vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(200);
 
-		const { container } = render(
-			<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />,
-		);
+		render(<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />);
 
-		const scrollContainer = container.querySelector('.max-h-64');
-		expect(scrollContainer).toHaveStyle({
+		expect(screen.queryByTestId('group-scroll-container')).toHaveStyle({
 			maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
 		});
 	});
@@ -116,18 +108,17 @@ describe('<ScrollableGroupList />', () => {
 			.mockReturnValue(100);
 		vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(200);
 
-		const { container } = render(
-			<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />,
-		);
+		render(<ScrollableGroupList groups={buildGroups(3)} renderGroup={renderGroup} />);
 
-		let scrollContainer = container.querySelector('.max-h-64');
-		expect(scrollContainer).not.toHaveAttribute('style', expect.stringContaining('maskImage'));
+		expect(screen.queryByTestId('group-scroll-container')).not.toHaveAttribute(
+			'style',
+			expect.stringContaining('maskImage'),
+		);
 
 		scrollHeightSpy.mockReturnValue(500);
 		instances[0].callback([], instances[0] as unknown as ResizeObserver);
 
-		scrollContainer = container.querySelector('.max-h-64');
-		expect(scrollContainer).toHaveStyle({
+		expect(screen.queryByTestId('group-scroll-container')).toHaveStyle({
 			maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
 		});
 	});
@@ -138,11 +129,11 @@ describe('<ScrollableGroupList />', () => {
 			.mockReturnValue(100);
 		vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(200);
 
-		const { container, rerender } = render(
+		const { rerender } = render(
 			<ScrollableGroupList groups={buildGroups(1)} renderGroup={renderGroup} />,
 		);
 
-		expect(container.querySelector('.max-h-64')).not.toHaveAttribute(
+		expect(screen.queryByTestId('group-scroll-container')).not.toHaveAttribute(
 			'style',
 			expect.stringContaining('maskImage'),
 		);
@@ -150,7 +141,7 @@ describe('<ScrollableGroupList />', () => {
 		scrollHeightSpy.mockReturnValue(500);
 		rerender(<ScrollableGroupList groups={buildGroups(5)} renderGroup={renderGroup} />);
 
-		expect(container.querySelector('.max-h-64')).toHaveStyle({
+		expect(screen.queryByTestId('group-scroll-container')).toHaveStyle({
 			maskImage: 'linear-gradient(to bottom, black calc(100% - 40px), transparent 100%)',
 		});
 	});

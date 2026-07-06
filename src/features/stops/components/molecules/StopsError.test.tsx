@@ -1,6 +1,6 @@
+import StopsError from '@/features/stops/components/molecules/StopsError';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import StopsError from './StopsError';
 
 describe('<StopsError />', () => {
 	it('renders the title and error message', () => {

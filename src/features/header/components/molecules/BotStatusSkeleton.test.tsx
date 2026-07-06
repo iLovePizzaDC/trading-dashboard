@@ -1,6 +1,6 @@
+import BotStatusSkeleton from '@/features/header/components/molecules/BotStatusSkeleton';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import BotStatusSkeleton from './BotStatusSkeleton';
 
 describe('<BotStatusSkeleton />', () => {
 	it('renders three skeleton cards', () => {

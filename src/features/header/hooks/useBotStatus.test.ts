@@ -144,7 +144,7 @@ describe('useBotStatus', () => {
 	});
 
 	it('is a trading day but not running/open when now is before the run window and before market open', () => {
-		setNow('2026-07-06T10:00:00.000Z'); // NY 06:00
+		setNow('2026-07-06T10:00:00.000Z');
 
 		const { result } = renderHook(() =>
 			useBotStatus(LAST_REBALANCE, buildMarketStatus(), DATA_VERSION_NOT_RAN_TODAY),
@@ -156,7 +156,7 @@ describe('useBotStatus', () => {
 	});
 
 	it('is a trading day but not running/open when now is after the run window and after market close', () => {
-		setNow('2026-07-06T21:00:00.000Z'); // NY 17:00
+		setNow('2026-07-06T21:00:00.000Z');
 
 		const { result } = renderHook(() =>
 			useBotStatus(LAST_REBALANCE, buildMarketStatus(), DATA_VERSION_NOT_RAN_TODAY),

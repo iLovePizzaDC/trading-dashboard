@@ -18,7 +18,7 @@ describe('<EntryRowLayout />', () => {
 	});
 
 	it('applies the given color to the dot', () => {
-		const { container } = render(
+		render(
 			<EntryRowLayout
 				color='#4ade80'
 				isLast={false}
@@ -27,12 +27,11 @@ describe('<EntryRowLayout />', () => {
 			/>,
 		);
 
-		const dot = container.querySelector('.rounded-full');
-		expect(dot).toHaveStyle({ backgroundColor: '#4ade80' });
+		expect(screen.getByTestId('entry-row-dot')).toHaveStyle({ backgroundColor: '#4ade80' });
 	});
 
 	it('defaults dotOpacity to 1 when not provided', () => {
-		const { container } = render(
+		render(
 			<EntryRowLayout
 				color='#4ade80'
 				isLast={false}
@@ -41,12 +40,11 @@ describe('<EntryRowLayout />', () => {
 			/>,
 		);
 
-		const dot = container.querySelector('.rounded-full');
-		expect(dot).toHaveStyle({ opacity: '1' });
+		expect(screen.getByTestId('entry-row-dot')).toHaveStyle({ opacity: '1' });
 	});
 
 	it('applies a custom dotOpacity when provided', () => {
-		const { container } = render(
+		render(
 			<EntryRowLayout
 				color='#4ade80'
 				isLast={false}
@@ -56,12 +54,11 @@ describe('<EntryRowLayout />', () => {
 			/>,
 		);
 
-		const dot = container.querySelector('.rounded-full');
-		expect(dot).toHaveStyle({ opacity: '0.5' });
+		expect(screen.getByTestId('entry-row-dot')).toHaveStyle({ opacity: '0.5' });
 	});
 
 	it('renders the connecting line when isLast is false', () => {
-		const { container } = render(
+		render(
 			<EntryRowLayout
 				color='#4ade80'
 				isLast={false}
@@ -70,13 +67,13 @@ describe('<EntryRowLayout />', () => {
 			/>,
 		);
 
-		const line = container.querySelector('.w-px.flex-1');
+		const line = screen.getByTestId('entry-row-line');
 		expect(line).toBeInTheDocument();
 		expect(line).toHaveStyle({ backgroundColor: '#4ade80', opacity: '0.2' });
 	});
 
 	it('does not render the connecting line when isLast is true', () => {
-		const { container } = render(
+		render(
 			<EntryRowLayout
 				color='#4ade80'
 				isLast
@@ -85,8 +82,7 @@ describe('<EntryRowLayout />', () => {
 			/>,
 		);
 
-		const line = container.querySelector('.w-px.flex-1');
-		expect(line).not.toBeInTheDocument();
+		expect(screen.queryByTestId('entry-row-line')).not.toBeInTheDocument();
 	});
 
 	it('renders a bottom border on the content row when isLast is false', () => {

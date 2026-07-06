@@ -38,12 +38,16 @@ function ScrollableGroupList<T extends { symbol: string }>({
 						}
 					: undefined
 			}
+			data-testid='group-scroll-container'
 		>
 			{groups.map((group, index) => (
 				<div key={group.symbol}>
 					{renderGroup(group)}
 					{index < groups.length - 1 && (
-						<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px my-3' />
+						<div
+							className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px my-3'
+							data-testid='group-divider'
+						/>
 					)}
 				</div>
 			))}

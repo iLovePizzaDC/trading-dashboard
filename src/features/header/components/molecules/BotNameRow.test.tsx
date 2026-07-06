@@ -1,7 +1,7 @@
+import BotNameRow from '@/features/header/components/molecules/BotNameRow';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import BotNameRow from './BotNameRow';
 
 vi.mock('@/features/header/components/atoms/StatusDot', () => ({
 	default: ({ variant }: { variant: string }) => (

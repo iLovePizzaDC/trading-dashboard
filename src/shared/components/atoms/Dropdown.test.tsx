@@ -100,8 +100,6 @@ describe('<Dropdown />', () => {
 		await user.click(screen.getByRole('button', { name: /Filter/ }));
 		await user.click(screen.getByText('Option B'));
 
-		// Option B's onClick fires, but let's verify the menu-closing behavior
-		// is due to the item click handler, not an unrelated outside-click:
 		expect(screen.queryByText('Option A')).not.toBeInTheDocument();
 	});
 

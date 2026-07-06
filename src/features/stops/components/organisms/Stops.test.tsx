@@ -1,9 +1,9 @@
+import Stops from '@/features/stops/components/organisms/Stops';
 import { fetchStopHistory } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 import type { StopHistory as StopHistoryType } from '@/shared/types/stops';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Stops from './Stops';
 
 vi.mock('@/features/stops/components/molecules/StopsCard', () => ({
 	default: ({ data }: { data: StopHistoryType }) => (

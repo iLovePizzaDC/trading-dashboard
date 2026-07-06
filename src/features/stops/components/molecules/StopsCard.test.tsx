@@ -1,9 +1,9 @@
+import StopsCard from '@/features/stops/components/molecules/StopsCard';
 import type { StopHistoryGroup } from '@/features/stops/types/stop-history';
 import type { StopHistory } from '@/shared/types/stops';
 import { symbolColor } from '@/shared/utils/symbol-colors';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import StopsCard from './StopsCard';
 
 vi.mock('@/features/stops/components/atoms/StopGroupRow', () => ({
 	default: ({ group }: { group: StopHistoryGroup }) => (
@@ -104,9 +104,6 @@ describe('<StopsCard />', () => {
 
 		render(<StopsCard data={data} />);
 
-		// latestStop should come from the most recent entry (07-10 -> new_stop 100)
-		// verified indirectly via the badge count and group presence; direct entry order
-		// is covered in StopGroupRow's own tests, so here we just confirm the group renders.
 		expect(screen.getByTestId('stop-group-row')).toBeInTheDocument();
 	});
 

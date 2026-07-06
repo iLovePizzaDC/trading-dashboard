@@ -1,6 +1,6 @@
+import StopsSkeleton from '@/features/stops/components/molecules/StopsSkeleton';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import StopsSkeleton from './StopsSkeleton';
 
 describe('<StopsSkeleton />', () => {
 	it('renders each SkeletonBox with a shimmer overlay', () => {

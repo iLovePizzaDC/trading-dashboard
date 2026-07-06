@@ -82,7 +82,7 @@ describe('calcMomentumTimeline', () => {
 
 		const result = calcMomentumTimeline(decisions);
 
-		expect(result[0].avgMomentum).toBe(17.9); // avg = 0.1790115 -> 17.9
+		expect(result[0].avgMomentum).toBe(17.9);
 		expect(result[0].topMomentum).toBe(23.46);
 	});
 
