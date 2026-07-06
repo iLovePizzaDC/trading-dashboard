@@ -68,46 +68,42 @@ describe('<SummaryCardsShell />', () => {
 	});
 
 	it('sets the indicator width based on the number of tabs', () => {
-		const { container } = render(
+		render(
 			<SummaryCardsShell activeTab='overview' handleTabChange={vi.fn()}>
 				<p>content</p>
 			</SummaryCardsShell>,
 		);
 
-		const indicator = container.querySelector('.bg-purple-500');
-		expect(indicator).toHaveStyle({ width: `${100 / 3}%` });
+		expect(screen.getByTestId('summary-indicator')).toHaveStyle({ width: `${100 / 3}%` });
 	});
 
 	it('positions the indicator at translateX(0%) when activeTab is the first tab', () => {
-		const { container } = render(
+		render(
 			<SummaryCardsShell activeTab='overview' handleTabChange={vi.fn()}>
 				<p>content</p>
 			</SummaryCardsShell>,
 		);
 
-		const indicator = container.querySelector('.bg-purple-500');
-		expect(indicator).toHaveStyle({ transform: 'translateX(0%)' });
+		expect(screen.getByTestId('summary-indicator')).toHaveStyle({ transform: 'translateX(0%)' });
 	});
 
 	it('positions the indicator at translateX(100%) when activeTab is the second tab', () => {
-		const { container } = render(
+		render(
 			<SummaryCardsShell activeTab='capital' handleTabChange={vi.fn()}>
 				<p>content</p>
 			</SummaryCardsShell>,
 		);
 
-		const indicator = container.querySelector('.bg-purple-500');
-		expect(indicator).toHaveStyle({ transform: 'translateX(100%)' });
+		expect(screen.getByTestId('summary-indicator')).toHaveStyle({ transform: 'translateX(100%)' });
 	});
 
 	it('positions the indicator at translateX(200%) when activeTab is the third tab', () => {
-		const { container } = render(
+		render(
 			<SummaryCardsShell activeTab='performance' handleTabChange={vi.fn()}>
 				<p>content</p>
 			</SummaryCardsShell>,
 		);
 
-		const indicator = container.querySelector('.bg-purple-500');
-		expect(indicator).toHaveStyle({ transform: 'translateX(200%)' });
+		expect(screen.getByTestId('summary-indicator')).toHaveStyle({ transform: 'translateX(200%)' });
 	});
 });

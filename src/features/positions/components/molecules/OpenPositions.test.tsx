@@ -148,12 +148,9 @@ describe('<OpenPositions />', () => {
 	it('renders a divider between preview rows but not after the last preview row', () => {
 		mockExpandable({ previewCount: 3 });
 
-		const { container } = render(
-			<OpenPositions stops={{ XLK: 90, XLF: 40, XLE: 60 }} trades={[]} />,
-		);
+		render(<OpenPositions stops={{ XLK: 90, XLF: 40, XLE: 60 }} trades={[]} />);
 
-		const dividers = container.querySelectorAll('.h-px.bg-linear-to-r');
-		expect(dividers).toHaveLength(2);
+		expect(screen.getAllByTestId('divider')).toHaveLength(2);
 	});
 
 	it('renders the remaining symbols as extra rows with a divider before each one', () => {
@@ -180,23 +177,17 @@ describe('<OpenPositions />', () => {
 	it('expands the grid rows when expanded is true', () => {
 		mockExpandable({ previewCount: 2, expanded: true, hasMore: true, hiddenCount: 2 });
 
-		const { container } = render(
-			<OpenPositions stops={{ XLK: 90, XLF: 40, XLE: 60, XLV: 50 }} trades={[]} />,
-		);
+		render(<OpenPositions stops={{ XLK: 90, XLF: 40, XLE: 60, XLV: 50 }} trades={[]} />);
 
-		const gridWrapper = container.querySelector('.duration-250');
-		expect(gridWrapper).toHaveClass('grid-rows-[1fr]');
+		expect(screen.getByTestId('open-positions-grid-wrapper')).toHaveClass('grid-rows-[1fr]');
 	});
 
 	it('collapses the grid rows when expanded is false', () => {
 		mockExpandable({ previewCount: 2, expanded: false, hasMore: true, hiddenCount: 2 });
 
-		const { container } = render(
-			<OpenPositions stops={{ XLK: 90, XLF: 40, XLE: 60, XLV: 50 }} trades={[]} />,
-		);
+		render(<OpenPositions stops={{ XLK: 90, XLF: 40, XLE: 60, XLV: 50 }} trades={[]} />);
 
-		const gridWrapper = container.querySelector('.duration-250');
-		expect(gridWrapper).toHaveClass('grid-rows-[0fr]');
+		expect(screen.getByTestId('open-positions-grid-wrapper')).toHaveClass('grid-rows-[0fr]');
 	});
 
 	it('renders the ShowMoreButton when hasMore is true', () => {

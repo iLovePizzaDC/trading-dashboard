@@ -25,11 +25,11 @@ describe('<RegimeBadge />', () => {
 	});
 
 	it('renders both a ping and a static dot with the regime color', () => {
-		const { container } = render(<RegimeBadge regime='bullish' />);
+		render(<RegimeBadge regime='bullish' />);
 
-		const dots = container.querySelectorAll('.bg-emerald-400');
-		expect(dots).toHaveLength(2);
-		expect(container.querySelector('.animate-ping')).toBeInTheDocument();
+		expect(screen.getByTestId('regime-ping')).toHaveClass('bg-emerald-400');
+		expect(screen.getByTestId('regime-dot')).toHaveClass('bg-emerald-400');
+		expect(screen.getByTestId('regime-badge')).toHaveClass('text-emerald-300');
 	});
 
 	it('does not crash when given a regime not present in regimeColors', () => {

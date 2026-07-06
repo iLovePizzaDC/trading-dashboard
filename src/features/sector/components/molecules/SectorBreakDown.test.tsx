@@ -178,9 +178,9 @@ describe('<SectorBreakdown />', () => {
 			buildStat({ symbol: 'XLF', timesSelected: 8 }),
 		]);
 
-		const { container } = render(<SectorBreakdown decisions={[]} trades={[]} />);
+		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
-		const bars = container.querySelectorAll('.bg-purple-400\\/60');
+		const bars = screen.getAllByTestId(/sector-bar-*/);
 		expect(bars[0]).toHaveStyle({ width: '100%' });
 		expect(bars[1]).toHaveStyle({ width: '50%' });
 	});
@@ -189,10 +189,9 @@ describe('<SectorBreakdown />', () => {
 		mockFilterWithStorage();
 		vi.mocked(calcSectorStats).mockReturnValue([buildStat({ timesSelected: 0 })]);
 
-		const { container } = render(<SectorBreakdown decisions={[]} trades={[]} />);
+		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
-		const bar = container.querySelector('.bg-purple-400\\/60');
-		expect(bar).toHaveStyle({ width: '0%' });
+		expect(screen.getByTestId('sector-bar-0')).toHaveStyle({ width: '0%' });
 	});
 
 	it('shows the formatted P&L in green when totalPnl is positive and trades exist', () => {
@@ -257,8 +256,8 @@ describe('<SectorBreakdown />', () => {
 		mockFilterWithStorage();
 		vi.mocked(calcSectorStats).mockReturnValue([]);
 
-		const { container } = render(<SectorBreakdown decisions={[]} trades={[]} />);
+		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
-		expect(container.querySelectorAll('.bg-purple-400\\/60')).toHaveLength(0);
+		expect(screen.queryAllByTestId(/sector-bar-*/)).toHaveLength(0);
 	});
 });

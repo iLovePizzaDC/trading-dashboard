@@ -60,7 +60,7 @@ describe('<MomentumTooltip />', () => {
 	});
 
 	it('renders an empty date paragraph when no date is present', () => {
-		const { container } = render(
+		render(
 			<MomentumTooltip
 				active
 				payload={[
@@ -71,8 +71,7 @@ describe('<MomentumTooltip />', () => {
 			/>,
 		);
 
-		const dateEl = container.querySelector('p.text-white\\/40');
-		expect(dateEl).toBeEmptyDOMElement();
+		expect(screen.getByTestId('momentum-date-paragraph')).toBeEmptyDOMElement();
 	});
 
 	it('renders one line per payload entry with name and formatted value', () => {

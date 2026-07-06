@@ -225,9 +225,9 @@ describe('<BotStatusGrid />', () => {
 	});
 
 	it('shows a loading skeleton when lastUpdated is not provided', () => {
-		const { container } = render(<BotStatusGrid {...baseProps} lastUpdated={undefined} />);
+		render(<BotStatusGrid {...baseProps} lastUpdated={undefined} />);
 
-		expect(container.querySelector('.animate-pulse')).toBeInTheDocument();
+		expect(screen.getByTestId('bot-row-loading-skeleton')).toBeInTheDocument();
 		expect(screen.queryByText(/^updated/)).not.toBeInTheDocument();
 	});
 

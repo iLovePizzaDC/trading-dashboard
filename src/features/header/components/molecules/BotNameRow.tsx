@@ -27,6 +27,7 @@ function BotNameRow({ dotVariant, expanded, onClick }: IBotNameRow) {
 					group-hover:text-white/25
 					${expanded ? 'rotate-180' : 'rotate-0'}
 				`}
+				data-testid='bot-row-chevron'
 			/>
 		</button>
 	);

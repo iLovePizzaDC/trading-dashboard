@@ -18,6 +18,7 @@ function ProgressBar({ value, color = 'green', animationDelay = '0ms' }: IProgre
 			<div
 				className={`h-full rounded-full transition-[width] duration-700 ease-out ${PROGRESS_COLOR_MAP[color]}`}
 				style={{ width: `${clamped}%`, transitionDelay: animationDelay }}
+				data-testid='progress-bar-fill'
 			/>
 		</div>
 	);

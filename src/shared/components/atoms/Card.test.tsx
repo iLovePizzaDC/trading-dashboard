@@ -24,23 +24,23 @@ describe('<Card />', () => {
 	});
 
 	it('does not render the title section when title is omitted', () => {
-		const { container } = render(
+		render(
 			<Card>
 				<p>content</p>
 			</Card>,
 		);
 
-		expect(container.querySelector('.bg-purple-500')).not.toBeInTheDocument();
+		expect(screen.queryByTestId('title-section')).not.toBeInTheDocument();
 	});
 
 	it('does not render the title section when title is an empty string', () => {
-		const { container } = render(
+		render(
 			<Card title=''>
 				<p>content</p>
 			</Card>,
 		);
 
-		expect(container.querySelector('.bg-purple-500')).not.toBeInTheDocument();
+		expect(screen.queryByTestId('title-section')).not.toBeInTheDocument();
 	});
 
 	it('renders the badge when both title and badge are provided', () => {

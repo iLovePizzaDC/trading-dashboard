@@ -139,39 +139,37 @@ describe('<SummaryCards />', () => {
 	it('applies opacity-0 during the fade-out phase (after 0ms, before 150ms)', () => {
 		mockLocalStorage('capital');
 
-		const { container } = render(<SummaryCards summary={buildSummary()} />);
+		render(<SummaryCards summary={buildSummary()} />);
 
 		act(() => {
 			vi.advanceTimersByTime(0);
 		});
 
-		const contentWrapper = container.querySelector('.space-y-4');
-		expect(contentWrapper).toHaveClass('opacity-0');
+		expect(screen.getByTestId('summary-wrapper')).toHaveClass('opacity-0');
 	});
 
 	it('applies opacity-100 again once the fade-in completes', () => {
 		mockLocalStorage('capital');
 
-		const { container } = render(<SummaryCards summary={buildSummary()} />);
+		render(<SummaryCards summary={buildSummary()} />);
 
 		act(() => {
 			vi.advanceTimersByTime(150);
 		});
 
-		const contentWrapper = container.querySelector('.space-y-4');
-		expect(contentWrapper).toHaveClass('opacity-100');
+		expect(screen.getByTestId('summary-wrapper')).toHaveClass('opacity-100');
 	});
 
 	it('does not trigger the fade cycle when activeTab already matches displayedTab (overview)', () => {
 		mockLocalStorage('overview');
 
-		const { container } = render(<SummaryCards summary={buildSummary()} />);
+		render(<SummaryCards summary={buildSummary()} />);
 
 		act(() => {
 			vi.advanceTimersByTime(150);
 		});
 
-		expect(container.querySelector('.space-y-4')).toHaveClass('opacity-100');
+		expect(screen.getByTestId('summary-wrapper')).toHaveClass('opacity-100');
 	});
 
 	describe('overview tab content', () => {
@@ -350,10 +348,9 @@ describe('<SummaryCards />', () => {
 		it('applies the measured scrollHeight as the wrapper height', () => {
 			mockLocalStorage('overview');
 
-			const { container } = render(<SummaryCards summary={buildSummary()} />);
+			render(<SummaryCards summary={buildSummary()} />);
 
-			const heightWrapper = container.querySelector('.overflow-hidden');
-			expect(heightWrapper).toHaveStyle({ height: '240px' });
+			expect(screen.getByTestId('summary-height-wrapper')).toHaveStyle({ height: '240px' });
 		});
 
 		it('observes the content element with a ResizeObserver', () => {

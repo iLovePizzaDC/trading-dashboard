@@ -43,7 +43,7 @@ function TradeRow({ trade, isLast = false }: ITradeRow) {
 						{usd(trade.pnl)}
 					</p>
 				) : (
-					trade.stop_price && (
+					trade.stop_price !== undefined && (
 						<p className='text-sm text-white/40 truncate'>stop {usd(trade.stop_price)}</p>
 					)
 				)}

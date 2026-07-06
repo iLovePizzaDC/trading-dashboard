@@ -52,10 +52,10 @@ describe('<TradeRow />', () => {
 			expect(screen.queryByText(/stop/)).not.toBeInTheDocument();
 		});
 
-		it('renders no stop when stop_price is 0 (falsy)', () => {
+		it('renders the stop when stop_price is 0 (falsy)', () => {
 			render(<TradeRow trade={buildTrade({ action: 'buy', stop_price: 0 })} />);
 
-			expect(screen.queryByText(/stop/)).not.toBeInTheDocument();
+			expect(screen.queryByText(/stop/)).toBeInTheDocument();
 		});
 	});
 

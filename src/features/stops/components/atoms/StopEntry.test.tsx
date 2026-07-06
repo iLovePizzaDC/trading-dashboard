@@ -56,7 +56,7 @@ describe('<StopEntry />', () => {
 		});
 
 		it('does not render the old stop value or arrow icon', () => {
-			const { container } = render(
+			render(
 				<StopEntry
 					entry={buildEntry({ old_stop: 0, new_stop: 95 })}
 					color='#4ade80'
@@ -65,7 +65,7 @@ describe('<StopEntry />', () => {
 			);
 
 			expect(screen.queryByText('$0.00')).not.toBeInTheDocument();
-			expect(container.querySelector('svg')).not.toBeInTheDocument();
+			expect(screen.queryByTestId('arrow-indicator')).not.toBeInTheDocument();
 		});
 
 		it('uses a neutral (white) color for the label and value', () => {
@@ -96,7 +96,7 @@ describe('<StopEntry />', () => {
 		});
 
 		it('renders the old stop value with an arrow icon', () => {
-			const { container } = render(
+			render(
 				<StopEntry
 					entry={buildEntry({ old_stop: 90, new_stop: 100 })}
 					color='#4ade80'
@@ -105,7 +105,7 @@ describe('<StopEntry />', () => {
 			);
 
 			expect(screen.getByText('$90.00')).toBeInTheDocument();
-			expect(container.querySelector('svg')).toBeInTheDocument();
+			expect(screen.getByTestId('arrow-indicator')).toBeInTheDocument();
 		});
 
 		it('uses green color for the label and value', () => {
@@ -148,7 +148,7 @@ describe('<StopEntry />', () => {
 		});
 
 		it('renders the old stop value with an arrow icon', () => {
-			const { container } = render(
+			render(
 				<StopEntry
 					entry={buildEntry({ old_stop: 100, new_stop: 90 })}
 					color='#4ade80'
@@ -157,7 +157,7 @@ describe('<StopEntry />', () => {
 			);
 
 			expect(screen.getByText('$100.00')).toBeInTheDocument();
-			expect(container.querySelector('svg')).toBeInTheDocument();
+			expect(screen.getByTestId('arrow-indicator')).toBeInTheDocument();
 		});
 
 		it('uses red color for the label and value', () => {

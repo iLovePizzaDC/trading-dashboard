@@ -46,18 +46,14 @@ describe('<BotNameRow />', () => {
 	});
 
 	it('rotates the chevron to 0 degrees when not expanded', () => {
-		const { container } = render(
-			<BotNameRow dotVariant='active' expanded={false} onClick={vi.fn()} />,
-		);
+		render(<BotNameRow dotVariant='active' expanded={false} onClick={vi.fn()} />);
 
-		const chevron = container.querySelector('svg');
-		expect(chevron).toHaveClass('rotate-0');
+		expect(screen.getByTestId('bot-row-chevron')).toHaveClass('rotate-0');
 	});
 
 	it('rotates the chevron to 180 degrees when expanded', () => {
-		const { container } = render(<BotNameRow dotVariant='active' expanded onClick={vi.fn()} />);
+		render(<BotNameRow dotVariant='active' expanded onClick={vi.fn()} />);
 
-		const chevron = container.querySelector('svg');
-		expect(chevron).toHaveClass('rotate-180');
+		expect(screen.getByTestId('bot-row-chevron')).toHaveClass('rotate-180');
 	});
 });
