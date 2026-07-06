@@ -179,3 +179,10 @@ Serve the `dist/` folder with a web server. Ensure the `/data/` directory is acc
 ---
 
 **Dashboard for [Sector Rotation Trading Bot](https://github.com/iLovePizzaDC/tradingbotv2)**
+
+## License
+
+**Personal Portfolio Project** - Source code available for review by potential employers only.
+Redistribution and commercial use prohibited without permission.
+
+© 2025 Nico Betz
