@@ -10,7 +10,9 @@ interface IDecisionsCard {
 
 function DecisionsCard({ data }: IDecisionsCard) {
 	const latest = data[data.length - 1];
-	const sorted = [...latest.candidates].sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0));
+	const sorted = latest
+		? [...latest.candidates].sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0))
+		: [];
 
 	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(sorted.length, 3);
 
@@ -33,6 +35,7 @@ function DecisionsCard({ data }: IDecisionsCard) {
 				className={`grid transition-[grid-template-rows] duration-250 ease-in-out ${
 					expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
 				}`}
+				data-testid='decision-grid-container'
 			>
 				<div className='overflow-hidden'>
 					{extra.map((candidate, index) => (

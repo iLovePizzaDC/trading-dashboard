@@ -1,3 +1,4 @@
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -14,28 +15,9 @@ function Tooltip({ content, children, className = '' }: ITooltip) {
 	const anchorRef = useRef<HTMLSpanElement>(null);
 	const popupRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (!open) return;
-
-		function handleOutside(e: MouseEvent | TouchEvent) {
-			const target = e.target as Node;
-			if (
-				anchorRef.current &&
-				!anchorRef.current.contains(target) &&
-				popupRef.current &&
-				!popupRef.current.contains(target)
-			) {
-				setOpen(false);
-			}
-		}
-
-		document.addEventListener('mousedown', handleOutside);
-		document.addEventListener('touchstart', handleOutside);
-		return () => {
-			document.removeEventListener('mousedown', handleOutside);
-			document.removeEventListener('touchstart', handleOutside);
-		};
-	}, [open]);
+	useClickOutside([anchorRef, popupRef], () => {
+		setOpen(false);
+	});
 
 	useEffect(() => {
 		if (!open || !anchorRef.current) return;

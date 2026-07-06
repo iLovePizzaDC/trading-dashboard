@@ -34,12 +34,14 @@ function Dropdown({ trigger, items, width = 'w-36' }: IDropdown) {
 				<ChevronDownIcon
 					className='h-3 w-3 transition-transform duration-200'
 					style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+					data-testid='dropdown-chevron'
 				/>
 			</button>
 
 			{open && (
 				<div
 					className={`absolute right-0 top-full z-50 mt-1.5 ${width} overflow-hidden rounded-xl border border-white/10 bg-[#1f2028] shadow-xl`}
+					data-testid='dropdown-menu'
 				>
 					{items.map(({ key, label, icon, active, onClick }) => (
 						<button

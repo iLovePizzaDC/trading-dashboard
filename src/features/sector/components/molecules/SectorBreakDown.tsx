@@ -43,7 +43,7 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 			}
 		>
 			<div className='space-y-2 mb-2'>
-				{sorted.map((s) => (
+				{sorted.map((s, i) => (
 					<div key={s.symbol} className='flex items-center gap-3'>
 						<p className='w-10 text-xs font-semibold text-white/75 tracking-widest shrink-0'>
 							{s.symbol}
@@ -58,6 +58,7 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 								<div
 									className='h-full rounded-full bg-purple-400/60 transition-all duration-300'
 									style={{ width: `${(s.timesSelected / maxSelected) * 100}%` }}
+									data-testid={`sector-bar-${i}`}
 								/>
 							</div>
 						</div>

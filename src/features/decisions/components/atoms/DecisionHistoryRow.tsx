@@ -41,6 +41,7 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 								${getMomentumColor(c.momentum ?? undefined)}
 								${i === 0 ? 'ring-1 ring-green-400/40 shadow-[0_0_8px_rgba(34,197,94,0.3)]' : ''}
 							`}
+							data-testid={`candidate-card-${i}`}
 						>
 							<span className='font-medium'>
 								{symbolName ? <Tooltip content={symbolName}>{c.symbol}</Tooltip> : c.symbol}

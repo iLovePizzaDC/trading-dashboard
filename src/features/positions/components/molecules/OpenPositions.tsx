@@ -12,7 +12,10 @@ interface IOpenPositions {
 }
 
 const Divider = () => (
-	<div className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px' />
+	<div
+		className='bg-linear-to-r from-transparent via-white/20 to-transparent h-px'
+		data-testid='divider'
+	/>
 );
 
 function OpenPositions({ stops, trades }: IOpenPositions) {
@@ -47,6 +50,7 @@ function OpenPositions({ stops, trades }: IOpenPositions) {
 				className={`grid transition-[grid-template-rows] duration-250 ease-in-out ${
 					expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
 				}`}
+				data-testid='open-positions-grid-wrapper'
 			>
 				<div className='overflow-hidden'>
 					{extra.map((symbol, index) => (

@@ -13,9 +13,13 @@ function StatusDot({ variant }: IStatusDot) {
 			{variant !== 'inactive' && (
 				<span
 					className={`absolute inline-flex h-full w-full rounded-full opacity-60 ${ring} ${animation}`}
+					data-testid='status-dot-ring'
 				/>
 			)}
-			<span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${core}`} />
+			<span
+				className={`relative inline-flex h-1.5 w-1.5 rounded-full ${core}`}
+				data-testid='status-dot-core'
+			/>
 		</span>
 	);
 }

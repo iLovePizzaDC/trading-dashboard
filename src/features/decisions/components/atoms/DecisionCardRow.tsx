@@ -1,3 +1,4 @@
+import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import Tooltip from '@/shared/components/atoms/Tooltip';
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { Candidate } from '@/shared/types/decisions';
@@ -13,14 +14,6 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 	const barWidth = momentum !== null ? Math.min(momentum * 100, 100) : 0;
 	const symbolName = SECTOR_MAP[symbol];
 
-	const reasonLabel: Record<string, string> = {
-		not_in_top_ranked: 'not top',
-		below_sma200: 'below sma200',
-		below_threshold: 'low momentum',
-		correlated: 'correlated',
-		no_momentum: 'no data',
-	};
-
 	return (
 		<div className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}>
 			<div className='w-12 shrink-0'>
@@ -34,6 +27,7 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 						selected ? 'bg-green-400' : !passes_trend ? 'bg-red-400' : 'bg-white/15'
 					}`}
 					style={{ width: `${barWidth}%` }}
+					data-testid='decision-progress-bar'
 				/>
 			</div>
 			<p
@@ -47,7 +41,7 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
 					<span className='text-green-400'>selected</span>
 				) : (
 					<span className='text-white/30'>
-						{rejected_reason ? (reasonLabel[rejected_reason] ?? rejected_reason) : '—'}
+						{rejected_reason ? (STOP_REASON_LABEL[rejected_reason] ?? rejected_reason) : '—'}
 					</span>
 				)}
 			</p>

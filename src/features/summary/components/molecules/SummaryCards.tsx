@@ -70,12 +70,14 @@ function SummaryCards({ summary }: ISummaryCards) {
 			<div
 				className='transition-all duration-300 overflow-hidden'
 				style={{ height: typeof height === 'number' ? `${height}px` : 'auto' }}
+				data-testid='summary-height-wrapper'
 			>
 				<div
 					ref={contentRef}
 					className={`space-y-4 transition-opacity duration-300 ${
 						isFading ? 'opacity-0' : 'opacity-100'
 					}`}
+					data-testid='summary-wrapper'
 				>
 					{displayedTab === 'overview' && (
 						<div className='grid grid-cols-2 gap-4 md:grid-cols-3'>

@@ -11,10 +11,14 @@ function ProgressBar({ value, color = 'green', animationDelay = '0ms' }: IProgre
 	const clamped = Math.min(100, Math.max(0, value));
 
 	return (
-		<div className='h-px w-full overflow-hidden rounded-full bg-white/[0.07]'>
+		<div
+			className='h-px w-full overflow-hidden rounded-full bg-white/[0.07]'
+			data-testid='progress-bar'
+		>
 			<div
 				className={`h-full rounded-full transition-[width] duration-700 ease-out ${PROGRESS_COLOR_MAP[color]}`}
 				style={{ width: `${clamped}%`, transitionDelay: animationDelay }}
+				data-testid='progress-bar-fill'
 			/>
 		</div>
 	);

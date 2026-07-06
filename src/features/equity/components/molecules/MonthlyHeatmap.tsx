@@ -69,6 +69,7 @@ function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 									<div
 										key={i}
 										className='h-5 w-full rounded-sm bg-linear-to-br from-white/5 to-white/0'
+										data-testid='month-cell-placeholder'
 									/>
 								),
 							)}
@@ -84,6 +85,7 @@ function MonthlyHeatmap({ data, deposits }: IMonthlyHeatmap) {
 					marginTop: displayed ? '0.75rem' : '0',
 					opacity: displayed ? 1 : 0,
 				}}
+				data-testid='detail-wrapper'
 			>
 				<div ref={contentRef}>{lastEntry && <DetailPanel entry={lastEntry} />}</div>
 			</div>
