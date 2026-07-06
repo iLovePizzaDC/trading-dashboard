@@ -1,6 +1,9 @@
 function SkeletonBox({ className }: { className?: string }) {
 	return (
-		<div className={`relative overflow-hidden rounded-md bg-white/10 ${className}`}>
+		<div
+			className={`relative overflow-hidden rounded-md bg-white/10 ${className}`}
+			data-testid='equity-skeleton-box'
+		>
 			<div className='absolute inset-0 animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent' />
 		</div>
 	);
@@ -9,8 +12,11 @@ function SkeletonBox({ className }: { className?: string }) {
 function EquitySkeleton() {
 	return (
 		<div className='grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr] items-start'>
-			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
-				<div className='mb-4 flex items-baseline justify-between'>
+			<div
+				className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'
+				data-testid='equity-card'
+			>
+				<div className='mb-4 flex items-baseline justify-between' data-testid='equity-header'>
 					<SkeletonBox className='h-3 w-24' />
 					<SkeletonBox className='h-4 w-16' />
 				</div>
@@ -22,7 +28,10 @@ function EquitySkeleton() {
 						))}
 					</div>
 
-					<div className='flex items-center justify-between gap-4 sm:justify-end'>
+					<div
+						className='flex items-center justify-between gap-4 sm:justify-end'
+						data-testid='equity-right-controls'
+					>
 						<SkeletonBox className='h-3 w-8' />
 						<SkeletonBox className='h-3 w-10' />
 						<SkeletonBox className='h-3 w-14' />
@@ -32,7 +41,10 @@ function EquitySkeleton() {
 				<SkeletonBox className='h-44 w-full rounded-lg' />
 			</div>
 
-			<div className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'>
+			<div
+				className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'
+				data-testid='monthly-heatmap-card'
+			>
 				<div className='flex justify-start mb-4'>
 					<SkeletonBox className='h-3 w-32' />
 				</div>

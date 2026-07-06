@@ -1,19 +1,19 @@
 import EquitySkeleton from '@/features/equity/components/molecules/EquitySkeleton';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 describe('<EquitySkeleton />', () => {
 	it('renders two skeleton cards side by side', () => {
-		const { container } = render(<EquitySkeleton />);
+		render(<EquitySkeleton />);
 
-		const cards = container.querySelectorAll(':scope > div > .rounded-xl');
-		expect(cards).toHaveLength(2);
+		expect(screen.getByTestId('equity-card')).toBeInTheDocument();
+		expect(screen.getByTestId('monthly-heatmap-card')).toBeInTheDocument();
 	});
 
 	it('renders each SkeletonBox with a shimmer overlay', () => {
-		const { container } = render(<EquitySkeleton />);
+		render(<EquitySkeleton />);
 
-		const skeletonBoxes = container.querySelectorAll('.bg-white\\/10');
+		const skeletonBoxes = screen.getAllByTestId('equity-skeleton-box');
 
 		expect(skeletonBoxes.length).toBeGreaterThan(0);
 

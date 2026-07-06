@@ -13,7 +13,7 @@ describe('<DecisionsSkeleton />', () => {
 	it('renders each SkeletonBox with a shimmer overlay', () => {
 		render(<DecisionsSkeleton />);
 
-		const skeletonBoxes = screen.getAllByTestId('skeleton-box');
+		const skeletonBoxes = screen.getAllByTestId('decisions-skeleton-box');
 
 		expect(skeletonBoxes.length).toBeGreaterThan(0);
 
@@ -36,7 +36,7 @@ describe('<DecisionsSkeleton />', () => {
 		const rows = screen.getAllByTestId('decision-row-placeholder');
 
 		rows.forEach((row) => {
-			expect(within(row).getAllByTestId('skeleton-box')).toHaveLength(4);
+			expect(within(row).getAllByTestId('decisions-skeleton-box')).toHaveLength(4);
 		});
 	});
 
@@ -44,7 +44,7 @@ describe('<DecisionsSkeleton />', () => {
 		render(<DecisionsSkeleton />);
 
 		const buttonWrapper = screen.getByTestId('button-placeholder');
-		expect(within(buttonWrapper).getAllByTestId('skeleton-box')).toHaveLength(1);
+		expect(within(buttonWrapper).getAllByTestId('decisions-skeleton-box')).toHaveLength(1);
 	});
 
 	it('renders 3 skeleton entries in the decision history card', () => {
@@ -59,13 +59,13 @@ describe('<DecisionsSkeleton />', () => {
 		const entries = screen.getAllByTestId('history-entry-placeholder');
 
 		entries.forEach((entry) => {
-			expect(within(entry).getAllByTestId('skeleton-box')).toHaveLength(5);
+			expect(within(entry).getAllByTestId('decisions-skeleton-box')).toHaveLength(5);
 		});
 	});
 
 	it('renders a total of 32 SkeletonBoxes across both cards', () => {
 		render(<DecisionsSkeleton />);
 
-		expect(screen.getAllByTestId('skeleton-box')).toHaveLength(32);
+		expect(screen.getAllByTestId('decisions-skeleton-box')).toHaveLength(32);
 	});
 });

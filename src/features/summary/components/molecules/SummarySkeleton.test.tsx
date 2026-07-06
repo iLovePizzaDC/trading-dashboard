@@ -33,14 +33,14 @@ describe('<SummarySkeleton />', () => {
 		render(<SummarySkeleton />);
 
 		const heroCard = screen.getByTestId('hero-card-large');
-		expect(within(heroCard).getAllByTestId('skeleton-box')).toHaveLength(3);
+		expect(within(heroCard).getAllByTestId('summary-skeleton-box')).toHaveLength(3);
 	});
 
 	it('renders the small hero card with 3 skeleton boxes', () => {
 		render(<SummarySkeleton />);
 
 		const heroCard = screen.getByTestId('hero-card-small');
-		expect(within(heroCard).getAllByTestId('skeleton-box')).toHaveLength(3);
+		expect(within(heroCard).getAllByTestId('summary-skeleton-box')).toHaveLength(3);
 	});
 
 	it('renders 6 metric card placeholders inside the shell', () => {
@@ -53,13 +53,13 @@ describe('<SummarySkeleton />', () => {
 		render(<SummarySkeleton />);
 
 		screen.getAllByTestId('metric-card-placeholder').forEach((card) => {
-			expect(within(card).getAllByTestId('skeleton-box')).toHaveLength(3);
+			expect(within(card).getAllByTestId('summary-skeleton-box')).toHaveLength(3);
 		});
 	});
 
 	it('renders a total of 24 skeleton boxes', () => {
 		render(<SummarySkeleton />);
 
-		expect(screen.getAllByTestId('skeleton-box')).toHaveLength(24);
+		expect(screen.getAllByTestId('summary-skeleton-box')).toHaveLength(24);
 	});
 });

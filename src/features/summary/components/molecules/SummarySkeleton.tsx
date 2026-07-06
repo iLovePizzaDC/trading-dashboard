@@ -5,7 +5,7 @@ import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 function SkeletonBox({ className }: { className?: string }) {
 	return (
 		<div
-			data-testid='skeleton-box'
+			data-testid='summary-skeleton-box'
 			className={`
 				relative overflow-hidden rounded-md
 				bg-white/10

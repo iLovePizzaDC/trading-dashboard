@@ -1,8 +1,8 @@
 function SkeletonBox({ className }: { className?: string }) {
 	return (
 		<div
-			data-testid='skeleton-box'
 			className={`relative overflow-hidden rounded-md bg-white/10 ${className}`}
+			data-testid='decisions-skeleton-box'
 		>
 			<div className='absolute inset-0 animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent' />
 		</div>
