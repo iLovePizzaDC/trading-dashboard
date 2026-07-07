@@ -7,10 +7,14 @@ function BotStatusSkeleton() {
 						key={i}
 						className='h-18 animate-pulse rounded-lg border border-white/6 bg-white/3'
 						style={{ animationDelay: `${i * 80}ms` }}
+						data-testid={`bot-status-card-skeleton-${i}`}
 					/>
 				))}
 			</div>
-			<div className='h-2.5 w-28 mx-auto animate-pulse rounded bg-white/5' />
+			<div
+				className='h-2.5 w-28 mx-auto animate-pulse rounded bg-white/5'
+				data-testid='bot-status-footer-skeleton'
+			/>
 		</div>
 	);
 }

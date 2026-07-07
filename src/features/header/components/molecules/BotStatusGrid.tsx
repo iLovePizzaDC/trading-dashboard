@@ -81,7 +81,10 @@ function BotStatusGrid({
 				{lastUpdated ? (
 					`updated ${lastUpdated}`
 				) : (
-					<span className='inline-block h-2.5 w-28 animate-pulse rounded bg-white/10' />
+					<span
+						className='inline-block h-2.5 w-28 animate-pulse rounded bg-white/10'
+						data-testid='bot-row-loading-skeleton'
+					/>
 				)}
 			</p>
 		</div>

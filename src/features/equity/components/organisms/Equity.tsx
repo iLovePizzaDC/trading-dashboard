@@ -1,7 +1,7 @@
 import EquityCurve from '@/features/equity/components/molecules/EquityCurve';
 import EquityError from '@/features/equity/components/molecules/EquityError';
 import EquitySkeleton from '@/features/equity/components/molecules/EquitySkeleton';
-import MonthlyHeatmap from '@/features/equity/components/molecules/MonthlyHeatMap';
+import MonthlyHeatmap from '@/features/equity/components/molecules/MonthlyHeatmap';
 import { fetchBotEquity, fetchDecisions, fetchDeposits, fetchSpyEquity } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 

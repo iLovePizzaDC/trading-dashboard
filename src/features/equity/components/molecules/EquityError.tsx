@@ -20,10 +20,21 @@ function EquityError() {
 				</div>
 				<div className='space-y-1'>
 					{Array.from({ length: 4 }).map((_, row) => (
-						<div key={row} className='grid grid-cols-[2rem_repeat(12,1fr)] gap-1 items-center'>
-							<div className='h-3 w-6 rounded bg-white/10' />
+						<div
+							key={row}
+							className='grid grid-cols-[2rem_repeat(12,1fr)] gap-1 items-center'
+							data-testid={`skeleton-row-wrapper-${row}`}
+						>
+							<div
+								className='h-3 w-6 rounded bg-white/10'
+								data-testid={`skeleton-col-label-${row}`}
+							/>
 							{Array.from({ length: 12 }).map((_, col) => (
-								<div key={col} className='h-5 w-full rounded-sm bg-white/10' />
+								<div
+									key={col}
+									className='h-5 w-full rounded-sm bg-white/10'
+									data-testid={`skeleton-col-content-${row}`}
+								/>
 							))}
 						</div>
 					))}

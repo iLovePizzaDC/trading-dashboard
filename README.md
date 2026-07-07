@@ -2,9 +2,26 @@
 
 Real-time monitoring dashboard for the Sector Rotation Trading Bot. Displays live trading data, performance metrics, and bot statistics.
 
+---
+
+## ⭐ Highlights
+
+- Built and self-host the full pipeline: a Python sector rotation trading bot (Alpaca API) that produces the data, and this dashboard that visualizes it
+- Set up a self-hosted GitHub Actions runner (Raspberry Pi) with a full CI/CD pipeline: type checking, linting, security audits, automated releases, and health-check-based rollback on deploy failure
+- Wrote component, hook, and utility tests with Vitest and React Testing Library
+
+---
+
+## 📸 Screenshots
+
+![Dashboard overview 1](./docs/dashboard0.png)
+![Dashboard overview 2](./docs/dashboard1.png)
+
+---
+
 ## 🎯 Overview
 
-This frontend dashboard connects to the [trading bot's](https://github.com/iLovePizzaDC/tradingbotv2) output data and visualizes:
+This dashboard visualizes the output of a sector rotation trading bot that I designed, built, and run myself. It displays:
 
 - Portfolio performance
 - Trade history and analysis
@@ -24,7 +41,7 @@ src/
 ├── features/            # Feature modules (self-contained)
 │   └── [feature]/
 │       ├── components/
-│       │   ├── atoms/   # Smallest UI elements
+│       │   ├── atoms/    # Smallest UI elements
 │       │   ├── molecules/ # Composite components
 │       │   └── organisms/ # Complete feature sections
 │       ├── types/       # Feature-specific types (optional)
@@ -39,9 +56,9 @@ src/
 └── main.tsx             # Entry point
 ```
 
-### Design Pattern: Atomic Design
+### Component Architecture
 
-Components are organized by size/complexity:
+Components are organized by size/complexity, following Atomic Design principles:
 
 - **Atoms**: Basic, reusable elements (buttons, cards, inputs)
 - **Molecules**: Simple combinations of atoms
@@ -179,3 +196,9 @@ Serve the `dist/` folder with a web server. Ensure the `/data/` directory is acc
 ---
 
 **Dashboard for [Sector Rotation Trading Bot](https://github.com/iLovePizzaDC/tradingbotv2)**
+
+## License
+
+Personal portfolio project. See [LICENSE](./LICENSE) for details.
+
+© 2025 Nico Betz

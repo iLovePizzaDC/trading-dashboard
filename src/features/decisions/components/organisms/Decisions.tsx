@@ -1,5 +1,5 @@
-import DecisionsCard from '@/features/decisions/components/molecules/DecisionCard';
 import DecisionHistory from '@/features/decisions/components/molecules/DecisionHistory';
+import DecisionsCard from '@/features/decisions/components/molecules/DecisionsCard';
 import DecisionsError from '@/features/decisions/components/molecules/DecisionsError';
 import DecisionsSkeleton from '@/features/decisions/components/molecules/DecisionsSkeleton';
 import { fetchDecisions } from '@/shared/api/data';

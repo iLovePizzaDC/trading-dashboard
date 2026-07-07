@@ -31,7 +31,10 @@ function StopEntry({ entry, color, isLast }: IStopEntry) {
 						{!isFirst && (
 							<span className='text-xs text-white/30 flex items-center gap-1 truncate'>
 								{usd(entry.old_stop)}
-								<ArrowRightIcon className='h-2.5 w-2.5 text-white/20 shrink-0' />
+								<ArrowRightIcon
+									className='h-2.5 w-2.5 text-white/20 shrink-0'
+									data-testid='arrow-indicator'
+								/>
 							</span>
 						)}
 					</div>

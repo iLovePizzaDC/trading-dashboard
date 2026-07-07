@@ -26,7 +26,7 @@ function PositionRow({ symbol, stop, trade, isLast = false }: IPositionRow) {
 						{trade.shares.toFixed(4)} shares @ {usd(trade.price)}
 					</p>
 				)}
-				{entryValue && <p className='text-xs text-white/40'>value {usd(entryValue)}</p>}
+				{entryValue !== null && <p className='text-xs text-white/40'>value {usd(entryValue)}</p>}
 			</div>
 			<div className='text-right'>
 				<p className='text-sm text-white/70'>stop {usd(stop)}</p>

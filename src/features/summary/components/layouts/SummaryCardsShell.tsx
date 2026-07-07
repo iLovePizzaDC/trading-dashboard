@@ -36,6 +36,7 @@ function SummaryCardsShell({ activeTab, handleTabChange, children }: ISummaryCar
 						width: `${100 / SUMMARY_TABS.length}%`,
 						transform: `translateX(${SUMMARY_TABS.indexOf(activeTab) * 100}%)`,
 					}}
+					data-testid='summary-indicator'
 				/>
 			</div>
 

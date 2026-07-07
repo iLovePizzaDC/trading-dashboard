@@ -7,13 +7,16 @@ function SummaryError() {
 
 	return (
 		<div className='space-y-4'>
-			<div className='text-red-400 text-sm'>Failed to load summary</div>
+			<div data-testid='summary-error-message' className='text-red-400 text-sm'>
+				Failed to load summary
+			</div>
 
 			<SummaryCardsShell activeTab={activeTab} handleTabChange={() => {}}>
 				<div className='grid grid-cols-2 gap-4 md:grid-cols-3 opacity-40'>
 					{Array.from({ length: 6 }).map((_, i) => (
 						<div
 							key={i}
+							data-testid='summary-error-placeholder'
 							className='rounded-xl border border-white/10 bg-linear-to-br from-white/5 to-white/0 p-4'
 						>
 							<p className='text-white/20'>—</p>
