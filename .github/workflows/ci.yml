@@ -107,12 +107,12 @@ jobs:
       - name: Backup current version
         run: |
           rm -rf /var/www/trading.bak
-          cp -r /var/www/trading /var/www/trading.bak || true
+          mkdir -p /var/www/trading.bak
+          rsync -a --exclude 'data' /var/www/trading/ /var/www/trading.bak/
 
       - name: Deploy
         run: |
-          rm -rf /var/www/trading/*
-          cp -r dist/* /var/www/trading/
+          rsync -a --delete --exclude 'data' dist/ /var/www/trading/
 
       - name: Health check
         run: |
@@ -121,5 +121,4 @@ jobs:
       - name: Rollback on failure
         if: failure()
         run: |
-          find /var/www/trading -mindepth 1 -maxdepth 1 ! -name 'data' -exec rm -rf {} +
-          cp -r /var/www/trading.bak/* /var/www/trading/
+          rsync -a --delete --exclude 'data' /var/www/trading.bak/ /var/www/trading/
