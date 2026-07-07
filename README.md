@@ -116,7 +116,7 @@ This project uses GitHub Actions with a self-hosted runner on a Raspberry Pi (Lu
 
 - Builds the project
 - Deploys the `dist` folder to Luna (preserving the `data` directory)
-- Runs a health check against `https://trading.migrainetracker.de`
+- Runs a health check
 - Automatically rolls back on failure
 
 Releases are managed via [release-please](https://github.com/googleapis/release-please-action) and main is automatically synced to develop after every merge.
