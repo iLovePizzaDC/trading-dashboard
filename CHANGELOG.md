@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.6.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.5.0...v1.6.0) (2026-07-07)
+
+
+### Features
+
+* add tests ([8c7e93a](https://github.com/iLovePizzaDC/trading-dashboard/commit/8c7e93afdd173dbf25ae89138a6214defaadf862))
+* add tests ([dadeecf](https://github.com/iLovePizzaDC/trading-dashboard/commit/dadeecfc469942d46385401271c42e77d0b53beb))
+* add tests ([01dffe1](https://github.com/iLovePizzaDC/trading-dashboard/commit/01dffe10071edb8d92dd52e3b0c5b7fc0d9a80ae))
+* add tests ([8f583c9](https://github.com/iLovePizzaDC/trading-dashboard/commit/8f583c9fb715df38d32d6a12adbaea42b72d8282))
+* add tests ([6ef7846](https://github.com/iLovePizzaDC/trading-dashboard/commit/6ef784649ceef5c342881b738826d8966d4f90a8))
+
+
+### Bug Fixes
+
+* normalize file casing in git index ([2b7fa79](https://github.com/iLovePizzaDC/trading-dashboard/commit/2b7fa799ec2ef5361ba84b82d7c8cf316fe1aa8f))
+
 ## [1.5.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.4.0...v1.5.0) (2026-07-01)
 
 
