@@ -1,14 +1,7 @@
+import type { DropdownItem } from '@/shared/constants/dropdown';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
-
-export type DropdownItem = {
-	key: string;
-	label: string;
-	icon?: React.ReactNode;
-	active?: boolean;
-	onClick: () => void;
-};
 
 interface IDropdown {
 	trigger: React.ReactNode;

@@ -1,4 +1,5 @@
-import Dropdown, { type DropdownItem } from '@/shared/components/atoms/Dropdown';
+import Dropdown from '@/shared/components/atoms/Dropdown';
+import type { DropdownItem } from '@/shared/constants/dropdown';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
