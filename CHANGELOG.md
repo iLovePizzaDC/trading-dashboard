@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.6.0...v1.7.0) (2026-07-16)
+
+
+### Features
+
+* display tomorrow in rebalance statcard ([#93](https://github.com/iLovePizzaDC/trading-dashboard/issues/93)) ([c4a153a](https://github.com/iLovePizzaDC/trading-dashboard/commit/c4a153a9fed85aed9bd58a3dae514b8efa323c05))
+
 ## [1.6.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.5.0...v1.6.0) (2026-07-07)
 
 
