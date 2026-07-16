@@ -117,7 +117,14 @@ describe('<BotStatusGrid />', () => {
 		expect(rebalanceCard).toHaveAttribute('data-value', 'today');
 	});
 
-	it('shows "in Nd" for the Rebalance card when rebalanceDaysLeft is greater than 0', () => {
+	it('shows "tomorrow" for the Rebalance card when rebalanceDaysLeft is 1', () => {
+		render(<BotStatusGrid {...baseProps} rebalanceDaysLeft={1} />);
+
+		const rebalanceCard = screen.getAllByTestId('stat-card')[1];
+		expect(rebalanceCard).toHaveAttribute('data-value', 'tomorrow');
+	});
+
+	it('shows "in Nd" for the Rebalance card when rebalanceDaysLeft is greater than 1', () => {
 		render(<BotStatusGrid {...baseProps} rebalanceDaysLeft={7} />);
 
 		const rebalanceCard = screen.getAllByTestId('stat-card')[1];

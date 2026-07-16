@@ -30,6 +30,12 @@ function BotStatusGrid({
 	lastUpdated,
 }: IBotStatusGrid) {
 	const statusCard = getStatusCard(isRunning, ranToday, isTradingDay, nextOpen);
+	const daysLeftString =
+		rebalanceDaysLeft === 0
+			? 'today'
+			: rebalanceDaysLeft === 1
+				? 'tomorrow'
+				: `in ${rebalanceDaysLeft}d`;
 
 	return (
 		<div className='flex flex-col gap-2 pt-3'>
@@ -46,7 +52,7 @@ function BotStatusGrid({
 				/>
 				<StatCard
 					label='Rebalance'
-					value={rebalanceDaysLeft === 0 ? 'today' : `in ${rebalanceDaysLeft}d`}
+					value={daysLeftString}
 					sub={rebalanceNextDate}
 					progress={rebalancePct}
 					color='green'
