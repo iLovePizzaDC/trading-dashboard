@@ -1,5 +1,5 @@
 export type EquityPoint = {
-	date: string;
-	equity: number;
-	spy: number | null;
+  date: string;
+  equity: number;
+  spy: number | null;
 };

@@ -4,196 +4,196 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/hooks/useDataVersion', () => ({
-	useDataVersion: vi.fn(),
+  useDataVersion: vi.fn(),
 }));
 
 function deferred<T>() {
-	let resolve!: (value: T) => void;
-	let reject!: (error: unknown) => void;
-	const promise = new Promise<T>((res, rej) => {
-		resolve = res;
-		reject = rej;
-	});
-	return { promise, resolve, reject };
+  let resolve!: (value: T) => void;
+  let reject!: (error: unknown) => void;
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
 }
 
 describe('useFetch', () => {
-	beforeEach(() => {
-		vi.mocked(useDataVersion).mockReset();
-	});
+  beforeEach(() => {
+    vi.mocked(useDataVersion).mockReset();
+  });
 
-	it('does not call the fetcher while version is null', () => {
-		vi.mocked(useDataVersion).mockReturnValue(null);
-		const fetcher = vi.fn();
+  it('does not call the fetcher while version is null', () => {
+    vi.mocked(useDataVersion).mockReturnValue(null);
+    const fetcher = vi.fn();
 
-		renderHook(() => useFetch(fetcher));
+    renderHook(() => useFetch(fetcher));
 
-		expect(fetcher).not.toHaveBeenCalled();
-	});
+    expect(fetcher).not.toHaveBeenCalled();
+  });
 
-	it('starts in the initial state (loading true, data null, error null) while version is null', () => {
-		vi.mocked(useDataVersion).mockReturnValue(null);
-		const fetcher = vi.fn();
+  it('starts in the initial state (loading true, data null, error null) while version is null', () => {
+    vi.mocked(useDataVersion).mockReturnValue(null);
+    const fetcher = vi.fn();
 
-		const { result } = renderHook(() => useFetch(fetcher));
+    const { result } = renderHook(() => useFetch(fetcher));
 
-		expect(result.current).toEqual({ data: null, loading: true, error: null });
-	});
+    expect(result.current).toEqual({ data: null, loading: true, error: null });
+  });
 
-	it('calls the fetcher with the version once it becomes available', () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const fetcher = vi.fn().mockResolvedValue('some data');
+  it('calls the fetcher with the version once it becomes available', () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const fetcher = vi.fn().mockResolvedValue('some data');
 
-		renderHook(() => useFetch(fetcher));
+    renderHook(() => useFetch(fetcher));
 
-		expect(fetcher).toHaveBeenCalledWith('v1');
-	});
+    expect(fetcher).toHaveBeenCalledWith('v1');
+  });
 
-	it('sets loading to true and clears the error immediately when the fetch starts', () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const { promise } = deferred<string>();
-		const fetcher = vi.fn().mockReturnValue(promise);
+  it('sets loading to true and clears the error immediately when the fetch starts', () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const { promise } = deferred<string>();
+    const fetcher = vi.fn().mockReturnValue(promise);
 
-		const { result } = renderHook(() => useFetch(fetcher));
+    const { result } = renderHook(() => useFetch(fetcher));
 
-		expect(result.current.loading).toBe(true);
-		expect(result.current.error).toBeNull();
-	});
+    expect(result.current.loading).toBe(true);
+    expect(result.current.error).toBeNull();
+  });
 
-	it('sets data and loading to false when the fetch resolves', async () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const fetcher = vi.fn().mockResolvedValue('resolved data');
+  it('sets data and loading to false when the fetch resolves', async () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const fetcher = vi.fn().mockResolvedValue('resolved data');
 
-		const { result } = renderHook(() => useFetch(fetcher));
+    const { result } = renderHook(() => useFetch(fetcher));
 
-		await waitFor(() => {
-			expect(result.current.loading).toBe(false);
-		});
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
 
-		expect(result.current.data).toBe('resolved data');
-		expect(result.current.error).toBeNull();
-	});
+    expect(result.current.data).toBe('resolved data');
+    expect(result.current.error).toBeNull();
+  });
 
-	it('sets the error and loading to false when the fetch rejects', async () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const error = new Error('fetch failed');
-		const fetcher = vi.fn().mockRejectedValue(error);
+  it('sets the error and loading to false when the fetch rejects', async () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const error = new Error('fetch failed');
+    const fetcher = vi.fn().mockRejectedValue(error);
 
-		const { result } = renderHook(() => useFetch(fetcher));
+    const { result } = renderHook(() => useFetch(fetcher));
 
-		await waitFor(() => {
-			expect(result.current.loading).toBe(false);
-		});
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
 
-		expect(result.current.error).toBe(error);
-		expect(result.current.data).toBeNull();
-	});
+    expect(result.current.error).toBe(error);
+    expect(result.current.data).toBeNull();
+  });
 
-	it('preserves stale data when a subsequent fetch fails', async () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const fetcher = vi.fn().mockResolvedValue('first success');
+  it('preserves stale data when a subsequent fetch fails', async () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const fetcher = vi.fn().mockResolvedValue('first success');
 
-		const { result, rerender } = renderHook(
-			({ version }) => {
-				vi.mocked(useDataVersion).mockReturnValue(version);
-				return useFetch(fetcher);
-			},
-			{ initialProps: { version: 'v1' } },
-		);
+    const { result, rerender } = renderHook(
+      ({ version }) => {
+        vi.mocked(useDataVersion).mockReturnValue(version);
+        return useFetch(fetcher);
+      },
+      { initialProps: { version: 'v1' } },
+    );
 
-		await waitFor(() => {
-			expect(result.current.data).toBe('first success');
-		});
+    await waitFor(() => {
+      expect(result.current.data).toBe('first success');
+    });
 
-		const error = new Error('second fetch failed');
-		fetcher.mockRejectedValueOnce(error);
+    const error = new Error('second fetch failed');
+    fetcher.mockRejectedValueOnce(error);
 
-		rerender({ version: 'v2' });
+    rerender({ version: 'v2' });
 
-		await waitFor(() => {
-			expect(result.current.error).toBe(error);
-		});
+    await waitFor(() => {
+      expect(result.current.error).toBe(error);
+    });
 
-		expect(result.current.data).toBe('first success');
-	});
+    expect(result.current.data).toBe('first success');
+  });
 
-	it('re-fetches when version changes', async () => {
-		const fetcher = vi.fn().mockResolvedValue('data');
+  it('re-fetches when version changes', async () => {
+    const fetcher = vi.fn().mockResolvedValue('data');
 
-		const { rerender } = renderHook(
-			({ version }) => {
-				vi.mocked(useDataVersion).mockReturnValue(version);
-				return useFetch(fetcher);
-			},
-			{ initialProps: { version: 'v1' } },
-		);
+    const { rerender } = renderHook(
+      ({ version }) => {
+        vi.mocked(useDataVersion).mockReturnValue(version);
+        return useFetch(fetcher);
+      },
+      { initialProps: { version: 'v1' } },
+    );
 
-		await waitFor(() => {
-			expect(fetcher).toHaveBeenCalledWith('v1');
-		});
+    await waitFor(() => {
+      expect(fetcher).toHaveBeenCalledWith('v1');
+    });
 
-		rerender({ version: 'v2' });
+    rerender({ version: 'v2' });
 
-		await waitFor(() => {
-			expect(fetcher).toHaveBeenCalledWith('v2');
-		});
+    await waitFor(() => {
+      expect(fetcher).toHaveBeenCalledWith('v2');
+    });
 
-		expect(fetcher).toHaveBeenCalledTimes(2);
-	});
+    expect(fetcher).toHaveBeenCalledTimes(2);
+  });
 
-	it('does not re-fetch when version stays the same across re-renders', async () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const fetcher = vi.fn().mockResolvedValue('data');
+  it('does not re-fetch when version stays the same across re-renders', async () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const fetcher = vi.fn().mockResolvedValue('data');
 
-		const { rerender } = renderHook(() => useFetch(fetcher));
+    const { rerender } = renderHook(() => useFetch(fetcher));
 
-		await waitFor(() => {
-			expect(fetcher).toHaveBeenCalledTimes(1);
-		});
+    await waitFor(() => {
+      expect(fetcher).toHaveBeenCalledTimes(1);
+    });
 
-		rerender();
-		rerender();
+    rerender();
+    rerender();
 
-		expect(fetcher).toHaveBeenCalledTimes(1);
-	});
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
 
-	it('does not re-fetch when only the fetcher function identity changes but version stays the same', async () => {
-		vi.mocked(useDataVersion).mockReturnValue('v1');
-		const fetcherA = vi.fn().mockResolvedValue('a');
-		const fetcherB = vi.fn().mockResolvedValue('b');
+  it('does not re-fetch when only the fetcher function identity changes but version stays the same', async () => {
+    vi.mocked(useDataVersion).mockReturnValue('v1');
+    const fetcherA = vi.fn().mockResolvedValue('a');
+    const fetcherB = vi.fn().mockResolvedValue('b');
 
-		const { rerender } = renderHook(({ fetcher }) => useFetch(fetcher), {
-			initialProps: { fetcher: fetcherA },
-		});
+    const { rerender } = renderHook(({ fetcher }) => useFetch(fetcher), {
+      initialProps: { fetcher: fetcherA },
+    });
 
-		await waitFor(() => {
-			expect(fetcherA).toHaveBeenCalledTimes(1);
-		});
+    await waitFor(() => {
+      expect(fetcherA).toHaveBeenCalledTimes(1);
+    });
 
-		rerender({ fetcher: fetcherB });
+    rerender({ fetcher: fetcherB });
 
-		expect(fetcherB).not.toHaveBeenCalled();
-	});
+    expect(fetcherB).not.toHaveBeenCalled();
+  });
 
-	it('transitions from null version to a real version and fetches exactly once', async () => {
-		const fetcher = vi.fn().mockResolvedValue('data');
+  it('transitions from null version to a real version and fetches exactly once', async () => {
+    const fetcher = vi.fn().mockResolvedValue('data');
 
-		const { rerender } = renderHook(
-			({ version }) => {
-				vi.mocked(useDataVersion).mockReturnValue(version);
-				return useFetch(fetcher);
-			},
-			{ initialProps: { version: null as string | null } },
-		);
+    const { rerender } = renderHook(
+      ({ version }) => {
+        vi.mocked(useDataVersion).mockReturnValue(version);
+        return useFetch(fetcher);
+      },
+      { initialProps: { version: null as string | null } },
+    );
 
-		expect(fetcher).not.toHaveBeenCalled();
+    expect(fetcher).not.toHaveBeenCalled();
 
-		rerender({ version: 'v1' });
+    rerender({ version: 'v1' });
 
-		await waitFor(() => {
-			expect(fetcher).toHaveBeenCalledTimes(1);
-		});
+    await waitFor(() => {
+      expect(fetcher).toHaveBeenCalledTimes(1);
+    });
 
-		expect(fetcher).toHaveBeenCalledWith('v1');
-	});
+    expect(fetcher).toHaveBeenCalledWith('v1');
+  });
 });

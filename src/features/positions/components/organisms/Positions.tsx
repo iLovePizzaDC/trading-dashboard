@@ -5,13 +5,13 @@ import { fetchOpenStops, fetchTrades } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 function Positions() {
-	const { data: stops, loading: stopsLoading, error: stopsError } = useFetch(fetchOpenStops);
-	const { data: trades, loading: tradesLoading, error: tradesError } = useFetch(fetchTrades);
+  const { data: stops, loading: stopsLoading, error: stopsError } = useFetch(fetchOpenStops);
+  const { data: trades, loading: tradesLoading, error: tradesError } = useFetch(fetchTrades);
 
-	if (stopsLoading || tradesLoading) return <PositionsSkeleton />;
-	if (stopsError || tradesError || !stops || !trades) return <PositionsError />;
+  if (stopsLoading || tradesLoading) return <PositionsSkeleton />;
+  if (stopsError || tradesError || !stops || !trades) return <PositionsError />;
 
-	return <OpenPositions stops={stops} trades={trades} />;
+  return <OpenPositions stops={stops} trades={trades} />;
 }
 
 export default Positions;
