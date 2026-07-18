@@ -35,7 +35,7 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
       >
         {pctLabel ?? '—'}%
       </p>
-      <p className='w-24 text-right text-xs'>
+      <p className='w-28 text-right text-xs'>
         {selected ? (
           <span className='text-green-400'>selected</span>
         ) : (
