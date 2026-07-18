@@ -4,161 +4,161 @@ import { createRef, useRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 function TestComponent({
-	onOutsideClick,
-	useMultipleRefs = false,
+  onOutsideClick,
+  useMultipleRefs = false,
 }: {
-	onOutsideClick: () => void;
-	useMultipleRefs?: boolean;
+  onOutsideClick: () => void;
+  useMultipleRefs?: boolean;
 }) {
-	const ref1 = useRef<HTMLDivElement>(null);
-	const ref2 = useRef<HTMLDivElement>(null);
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
 
-	useClickOutside(useMultipleRefs ? [ref1, ref2] : ref1, onOutsideClick);
+  useClickOutside(useMultipleRefs ? [ref1, ref2] : ref1, onOutsideClick);
 
-	return (
-		<div>
-			<div data-testid='inside-1' ref={ref1}>
-				Inside 1
-			</div>
-			<div data-testid='inside-2' ref={ref2}>
-				Inside 2
-			</div>
-			<div data-testid='outside'>Outside</div>
-		</div>
-	);
+  return (
+    <div>
+      <div data-testid='inside-1' ref={ref1}>
+        Inside 1
+      </div>
+      <div data-testid='inside-2' ref={ref2}>
+        Inside 2
+      </div>
+      <div data-testid='outside'>Outside</div>
+    </div>
+  );
 }
 
 describe('useClickOutside', () => {
-	it('calls onOutsideClick when clicking outside the target ref', () => {
-		const onOutsideClick = vi.fn();
+  it('calls onOutsideClick when clicking outside the target ref', () => {
+    const onOutsideClick = vi.fn();
 
-		const { getByTestId } = render(<TestComponent onOutsideClick={onOutsideClick} />);
+    const { getByTestId } = render(<TestComponent onOutsideClick={onOutsideClick} />);
 
-		fireEvent.mouseDown(getByTestId('outside'));
+    fireEvent.mouseDown(getByTestId('outside'));
 
-		expect(onOutsideClick).toHaveBeenCalledTimes(1);
-	});
+    expect(onOutsideClick).toHaveBeenCalledTimes(1);
+  });
 
-	it('does not call onOutsideClick when clicking inside the target ref', () => {
-		const onOutsideClick = vi.fn();
+  it('does not call onOutsideClick when clicking inside the target ref', () => {
+    const onOutsideClick = vi.fn();
 
-		const { getByTestId } = render(<TestComponent onOutsideClick={onOutsideClick} />);
+    const { getByTestId } = render(<TestComponent onOutsideClick={onOutsideClick} />);
 
-		fireEvent.mouseDown(getByTestId('inside-1'));
+    fireEvent.mouseDown(getByTestId('inside-1'));
 
-		expect(onOutsideClick).not.toHaveBeenCalled();
-	});
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
 
-	it('does not call onOutsideClick when clicking on a nested child of the target ref', () => {
-		const onOutsideClick = vi.fn();
-		const ref = createRef<HTMLDivElement>();
+  it('does not call onOutsideClick when clicking on a nested child of the target ref', () => {
+    const onOutsideClick = vi.fn();
+    const ref = createRef<HTMLDivElement>();
 
-		function NestedComponent() {
-			useClickOutside(ref, onOutsideClick);
+    function NestedComponent() {
+      useClickOutside(ref, onOutsideClick);
 
-			return (
-				<div ref={ref} data-testid='parent'>
-					<span data-testid='child'>Nested</span>
-				</div>
-			);
-		}
+      return (
+        <div ref={ref} data-testid='parent'>
+          <span data-testid='child'>Nested</span>
+        </div>
+      );
+    }
 
-		const { getByTestId } = render(<NestedComponent />);
+    const { getByTestId } = render(<NestedComponent />);
 
-		fireEvent.mouseDown(getByTestId('child'));
+    fireEvent.mouseDown(getByTestId('child'));
 
-		expect(onOutsideClick).not.toHaveBeenCalled();
-	});
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
 
-	it('supports an array of refs, treating a click inside any of them as "inside"', () => {
-		const onOutsideClick = vi.fn();
+  it('supports an array of refs, treating a click inside any of them as "inside"', () => {
+    const onOutsideClick = vi.fn();
 
-		const { getByTestId } = render(
-			<TestComponent onOutsideClick={onOutsideClick} useMultipleRefs />,
-		);
+    const { getByTestId } = render(
+      <TestComponent onOutsideClick={onOutsideClick} useMultipleRefs />,
+    );
 
-		fireEvent.mouseDown(getByTestId('inside-1'));
-		fireEvent.mouseDown(getByTestId('inside-2'));
+    fireEvent.mouseDown(getByTestId('inside-1'));
+    fireEvent.mouseDown(getByTestId('inside-2'));
 
-		expect(onOutsideClick).not.toHaveBeenCalled();
-	});
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
 
-	it('calls onOutsideClick when clicking outside all refs in an array', () => {
-		const onOutsideClick = vi.fn();
+  it('calls onOutsideClick when clicking outside all refs in an array', () => {
+    const onOutsideClick = vi.fn();
 
-		const { getByTestId } = render(
-			<TestComponent onOutsideClick={onOutsideClick} useMultipleRefs />,
-		);
+    const { getByTestId } = render(
+      <TestComponent onOutsideClick={onOutsideClick} useMultipleRefs />,
+    );
 
-		fireEvent.mouseDown(getByTestId('outside'));
+    fireEvent.mouseDown(getByTestId('outside'));
 
-		expect(onOutsideClick).toHaveBeenCalledTimes(1);
-	});
+    expect(onOutsideClick).toHaveBeenCalledTimes(1);
+  });
 
-	it('does not throw and treats the click as outside when ref.current is null', () => {
-		const onOutsideClick = vi.fn();
-		const ref = createRef<HTMLDivElement>();
+  it('does not throw and treats the click as outside when ref.current is null', () => {
+    const onOutsideClick = vi.fn();
+    const ref = createRef<HTMLDivElement>();
 
-		function UnmountedRefComponent() {
-			useClickOutside(ref, onOutsideClick);
-			return <div data-testid='outside'>No ref attached</div>;
-		}
+    function UnmountedRefComponent() {
+      useClickOutside(ref, onOutsideClick);
+      return <div data-testid='outside'>No ref attached</div>;
+    }
 
-		const { getByTestId } = render(<UnmountedRefComponent />);
+    const { getByTestId } = render(<UnmountedRefComponent />);
 
-		expect(() => fireEvent.mouseDown(getByTestId('outside'))).not.toThrow();
-		expect(onOutsideClick).toHaveBeenCalledTimes(1);
-	});
+    expect(() => fireEvent.mouseDown(getByTestId('outside'))).not.toThrow();
+    expect(onOutsideClick).toHaveBeenCalledTimes(1);
+  });
 
-	it('removes the event listener on unmount', () => {
-		const onOutsideClick = vi.fn();
-		const removeEventListenerSpy = vi.spyOn(document, 'removeEventListener');
+  it('removes the event listener on unmount', () => {
+    const onOutsideClick = vi.fn();
+    const removeEventListenerSpy = vi.spyOn(document, 'removeEventListener');
 
-		const { unmount } = render(<TestComponent onOutsideClick={onOutsideClick} />);
+    const { unmount } = render(<TestComponent onOutsideClick={onOutsideClick} />);
 
-		unmount();
+    unmount();
 
-		expect(removeEventListenerSpy).toHaveBeenCalledWith('mousedown', expect.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('mousedown', expect.any(Function));
 
-		removeEventListenerSpy.mockRestore();
-	});
+    removeEventListenerSpy.mockRestore();
+  });
 
-	it('does not call onOutsideClick after unmount', () => {
-		const onOutsideClick = vi.fn();
+  it('does not call onOutsideClick after unmount', () => {
+    const onOutsideClick = vi.fn();
 
-		const { unmount } = render(<TestComponent onOutsideClick={onOutsideClick} />);
+    const { unmount } = render(<TestComponent onOutsideClick={onOutsideClick} />);
 
-		unmount();
+    unmount();
 
-		fireEvent.mouseDown(document.body);
+    fireEvent.mouseDown(document.body);
 
-		expect(onOutsideClick).not.toHaveBeenCalled();
-	});
+    expect(onOutsideClick).not.toHaveBeenCalled();
+  });
 
-	it('re-attaches the listener when onOutsideClick changes', () => {
-		const firstCallback = vi.fn();
-		const secondCallback = vi.fn();
+  it('re-attaches the listener when onOutsideClick changes', () => {
+    const firstCallback = vi.fn();
+    const secondCallback = vi.fn();
 
-		function RerenderComponent({ callback }: { callback: () => void }) {
-			const ref = useRef<HTMLDivElement>(null);
-			useClickOutside(ref, callback);
-			return (
-				<div>
-					<div ref={ref} data-testid='inside'>
-						Inside
-					</div>
-					<div data-testid='outside'>Outside</div>
-				</div>
-			);
-		}
+    function RerenderComponent({ callback }: { callback: () => void }) {
+      const ref = useRef<HTMLDivElement>(null);
+      useClickOutside(ref, callback);
+      return (
+        <div>
+          <div ref={ref} data-testid='inside'>
+            Inside
+          </div>
+          <div data-testid='outside'>Outside</div>
+        </div>
+      );
+    }
 
-		const { getByTestId, rerender } = render(<RerenderComponent callback={firstCallback} />);
+    const { getByTestId, rerender } = render(<RerenderComponent callback={firstCallback} />);
 
-		rerender(<RerenderComponent callback={secondCallback} />);
+    rerender(<RerenderComponent callback={secondCallback} />);
 
-		fireEvent.mouseDown(getByTestId('outside'));
+    fireEvent.mouseDown(getByTestId('outside'));
 
-		expect(firstCallback).not.toHaveBeenCalled();
-		expect(secondCallback).toHaveBeenCalledTimes(1);
-	});
+    expect(firstCallback).not.toHaveBeenCalled();
+    expect(secondCallback).toHaveBeenCalledTimes(1);
+  });
 });
