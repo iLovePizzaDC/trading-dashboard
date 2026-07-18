@@ -11,64 +11,64 @@ import { useFetch } from '@/shared/hooks/useFetch';
 import { useState } from 'react';
 
 function Header() {
-	const { data: lastRebalance, loading, error } = useFetch(fetchLastRebalanceDate);
-	const { data: marketStatus } = useFetch(fetchMarketStatus);
-	const lastUpdated = useLastUpdated();
-	const dataVersion = useDataVersion();
-	const status = useBotStatus(lastRebalance ?? null, marketStatus, dataVersion);
+  const { data: lastRebalance, loading, error } = useFetch(fetchLastRebalanceDate);
+  const { data: marketStatus } = useFetch(fetchMarketStatus);
+  const lastUpdated = useLastUpdated();
+  const dataVersion = useDataVersion();
+  const status = useBotStatus(lastRebalance ?? null, marketStatus, dataVersion);
 
-	const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
-	const isTradingDay = status?.isTradingDay ?? false;
+  const isTradingDay = status?.isTradingDay ?? false;
 
-	const dotVariant: StatusDotVariant = (() => {
-		if (!lastRebalance && !loading) return 'inactive';
-		if (status?.isRunning) return 'running';
-		if (isTradingDay) return 'active';
-		return 'weekend';
-	})();
+  const dotVariant: StatusDotVariant = (() => {
+    if (!lastRebalance && !loading) return 'inactive';
+    if (status?.isRunning) return 'running';
+    if (isTradingDay) return 'active';
+    return 'weekend';
+  })();
 
-	return (
-		<div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
-			<div className='flex flex-col'>
-				<BotNameRow
-					dotVariant={dotVariant}
-					expanded={expanded}
-					onClick={() => setExpanded((v) => !v)}
-				/>
+  return (
+    <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
+      <div className='flex flex-col'>
+        <BotNameRow
+          dotVariant={dotVariant}
+          expanded={expanded}
+          onClick={() => setExpanded((v) => !v)}
+        />
 
-				<div
-					className={`
+        <div
+          className={`
 						grid transition-all duration-300 ease-in-out
 						${expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}
 					`}
-				>
-					<div className='overflow-hidden'>
-						{loading && <BotStatusSkeleton />}
+        >
+          <div className='overflow-hidden'>
+            {loading && <BotStatusSkeleton />}
 
-						{error && (
-							<p className='pt-3 text-xs tracking-wider text-red-400/40'>status unavailable</p>
-						)}
+            {error && (
+              <p className='pt-3 text-xs tracking-wider text-red-400/40'>status unavailable</p>
+            )}
 
-						{status && !loading && !error && (
-							<BotStatusGrid
-								visible={expanded}
-								nextOpen={marketStatus?.next_open ?? null}
-								nextClose={marketStatus?.next_close ?? null}
-								lastUpdated={lastUpdated ?? undefined}
-								{...status}
-								isTradingDay={isTradingDay}
-							/>
-						)}
-					</div>
-				</div>
-			</div>
+            {status && !loading && !error && (
+              <BotStatusGrid
+                visible={expanded}
+                nextOpen={marketStatus?.next_open ?? null}
+                nextClose={marketStatus?.next_close ?? null}
+                lastUpdated={lastUpdated ?? undefined}
+                {...status}
+                isTradingDay={isTradingDay}
+              />
+            )}
+          </div>
+        </div>
+      </div>
 
-			<div className='self-end md:self-auto'>
-				<DownloadDropdown />
-			</div>
-		</div>
-	);
+      <div className='self-end md:self-auto'>
+        <DownloadDropdown />
+      </div>
+    </div>
+  );
 }
 
 export default Header;

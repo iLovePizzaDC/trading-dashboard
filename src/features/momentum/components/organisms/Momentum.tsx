@@ -5,12 +5,12 @@ import { fetchDecisions } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 function Momentum() {
-	const { data, loading, error } = useFetch(fetchDecisions);
+  const { data, loading, error } = useFetch(fetchDecisions);
 
-	if (loading) return <MomentumSkeleton />;
-	if (error || !data) return <MomentumError />;
+  if (loading) return <MomentumSkeleton />;
+  if (error || !data) return <MomentumError />;
 
-	return <MomentumTimeline data={data} />;
+  return <MomentumTimeline data={data} />;
 }
 
 export default Momentum;

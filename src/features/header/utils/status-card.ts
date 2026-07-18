@@ -2,45 +2,45 @@ import { getBotRunTimeDE, getWeekdayNow } from '@/features/header/utils/time-hel
 import { DateTime } from 'luxon';
 
 export function getStatusCard(
-	isRunning: boolean,
-	ranToday: boolean,
-	isTradingDay: boolean,
-	nextOpen: string | null,
+  isRunning: boolean,
+  ranToday: boolean,
+  isTradingDay: boolean,
+  nextOpen: string | null,
 ): { value: string; sub: string; progress: number; color: 'green' | 'amber' | 'blue' } {
-	const runTime = getBotRunTimeDE();
-	const day = getWeekdayNow();
-	const nextDay = nextOpen ? DateTime.fromISO(nextOpen).toFormat('ccc').toLowerCase() : 'mon';
+  const runTime = getBotRunTimeDE();
+  const day = getWeekdayNow();
+  const nextDay = nextOpen ? DateTime.fromISO(nextOpen).toFormat('ccc').toLowerCase() : 'mon';
 
-	if (isRunning) {
-		return { value: 'running now', sub: `started at ${runTime}`, progress: 100, color: 'green' };
-	}
-	if (ranToday) {
-		return { value: `${day} — done`, sub: `ran at ${runTime}`, progress: 100, color: 'green' };
-	}
-	if (isTradingDay) {
-		return {
-			value: `${day} — active`,
-			sub: `runs at ${runTime}`,
-			progress: 0,
-			color: 'green',
-		};
-	}
-	return {
-		value: `${day} — resting`,
-		sub: `resumes ${nextDay} ${runTime}`,
-		color: 'amber',
-		progress: 100,
-	};
+  if (isRunning) {
+    return { value: 'running now', sub: `started at ${runTime}`, progress: 100, color: 'green' };
+  }
+  if (ranToday) {
+    return { value: `${day} — done`, sub: `ran at ${runTime}`, progress: 100, color: 'green' };
+  }
+  if (isTradingDay) {
+    return {
+      value: `${day} — active`,
+      sub: `runs at ${runTime}`,
+      progress: 0,
+      color: 'green',
+    };
+  }
+  return {
+    value: `${day} — resting`,
+    sub: `resumes ${nextDay} ${runTime}`,
+    color: 'amber',
+    progress: 100,
+  };
 }
 
 export function getTradingDayProgress(): number {
-	const OPEN_MINUTES = 9 * 60 + 30;
-	const TOTAL_MINUTES = 6 * 60 + 30;
+  const OPEN_MINUTES = 9 * 60 + 30;
+  const TOTAL_MINUTES = 6 * 60 + 30;
 
-	const nowNY = DateTime.now().setZone('America/New_York');
+  const nowNY = DateTime.now().setZone('America/New_York');
 
-	const minutesNow = nowNY.hour * 60 + nowNY.minute;
-	const elapsed = minutesNow - OPEN_MINUTES;
+  const minutesNow = nowNY.hour * 60 + nowNY.minute;
+  const elapsed = minutesNow - OPEN_MINUTES;
 
-	return Math.min(100, Math.max(0, Math.round((elapsed / TOTAL_MINUTES) * 100)));
+  return Math.min(100, Math.max(0, Math.round((elapsed / TOTAL_MINUTES) * 100)));
 }

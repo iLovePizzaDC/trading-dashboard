@@ -11,27 +11,27 @@ import Trades from '@/features/trades/components/organisms/Trades';
 import { DataVersionProvider } from '@/shared/context/DataVersionProvider';
 
 function App() {
-	return (
-		<DataVersionProvider>
-			<main className='min-h-screen p-4 sm:pb-10 md:p-5 cursor-default'>
-				<div className='mx-auto max-w-7xl space-y-6'>
-					<Header />
-					<Summary />
-					<Equity />
-					<Trades />
-					<Decisions />
-					<div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 items-start'>
-						<Positions />
-						<Stops />
-						<div className='md:col-span-2 xl:col-span-2'>
-							<Sector />
-						</div>
-					</div>
-					<Momentum />
-				</div>
-			</main>
-		</DataVersionProvider>
-	);
+  return (
+    <DataVersionProvider>
+      <main className='min-h-screen p-4 sm:pb-10 md:p-5 cursor-default'>
+        <div className='mx-auto max-w-7xl space-y-6'>
+          <Header />
+          <Summary />
+          <Equity />
+          <Trades />
+          <Decisions />
+          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 items-start'>
+            <Positions />
+            <Stops />
+            <div className='md:col-span-2 xl:col-span-2'>
+              <Sector />
+            </div>
+          </div>
+          <Momentum />
+        </div>
+      </main>
+    </DataVersionProvider>
+  );
 }
 
 export default App;
