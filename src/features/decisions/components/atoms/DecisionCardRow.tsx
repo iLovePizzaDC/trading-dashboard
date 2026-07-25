@@ -18,13 +18,29 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
     <div className={`flex items-center gap-3 py-2.5 ${isLast ? '' : 'border-b border-white/5'}`}>
       <div className='w-12 shrink-0'>
         <p className='text-left text-xs font-medium text-white'>
-          {symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
+          {symbolName ? (
+            <Tooltip content={
+              <p className='flex flex-col'>
+                <span>
+                  {symbolName}
+                </span>
+                {selected ? (
+                  <span className='text-green-400'>selected</span>
+                ) : (
+                  <span className='text-white/30'>
+                    {rejected_reason ? (STOP_REASON_LABEL[rejected_reason] ?? rejected_reason) : '—'}
+                  </span>
+                )}
+              </p>
+            }>
+              {symbol}
+            </Tooltip>
+          ) : symbol}
         </p>
       </div>
       <div className='flex-1 overflow-hidden rounded-full bg-linear-to-br from-white/5 to-white/0 h-1'>
         <div
-          className={`h-full rounded-full transition-all ${selected ? 'bg-green-400' : !passes_trend ? 'bg-red-400' : 'bg-white/15'
-            }`}
+          className={`h-full rounded-full transition-all ${selected ? 'bg-green-400' : !passes_trend ? 'bg-red-400' : 'bg-white/15'}`}
           style={{ width: `${barWidth}%` }}
           data-testid='decision-progress-bar'
         />
@@ -34,15 +50,6 @@ function DecisionCardRow({ candidate, isLast = false }: IDecisionCardRow) {
         title={momentum?.toString() ?? undefined}
       >
         {pctLabel ?? '—'}%
-      </p>
-      <p className='w-28 text-right text-xs'>
-        {selected ? (
-          <span className='text-green-400'>selected</span>
-        ) : (
-          <span className='text-white/30'>
-            {rejected_reason ? (STOP_REASON_LABEL[rejected_reason] ?? rejected_reason) : '—'}
-          </span>
-        )}
       </p>
     </div>
   );
