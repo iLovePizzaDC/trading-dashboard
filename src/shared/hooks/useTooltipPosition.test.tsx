@@ -1,7 +1,7 @@
 import { act, render } from '@testing-library/react';
 import { useRef, useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { useTooltipPosition } from './useTooltipPosition';
+import { useTooltipPosition } from '@/shared/hooks/useTooltipPosition';
 
 function Harness({ initialOpen = false }: { initialOpen?: boolean }) {
 	const [open, setOpen] = useState(initialOpen);
