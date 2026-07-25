@@ -48,7 +48,7 @@ describe('calculateTooltipPosition', () => {
   });
 
   it('shifts left when the tooltip would overflow on the right', () => {
-    const anchor = rect({ left: 950, width: 20 }); // anchorCenterX = 960
+    const anchor = rect({ left: 950, width: 20 });
     const popup = rect({ width: 200, height: 40 });
 
     const position = calculateTooltipPosition(anchor, popup, viewport);
