@@ -1,6 +1,7 @@
 {
 	"languages": {
 		"TypeScript": {
+			"language_servers": ["typescript-language-server", "!vtsls", "..."],
 			"formatter": {
 				"external": {
 					"command": "npx",
@@ -14,6 +15,7 @@
 			},
 		},
 		"TSX": {
+			"language_servers": ["typescript-language-server", "!vtsls", "..."],
 			"formatter": {
 				"external": {
 					"command": "npx",
