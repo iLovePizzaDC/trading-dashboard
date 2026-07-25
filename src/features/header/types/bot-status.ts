@@ -1,9 +1,9 @@
 export type BotStatus = {
-  rebalanceDaysLeft: number;
-  rebalanceNextDate: string;
-  rebalancePct: number;
-  isRunning: boolean;
-  ranToday: boolean;
-  isTradingDay: boolean;
-  marketIsOpen: boolean;
+	rebalanceDaysLeft: number;
+	rebalanceNextDate: string;
+	rebalancePct: number;
+	isRunning: boolean;
+	ranToday: boolean;
+	isTradingDay: boolean;
+	marketIsOpen: boolean;
 };

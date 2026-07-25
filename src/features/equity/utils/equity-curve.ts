@@ -7,74 +7,74 @@ import { cutoffDate } from '@/shared/utils/date-range';
 import { DateTime } from 'luxon';
 
 export function normalizeToRelative(data: EquityPoint[], relative: boolean): ChartPoint[] {
-  if (!data.length) return [];
+	if (!data.length) return [];
 
-  const botStart = data[0].equity;
-  const spyStart = data.find((d) => d.spy != null)?.spy ?? null;
+	const botStart = data[0].equity;
+	const spyStart = data.find((d) => d.spy != null)?.spy ?? null;
 
-  return data.map((d) => ({
-    date: d.date,
-    equity: relative ? (d.equity / botStart) * 100 : d.equity,
-    spy: relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
-  }));
+	return data.map((d) => ({
+		date: d.date,
+		equity: relative ? (d.equity / botStart) * 100 : d.equity,
+		spy: relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
+	}));
 }
 
 function filterByRange(chartData: ChartPoint[], range: Range): ChartPoint[] {
-  const cutoff = cutoffDate(range);
-  if (!cutoff) return chartData;
+	const cutoff = cutoffDate(range);
+	if (!cutoff) return chartData;
 
-  return chartData.filter((d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'));
+	return chartData.filter((d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'));
 }
 
 function rebaseToFilteredStart(
-  filtered: ChartPoint[],
-  originalData: EquityPoint[],
-  relative: boolean,
+	filtered: ChartPoint[],
+	originalData: EquityPoint[],
+	relative: boolean,
 ): ChartPoint[] {
-  if (!filtered.length) return [];
+	if (!filtered.length) return [];
 
-  const baseBotValue = filtered[0].equity;
-  const baseSpyValue = filtered.find((d) => d.spy != null)?.spy ?? null;
-  const fallbackBotValue = originalData[0]?.equity ?? 0;
-  const fallbackSpyValue = originalData.find((dp) => dp.spy != null)?.spy ?? 0;
+	const baseBotValue = filtered[0].equity;
+	const baseSpyValue = filtered.find((d) => d.spy != null)?.spy ?? null;
+	const fallbackBotValue = originalData[0]?.equity ?? 0;
+	const fallbackSpyValue = originalData.find((dp) => dp.spy != null)?.spy ?? 0;
 
-  return filtered.map((d) => ({
-    ...d,
-    equity: relative ? d.equity - baseBotValue + 100 : d.equity - baseBotValue + fallbackBotValue,
-    spy:
-      d.spy != null && baseSpyValue != null
-        ? relative
-          ? d.spy - baseSpyValue + 100
-          : d.spy - baseSpyValue + fallbackSpyValue
-        : null,
-  }));
+	return filtered.map((d) => ({
+		...d,
+		equity: relative ? d.equity - baseBotValue + 100 : d.equity - baseBotValue + fallbackBotValue,
+		spy:
+			d.spy != null && baseSpyValue != null
+				? relative
+					? d.spy - baseSpyValue + 100
+					: d.spy - baseSpyValue + fallbackSpyValue
+				: null,
+	}));
 }
 
 export function applyRangeAndMode(
-  allChartData: ChartPoint[],
-  range: Range,
-  curveMode: EquityCurveMode,
-  relative: boolean,
-  originalData: EquityPoint[],
+	allChartData: ChartPoint[],
+	range: Range,
+	curveMode: EquityCurveMode,
+	relative: boolean,
+	originalData: EquityPoint[],
 ): ChartPoint[] {
-  const filtered = filterByRange(allChartData, range);
+	const filtered = filterByRange(allChartData, range);
 
-  if (curveMode === 'zoom') {
-    return filtered;
-  }
+	if (curveMode === 'zoom') {
+		return filtered;
+	}
 
-  return rebaseToFilteredStart(filtered, originalData, relative);
+	return rebaseToFilteredStart(filtered, originalData, relative);
 }
 
 export function findRebalanceIndexes(
-  chartData: ChartPoint[],
-  decisions: DecisionEntry[],
+	chartData: ChartPoint[],
+	decisions: DecisionEntry[],
 ): number[] {
-  if (!chartData.length) return [];
+	if (!chartData.length) return [];
 
-  const decisionDateSet = new Set(decisions.map((d) => d.date));
+	const decisionDateSet = new Set(decisions.map((d) => d.date));
 
-  return chartData
-    .map((point, i) => (decisionDateSet.has(point.date) ? i : -1))
-    .filter((i) => i !== -1);
+	return chartData
+		.map((point, i) => (decisionDateSet.has(point.date) ? i : -1))
+		.filter((i) => i !== -1);
 }
