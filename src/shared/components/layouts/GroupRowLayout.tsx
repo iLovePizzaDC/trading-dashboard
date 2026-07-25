@@ -4,103 +4,105 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 interface IGroupRowLayout<T> {
-  symbol: string;
-  color: string;
-  entries: T[];
-  getEntryKey: (entry: T, index: number) => string;
-  renderBadge: (expanded: boolean) => React.ReactNode;
-  renderEntry: (entry: T, color: string, isLast: boolean) => React.ReactNode;
-  reverseEntries?: boolean;
+	symbol: string;
+	color: string;
+	entries: T[];
+	getEntryKey: (entry: T, index: number) => string;
+	renderBadge: (expanded: boolean) => React.ReactNode;
+	renderEntry: (entry: T, color: string, isLast: boolean) => React.ReactNode;
+	reverseEntries?: boolean;
 }
 
 function GroupRowLayout<T>({
-  symbol,
-  color,
-  entries,
-  getEntryKey,
-  renderBadge,
-  renderEntry,
-  reverseEntries = false,
+	symbol,
+	color,
+	entries,
+	getEntryKey,
+	renderBadge,
+	renderEntry,
+	reverseEntries = false,
 }: IGroupRowLayout<T>) {
-  const [expanded, setExpanded] = useState(false);
+	const [expanded, setExpanded] = useState(false);
 
-  const ordered = reverseEntries ? [...entries].reverse() : entries;
-  const latestEntry = ordered[0];
-  const olderEntries = ordered.slice(1);
-  const hasMultiple = entries.length > 1;
-  const symbolName = SECTOR_MAP[symbol];
+	const ordered = reverseEntries ? [...entries].reverse() : entries;
+	const latestEntry = ordered[0];
+	const olderEntries = ordered.slice(1);
+	const hasMultiple = entries.length > 1;
+	const symbolName = SECTOR_MAP[symbol];
 
-  return (
-    <div>
-      <div className='w-full flex items-center justify-between mb-2 mt-1'>
-        <div className='flex items-center gap-2 min-w-0'>
-          <span className='w-2 h-2 rounded-full shrink-0' style={{ backgroundColor: color }} />
-          <div className='w-12 shrink-0'>
-            <p className='text-left text-xs font-medium text-white'>
-              {symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
-            </p>
-          </div>
-          <button
-            onClick={() => hasMultiple && setExpanded((v) => !v)}
-            disabled={!hasMultiple}
-            className={`flex items-center gap-2 -m-1 p-1 ${hasMultiple ? 'cursor-pointer' : 'cursor-default'
-              }`}
-          >
-            {hasMultiple && (
-              <ChevronDownIcon
-                className={`w-3 h-3 text-white/25 shrink-0 transition-all duration-300 hover:text-white/50 ${expanded ? 'rotate-180' : ''
-                  }`}
-                data-testid='group-row-chevron'
-              />
-            )}
-          </button>
-        </div>
+	return (
+		<div>
+			<div className='w-full flex items-center justify-between mb-2 mt-1'>
+				<div className='flex items-center gap-2 min-w-0'>
+					<span className='w-2 h-2 rounded-full shrink-0' style={{ backgroundColor: color }} />
+					<div className='w-12 shrink-0'>
+						<p className='text-left text-xs font-medium text-white'>
+							{symbolName ? <Tooltip content={symbolName}>{symbol}</Tooltip> : symbol}
+						</p>
+					</div>
+					<button
+						onClick={() => hasMultiple && setExpanded((v) => !v)}
+						disabled={!hasMultiple}
+						className={`flex items-center gap-2 -m-1 p-1 ${
+							hasMultiple ? 'cursor-pointer' : 'cursor-default'
+						}`}
+					>
+						{hasMultiple && (
+							<ChevronDownIcon
+								className={`w-3 h-3 text-white/25 shrink-0 transition-all duration-300 hover:text-white/50 ${
+									expanded ? 'rotate-180' : ''
+								}`}
+								data-testid='group-row-chevron'
+							/>
+						)}
+					</button>
+				</div>
 
-        <button
-          onClick={() => hasMultiple && setExpanded((v) => !v)}
-          disabled={!hasMultiple}
-          className={`flex items-center gap-2 ${hasMultiple ? 'cursor-pointer' : 'cursor-default'}`}
-        >
-          {!expanded && hasMultiple && (
-            <div className='text-[9px] text-white/20 transition-opacity duration-200'>
-              <span className='hidden sm:inline'>+{olderEntries.length} older</span>
-              <span className='sm:hidden'>+{olderEntries.length}</span>
-            </div>
-          )}
-          {renderBadge(expanded)}
-        </button>
-      </div>
+				<button
+					onClick={() => hasMultiple && setExpanded((v) => !v)}
+					disabled={!hasMultiple}
+					className={`flex items-center gap-2 ${hasMultiple ? 'cursor-pointer' : 'cursor-default'}`}
+				>
+					{!expanded && hasMultiple && (
+						<div className='text-[9px] text-white/20 transition-opacity duration-200'>
+							<span className='hidden sm:inline'>+{olderEntries.length} older</span>
+							<span className='sm:hidden'>+{olderEntries.length}</span>
+						</div>
+					)}
+					{renderBadge(expanded)}
+				</button>
+			</div>
 
-      <div className='pl-1'>
-        {renderEntry(latestEntry, color, !expanded || olderEntries.length === 0)}
+			<div className='pl-1'>
+				{renderEntry(latestEntry, color, !expanded || olderEntries.length === 0)}
 
-        {hasMultiple && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateRows: expanded ? '1fr' : '0fr',
-              transition: 'grid-template-rows 280ms cubic-bezier(0.4, 0, 0.2, 1)',
-            }}
-          >
-            <div style={{ overflow: 'hidden' }}>
-              {olderEntries.map((entry, i) => (
-                <div
-                  key={getEntryKey(entry, i)}
-                  style={{
-                    opacity: expanded ? 1 : 0,
-                    transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
-                    transition: `opacity 220ms ease ${i * 40}ms, transform 220ms ease ${i * 40}ms`,
-                  }}
-                >
-                  {renderEntry(entry, color, i === olderEntries.length - 1)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+				{hasMultiple && (
+					<div
+						style={{
+							display: 'grid',
+							gridTemplateRows: expanded ? '1fr' : '0fr',
+							transition: 'grid-template-rows 280ms cubic-bezier(0.4, 0, 0.2, 1)',
+						}}
+					>
+						<div style={{ overflow: 'hidden' }}>
+							{olderEntries.map((entry, i) => (
+								<div
+									key={getEntryKey(entry, i)}
+									style={{
+										opacity: expanded ? 1 : 0,
+										transform: expanded ? 'translateY(0)' : 'translateY(-6px)',
+										transition: `opacity 220ms ease ${i * 40}ms, transform 220ms ease ${i * 40}ms`,
+									}}
+								>
+									{renderEntry(entry, color, i === olderEntries.length - 1)}
+								</div>
+							))}
+						</div>
+					</div>
+				)}
+			</div>
+		</div>
+	);
 }
 
 export default GroupRowLayout;

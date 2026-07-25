@@ -6,17 +6,17 @@ import { fetchDecisions } from '@/shared/api/data';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 function Decisions() {
-  const { data, loading, error } = useFetch(fetchDecisions);
+	const { data, loading, error } = useFetch(fetchDecisions);
 
-  if (loading) return <DecisionsSkeleton />;
-  if (error || !data) return <DecisionsError />;
+	if (loading) return <DecisionsSkeleton />;
+	if (error || !data) return <DecisionsError />;
 
-  return (
-    <div className='grid grid-cols-1 gap-6 md:grid-cols-2 items-start'>
-      <DecisionsCard data={data} />
-      <DecisionHistory data={data} />
-    </div>
-  );
+	return (
+		<div className='grid grid-cols-1 gap-6 md:grid-cols-2 items-start'>
+			<DecisionsCard data={data} />
+			<DecisionHistory data={data} />
+		</div>
+	);
 }
 
 export default Decisions;

@@ -3,44 +3,44 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 describe('<MomentumSkeleton />', () => {
-  it('renders each SkeletonBox with a shimmer overlay', () => {
-    render(<MomentumSkeleton />);
+	it('renders each SkeletonBox with a shimmer overlay', () => {
+		render(<MomentumSkeleton />);
 
-    const skeletonBoxes = screen.getAllByTestId('momentum-skeleton-box');
+		const skeletonBoxes = screen.getAllByTestId('momentum-skeleton-box');
 
-    expect(skeletonBoxes.length).toBeGreaterThan(0);
+		expect(skeletonBoxes.length).toBeGreaterThan(0);
 
-    skeletonBoxes.forEach((box) => {
-      const shimmer = box.querySelector('.animate-\\[shimmer_1\\.5s_infinite\\]');
-      expect(shimmer).toBeInTheDocument();
-    });
-  });
+		skeletonBoxes.forEach((box) => {
+			const shimmer = box.querySelector('.animate-\\[shimmer_1\\.5s_infinite\\]');
+			expect(shimmer).toBeInTheDocument();
+		});
+	});
 
-  it('renders the header with a title placeholder and two legend placeholders', () => {
-    render(<MomentumSkeleton />);
+	it('renders the header with a title placeholder and two legend placeholders', () => {
+		render(<MomentumSkeleton />);
 
-    const header = screen.getByTestId('momentum-header');
-    expect(within(header).getAllByTestId('momentum-skeleton-box')).toHaveLength(3);
+		const header = screen.getByTestId('momentum-header');
+		expect(within(header).getAllByTestId('momentum-skeleton-box')).toHaveLength(3);
 
-    const legend = screen.getByTestId('momentum-legend');
-    expect(within(legend).getAllByTestId('momentum-skeleton-box')).toHaveLength(2);
-  });
+		const legend = screen.getByTestId('momentum-legend');
+		expect(within(legend).getAllByTestId('momentum-skeleton-box')).toHaveLength(2);
+	});
 
-  it('renders 6 range filter placeholders', () => {
-    render(<MomentumSkeleton />);
+	it('renders 6 range filter placeholders', () => {
+		render(<MomentumSkeleton />);
 
-    expect(screen.getByTestId('momentum-range-buttons').children).toHaveLength(6);
-  });
+		expect(screen.getByTestId('momentum-range-buttons').children).toHaveLength(6);
+	});
 
-  it('renders a single chart placeholder box', () => {
-    render(<MomentumSkeleton />);
+	it('renders a single chart placeholder box', () => {
+		render(<MomentumSkeleton />);
 
-    expect(screen.getByTestId('momentum-chart-placeholder')).toBeInTheDocument();
-  });
+		expect(screen.getByTestId('momentum-chart-placeholder')).toBeInTheDocument();
+	});
 
-  it('renders a total of 10 SkeletonBoxes', () => {
-    render(<MomentumSkeleton />);
+	it('renders a total of 10 SkeletonBoxes', () => {
+		render(<MomentumSkeleton />);
 
-    expect(screen.getAllByTestId('momentum-skeleton-box')).toHaveLength(10);
-  });
+		expect(screen.getAllByTestId('momentum-skeleton-box')).toHaveLength(10);
+	});
 });
