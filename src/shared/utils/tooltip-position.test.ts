@@ -57,7 +57,7 @@ describe('calculateTooltipPosition', () => {
   });
 
   it('keeps the arrow centered on the anchor after clamping', () => {
-    const anchor = rect({ left: 10, width: 20 }); // anchorCenterX = 20
+    const anchor = rect({ left: 10, width: 20 });
     const popup = rect({ width: 200, height: 40 });
 
     const position = calculateTooltipPosition(anchor, popup, viewport);
