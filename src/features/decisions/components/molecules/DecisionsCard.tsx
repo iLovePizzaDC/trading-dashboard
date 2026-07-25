@@ -21,7 +21,7 @@ function DecisionsCard({ data }: IDecisionsCard) {
   const preview = sorted.slice(0, previewCount);
   const extra = sorted.slice(previewCount);
 
-  return (
+  return ( // TODO format date
     <Card title='last decisions' badge={<p className='text-xs text-white/30'>{latest.date}</p>}>
       {preview.map((candidate, index) => (
         <DecisionCardRow
