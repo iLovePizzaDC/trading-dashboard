@@ -3,6 +3,7 @@ import Card from '@/shared/components/atoms/Card';
 import ShowMoreButton from '@/shared/components/atoms/ShowMoreButton';
 import { useExpandable } from '@/shared/hooks/useExpandable';
 import type { DecisionEntry } from '@/shared/types/decisions';
+import { DateTime } from 'luxon';
 
 interface IDecisionsCard {
 	data: DecisionEntry[];
@@ -18,12 +19,12 @@ function DecisionsCard({ data }: IDecisionsCard) {
 
 	if (!latest) return null;
 
+	const formattedDate = latest.date ? DateTime.fromISO(latest.date).toFormat('dd MMM yyyy') : '';
 	const preview = sorted.slice(0, previewCount);
 	const extra = sorted.slice(previewCount);
 
 	return (
-		// TODO format date
-		<Card title='last decisions' badge={<p className='text-xs text-white/30'>{latest.date}</p>}>
+		<Card title='last decisions' badge={<p className='text-xs text-white/30'>{formattedDate}</p>}>
 			{preview.map((candidate, index) => (
 				<DecisionCardRow
 					key={candidate.symbol}

@@ -2,6 +2,7 @@ import { getMomentumColor } from '@/features/decisions/utils/decision-history-ro
 import Tooltip from '@/shared/components/atoms/Tooltip';
 import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { Candidate, DecisionEntry } from '@/shared/types/decisions';
+import { DateTime } from 'luxon';
 
 interface IDecisionHistoryRow {
 	decision: DecisionEntry;
@@ -9,6 +10,10 @@ interface IDecisionHistoryRow {
 }
 
 function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
+	const formattedDate = decision.date
+		? DateTime.fromISO(decision.date).toFormat('dd MMM yyyy')
+		: '';
+
 	const top = [...decision.candidates]
 		.sort((a, b) => (b.momentum ?? 0) - (a.momentum ?? 0))
 		.slice(0, 3);
@@ -21,7 +26,7 @@ function DecisionHistoryRow({ decision, cardHeight }: IDecisionHistoryRow) {
 			style={{ height: cardHeight }}
 		>
 			<div className='flex items-center justify-between'>
-				<p className='text-xs text-white/40 truncate'>{decision.date}</p>
+				<p className='text-xs text-white/40 truncate'>{formattedDate}</p>
 
 				<div className='flex items-center gap-2 shrink-0'>
 					<span className='text-[10px] text-white/30'>{decision.candidates.length} picks</span>
