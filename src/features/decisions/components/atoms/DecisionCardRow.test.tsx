@@ -1,8 +1,8 @@
 import DecisionCardRow from '@/features/decisions/components/atoms/DecisionCardRow';
-import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import type { Candidate } from '@/shared/types/decisions';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { DECISION_REASON_LABEL } from '@/features/decisions/consts/decisions';
 
 vi.mock('@/shared/components/atoms/Tooltip', () => ({
 	default: ({ children, content }: { children: React.ReactNode; content: React.ReactNode }) => (
@@ -113,7 +113,7 @@ describe('<DecisionCardRow />', () => {
 	});
 
 	it('maps every known rejected_reason key to its label inside the tooltip content', () => {
-		Object.entries(STOP_REASON_LABEL).forEach(([reason, label]) => {
+		Object.entries(DECISION_REASON_LABEL).forEach(([reason, label]) => {
 			const { unmount } = render(
 				<DecisionCardRow
 					candidate={buildCandidate({ selected: false, rejected_reason: reason })}
