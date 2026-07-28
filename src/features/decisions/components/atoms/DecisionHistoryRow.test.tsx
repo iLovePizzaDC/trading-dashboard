@@ -45,7 +45,7 @@ describe('<DecisionHistoryRow />', () => {
 			<DecisionHistoryRow decision={buildDecision({ date: '2026-06-15' })} cardHeight={120} />,
 		);
 
-		expect(screen.getByText('2026-06-15')).toBeInTheDocument();
+		expect(screen.getByText('15 Jun 2026')).toBeInTheDocument();
 	});
 
 	it('displays the candidate count', () => {
