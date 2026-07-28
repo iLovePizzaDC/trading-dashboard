@@ -2,15 +2,13 @@
 
 ## [1.8.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.7.0...v1.8.0) (2026-07-25)
 
-
 ### Features
 
-* move decision reason label into tooltip ([#99](https://github.com/iLovePizzaDC/trading-dashboard/issues/99)) ([5de15f4](https://github.com/iLovePizzaDC/trading-dashboard/commit/5de15f46115a8188f97f7cf1a49eb0dadd3a06cc))
-
+- move decision reason label into tooltip ([#99](https://github.com/iLovePizzaDC/trading-dashboard/issues/99)) ([5de15f4](https://github.com/iLovePizzaDC/trading-dashboard/commit/5de15f46115a8188f97f7cf1a49eb0dadd3a06cc))
 
 ### Bug Fixes
 
-* not enough padding in last decisions ([#98](https://github.com/iLovePizzaDC/trading-dashboard/issues/98)) ([273cf66](https://github.com/iLovePizzaDC/trading-dashboard/commit/273cf661e0ae57e6466201d29f28069fce729456))
+- not enough padding in last decisions ([#98](https://github.com/iLovePizzaDC/trading-dashboard/issues/98)) ([273cf66](https://github.com/iLovePizzaDC/trading-dashboard/commit/273cf661e0ae57e6466201d29f28069fce729456))
 
 ## [1.7.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.6.0...v1.7.0) (2026-07-16)
 
