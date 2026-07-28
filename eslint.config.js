@@ -23,7 +23,6 @@ export default defineConfig([
 			globals: globals.browser,
 		},
 		rules: {
-			'no-trailing-spaces': 'error',
 			'react/react-in-jsx-scope': 'off',
 		},
 	},
