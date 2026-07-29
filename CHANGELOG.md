@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.8.0...v1.9.0) (2026-07-29)
+
+
+### Features
+
+* change date format ([#108](https://github.com/iLovePizzaDC/trading-dashboard/issues/108)) ([ff168b1](https://github.com/iLovePizzaDC/trading-dashboard/commit/ff168b1312a9a4c6c893e37625a3512ccd66f513))
+
+
+### Bug Fixes
+
+* use decision reason label in card ([#107](https://github.com/iLovePizzaDC/trading-dashboard/issues/107)) ([69cf887](https://github.com/iLovePizzaDC/trading-dashboard/commit/69cf887bb8f7857355e85cba26f3a013d62b8e1c))
+
 ## [1.8.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.7.0...v1.8.0) (2026-07-25)
 
 ### Features
