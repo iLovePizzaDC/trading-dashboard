@@ -1,6 +1,7 @@
 import type { ScatterPoint } from '@/features/trades/types/scatter';
 import { useRotateSectorName } from '@/shared/hooks/useRotateSymbolName';
 import { isPos, usd } from '@/shared/utils/currency';
+import { DateTime } from 'luxon';
 
 interface IScatterTooltip {
 	active?: boolean;
@@ -15,6 +16,9 @@ function ScatterTooltip({ active, payload }: IScatterTooltip) {
 	if (!active || !scatterPoint) return null;
 
 	const pointPositive = isPos(scatterPoint.pnl);
+	const formattedDate = scatterPoint.date
+		? DateTime.fromISO(scatterPoint.date).toFormat('dd MMM yyyy')
+		: '';
 
 	return (
 		<div className='bg-black/80 border border-white/20 rounded-lg px-3 py-2 backdrop-blur-sm shadow-lg text-xs'>
@@ -29,7 +33,7 @@ function ScatterTooltip({ active, payload }: IScatterTooltip) {
 				{pointPositive ? '+' : ''}
 				{usd(scatterPoint.pnl)}
 			</p>
-			<p className='text-white/40'>{scatterPoint.date}</p>
+			<p className='text-white/40'>{formattedDate}</p>
 		</div>
 	);
 }
