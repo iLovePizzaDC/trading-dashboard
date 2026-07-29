@@ -99,7 +99,7 @@ describe('<DecisionsCard />', () => {
 		render(<DecisionsCard data={[older, latest]} />);
 
 		expect(screen.getByTestId('card-title')).toHaveTextContent('last decisions');
-		expect(screen.getByTestId('card-badge')).toHaveTextContent('2026-07-01');
+		expect(screen.getByTestId('card-badge')).toHaveTextContent('01 Jul 2026');
 	});
 
 	it('calls useExpandable with the candidate count and a preview size of 3', () => {

@@ -114,7 +114,7 @@ describe('<ScatterTooltip />', () => {
 			<ScatterTooltip active payload={[{ payload: buildScatterPoint({ date: '2026-07-04' }) }]} />,
 		);
 
-		expect(screen.getByText('2026-07-04')).toBeInTheDocument();
+		expect(screen.getByText('04 Jul 2026')).toBeInTheDocument();
 	});
 
 	it('shows a "+" prefix and green color for a positive pnl', () => {

@@ -38,7 +38,7 @@ describe('<StopEntry />', () => {
 	it('renders the date', () => {
 		render(<StopEntry entry={buildEntry({ date: '2026-07-04' })} color='#4ade80' isLast={false} />);
 
-		expect(screen.getByText('2026-07-04')).toBeInTheDocument();
+		expect(screen.getByText('04 Jul 2026')).toBeInTheDocument();
 	});
 
 	it('renders the new stop value on the right', () => {

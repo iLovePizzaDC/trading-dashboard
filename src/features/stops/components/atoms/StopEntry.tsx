@@ -2,6 +2,7 @@ import EntryRowLayout from '@/shared/components/layouts/EntryRowLayout';
 import type { StopHistoryEntry } from '@/shared/types/stops';
 import { usd } from '@/shared/utils/currency';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { DateTime } from 'luxon';
 
 interface IStopEntry {
 	entry: StopHistoryEntry;
@@ -16,6 +17,8 @@ function StopEntry({ entry, color, isLast }: IStopEntry) {
 	const label = isFirst ? 'init' : isRaise ? 'raise' : 'lower';
 	const labelColor = isFirst ? 'text-white/40' : isRaise ? 'text-green-400' : 'text-red-400';
 	const valueColor = isFirst ? 'text-white/50' : isRaise ? 'text-green-400' : 'text-red-400';
+
+	const formattedDate = entry.date ? DateTime.fromISO(entry.date).toFormat('dd MMM yyyy') : '';
 
 	return (
 		<EntryRowLayout
@@ -38,7 +41,7 @@ function StopEntry({ entry, color, isLast }: IStopEntry) {
 							</span>
 						)}
 					</div>
-					<p className='text-[11px] text-white/25 mt-0.5'>{entry.date}</p>
+					<p className='text-[11px] text-white/25 mt-0.5'>{formattedDate}</p>
 				</>
 			}
 			renderRight={

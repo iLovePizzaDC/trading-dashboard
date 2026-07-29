@@ -2,6 +2,7 @@ import { STOP_REASON_LABEL } from '@/features/trades/constants/trades-card';
 import EntryRowLayout from '@/shared/components/layouts/EntryRowLayout';
 import type { Trade } from '@/shared/types/trades';
 import { usd } from '@/shared/utils/currency';
+import { DateTime } from 'luxon';
 
 interface ITradeEntry {
 	trade: Trade;
@@ -12,7 +13,7 @@ interface ITradeEntry {
 
 function TradeEntry({ trade, color, isLast, currentStop }: ITradeEntry) {
 	const isBuy = trade.action === 'buy';
-
+	const formattedDate = trade.date ? DateTime.fromISO(trade.date).toFormat('dd MMM yyyy') : '';
 	const displayStop = isBuy ? (currentStop ?? trade.stop_price) : undefined;
 
 	return (
@@ -33,7 +34,7 @@ function TradeEntry({ trade, color, isLast, currentStop }: ITradeEntry) {
 						</span>
 					</div>
 					<p className='text-[11px] text-white/25 mt-0.5 truncate'>
-						{trade.reason ? (STOP_REASON_LABEL[trade.reason] ?? trade.reason) : trade.date}
+						{trade.reason ? (STOP_REASON_LABEL[trade.reason] ?? trade.reason) : formattedDate}
 					</p>
 				</>
 			}
