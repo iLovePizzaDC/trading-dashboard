@@ -43,8 +43,16 @@ export function formatNextOpen(iso: string): string {
 	return `opens ${berlin.toFormat('ccc').toLowerCase()} ${berlin.toFormat('HH:mm')}`;
 }
 
-export function getWeekdayNow(): string {
-	return DateTime.now().setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
+export function getBotRunWeekday(reference: DateTime = DateTime.now()): string {
+	const runNY = reference
+		.setZone('America/New_York')
+		.set({
+			hour: BOT_START_TIME_NY.hour,
+			minute: BOT_START_TIME_NY.minute,
+			second: 0,
+			millisecond: 0,
+		});
+	return runNY.setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
 }
 
 export function getWeekdayFromISO(iso: string): string {
