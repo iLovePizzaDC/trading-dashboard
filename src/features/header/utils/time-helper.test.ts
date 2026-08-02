@@ -4,7 +4,7 @@ import {
 	getBotRunTimeDE,
 	getNYTime,
 	getWeekdayFromISO,
-	getWeekdayNow,
+	getBotRunWeekday,
 	isInRunWindow,
 	nextBusinessDay,
 } from '@/features/header/utils/time-helper';
@@ -120,29 +120,78 @@ describe('formatNextOpen', () => {
 	});
 });
 
-describe('getWeekdayNow', () => {
+describe('getBotRunWeekday', () => {
 	afterEach(() => {
 		Settings.now = () => Date.now();
 	});
 
-	it('returns the current weekday abbreviation in lowercase, based on Berlin time', () => {
-		const berlin = DateTime.fromObject(
-			{ year: 2026, month: 7, day: 6, hour: 12, minute: 0 },
-			{ zone: 'Europe/Berlin' },
+	it('shifts to the next calendar day when both zones are in DST (summer, 6h offset)', () => {
+		const ny = DateTime.fromObject(
+			{ year: 2026, month: 8, day: 3, hour: 10 },
+			{ zone: 'America/New_York' },
 		);
-		Settings.now = () => berlin.toMillis();
+		Settings.now = () => ny.toMillis();
 
-		expect(getWeekdayNow()).toBe('mon');
+		expect(getBotRunWeekday()).toBe('tue');
 	});
 
-	it('rolls over to the next weekday around midnight Berlin time when UTC is still on the previous day', () => {
-		const berlin = DateTime.fromObject(
-			{ year: 2026, month: 7, day: 7, hour: 0, minute: 30 },
-			{ zone: 'Europe/Berlin' },
+	it('shifts to the next calendar day when both zones are on standard time (winter, 6h offset)', () => {
+		const ny = DateTime.fromObject(
+			{ year: 2026, month: 1, day: 15, hour: 9 },
+			{ zone: 'America/New_York' },
 		);
-		Settings.now = () => berlin.toMillis();
+		Settings.now = () => ny.toMillis();
 
-		expect(getWeekdayNow()).toBe('tue');
+		expect(getBotRunWeekday()).toBe('fri');
+	});
+
+	it('still shifts by exactly one day during the US/EU DST-mismatch week (5h offset)', () => {
+		const ny = DateTime.fromObject(
+			{ year: 2026, month: 10, day: 26, hour: 10 },
+			{ zone: 'America/New_York' },
+		);
+		Settings.now = () => ny.toMillis();
+
+		expect(getBotRunWeekday()).toBe('tue');
+	});
+
+	it('rolls Friday over to Saturday', () => {
+		const ny = DateTime.fromObject(
+			{ year: 2026, month: 8, day: 7, hour: 9 },
+			{ zone: 'America/New_York' },
+		);
+		Settings.now = () => ny.toMillis();
+
+		expect(getBotRunWeekday()).toBe('sat');
+	});
+
+	it('rolls over across a year boundary', () => {
+		const ny = DateTime.fromObject(
+			{ year: 2026, month: 12, day: 31, hour: 12 },
+			{ zone: 'America/New_York' },
+		);
+		Settings.now = () => ny.toMillis();
+
+		expect(getBotRunWeekday()).toBe('fri');
+	});
+
+	it('depends only on the NY calendar date, not the current NY wall-clock time', () => {
+		const earlyMorning = DateTime.fromObject(
+			{ year: 2026, month: 8, day: 3, hour: 0, minute: 1 },
+			{ zone: 'America/New_York' },
+		);
+		Settings.now = () => earlyMorning.toMillis();
+		const resultEarly = getBotRunWeekday();
+
+		const lateEvening = DateTime.fromObject(
+			{ year: 2026, month: 8, day: 3, hour: 23, minute: 59 },
+			{ zone: 'America/New_York' },
+		);
+		Settings.now = () => lateEvening.toMillis();
+		const resultLate = getBotRunWeekday();
+
+		expect(resultEarly).toBe(resultLate);
+		expect(resultEarly).toBe('tue');
 	});
 });
 
