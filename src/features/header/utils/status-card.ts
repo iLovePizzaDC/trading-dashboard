@@ -1,4 +1,4 @@
-import { getBotRunTimeDE, getWeekdayNow } from '@/features/header/utils/time-helper';
+import { getBotRunTimeDE, getBotRunWeekday } from '@/features/header/utils/time-helper';
 import { DateTime } from 'luxon';
 
 export function getStatusCard(
@@ -8,7 +8,7 @@ export function getStatusCard(
 	nextOpen: string | null,
 ): { value: string; sub: string; progress: number; color: 'green' | 'amber' | 'blue' } {
 	const runTime = getBotRunTimeDE();
-	const day = getWeekdayNow();
+	const day = getBotRunWeekday();
 	const nextDay = nextOpen ? DateTime.fromISO(nextOpen).toFormat('ccc').toLowerCase() : 'mon';
 
 	if (isRunning) {

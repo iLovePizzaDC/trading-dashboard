@@ -1,17 +1,17 @@
 import { getStatusCard, getTradingDayProgress } from '@/features/header/utils/status-card';
-import { getBotRunTimeDE, getWeekdayNow } from '@/features/header/utils/time-helper';
+import { getBotRunTimeDE, getBotRunWeekday } from '@/features/header/utils/time-helper';
 import { DateTime, Settings } from 'luxon';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/features/header/utils/time-helper', () => ({
 	getBotRunTimeDE: vi.fn(),
-	getWeekdayNow: vi.fn(),
+	getBotRunWeekday: vi.fn(),
 }));
 
 describe('getStatusCard', () => {
 	beforeEach(() => {
 		vi.mocked(getBotRunTimeDE).mockReturnValue('09:35');
-		vi.mocked(getWeekdayNow).mockReturnValue('mon');
+		vi.mocked(getBotRunWeekday).mockReturnValue('mon');
 	});
 
 	it('returns the running state when isRunning is true', () => {
@@ -82,8 +82,8 @@ describe('getStatusCard', () => {
 		expect(result.sub).toBe(`resumes ${expectedDay} 09:35`);
 	});
 
-	it('uses the current weekday from getWeekdayNow, not derived from nextOpen', () => {
-		vi.mocked(getWeekdayNow).mockReturnValue('fri');
+	it('uses the current weekday from getBotRunWeekday, not derived from nextOpen', () => {
+		vi.mocked(getBotRunWeekday).mockReturnValue('fri');
 
 		const result = getStatusCard(false, true, true, null);
 
