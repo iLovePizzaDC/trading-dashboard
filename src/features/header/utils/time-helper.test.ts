@@ -43,23 +43,23 @@ describe('getNYTime', () => {
 
 describe('isInRunWindow', () => {
 	it('returns true exactly at RUN_START', () => {
-		expect(isInRunWindow(16, 29)).toBe(true);
+		expect(isInRunWindow(19, 59)).toBe(true);
 	});
 
 	it('returns true exactly at RUN_END', () => {
-		expect(isInRunWindow(16, 35)).toBe(true);
+		expect(isInRunWindow(20, 5)).toBe(true);
 	});
 
 	it('returns true for a time strictly between RUN_START and RUN_END', () => {
-		expect(isInRunWindow(16, 30)).toBe(true);
+		expect(isInRunWindow(20, 0)).toBe(true);
 	});
 
 	it('returns false just before RUN_START', () => {
-		expect(isInRunWindow(16, 28)).toBe(false);
+		expect(isInRunWindow(19, 58)).toBe(false);
 	});
 
 	it('returns false just after RUN_END', () => {
-		expect(isInRunWindow(16, 36)).toBe(false);
+		expect(isInRunWindow(20, 6)).toBe(false);
 	});
 
 	it('returns false well outside the window', () => {
@@ -90,7 +90,7 @@ describe('getBotRunTimeDE', () => {
 	it('converts BOT_START_TIME_NY to Berlin time as HH:mm', () => {
 		const result = getBotRunTimeDE();
 
-		const expected = DateTime.fromObject({ hour: 16, minute: 30 }, { zone: 'America/New_York' })
+		const expected = DateTime.fromObject({ hour: 20, minute: 0 }, { zone: 'America/New_York' })
 			.setZone('Europe/Berlin')
 			.toFormat('HH:mm');
 
