@@ -44,15 +44,7 @@ export function formatNextOpen(iso: string): string {
 }
 
 export function getBotRunWeekday(reference: DateTime = DateTime.now()): string {
-	const runNY = reference
-		.setZone('America/New_York')
-		.set({
-			hour: BOT_START_TIME_NY.hour,
-			minute: BOT_START_TIME_NY.minute,
-			second: 0,
-			millisecond: 0,
-		});
-	return runNY.setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
+	return reference.setZone('America/New_York').toFormat('ccc').toLowerCase();
 }
 
 export function getWeekdayFromISO(iso: string): string {
