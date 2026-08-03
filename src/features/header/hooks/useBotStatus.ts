@@ -1,6 +1,6 @@
 import type { BotStatus } from '@/features/header/types/bot-status';
 import { nextBusinessDay } from '@/features/header/utils/time-helper';
-import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/shared/constants/bot';
+import { REBALANCE_DAYS, RUN_END, RUN_START, BOT_START_TIME_NY } from '@/shared/constants/bot';
 import type { MarketStatus } from '@/shared/types/market.status';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
@@ -15,6 +15,13 @@ export function useBotStatus(
 
 		const nowNY = DateTime.now().setZone('America/New_York');
 		const nowUTC = DateTime.now().toUTC();
+
+		const scheduledRunNY = nowNY.set({
+			hour: BOT_START_TIME_NY.hour,
+			minute: BOT_START_TIME_NY.minute,
+			second: 0,
+			millisecond: 0,
+		});
 
 		const lastReb = DateTime.fromISO(lastRebalance.trim(), { zone: 'utc' });
 		const nextReb = nextBusinessDay(lastReb.plus({ days: REBALANCE_DAYS }));
@@ -38,10 +45,16 @@ export function useBotStatus(
 			? DateTime.fromISO(marketStatus.next_close, { setZone: true })
 			: null;
 
+		const scheduledRunDE = scheduledRunNY.setZone('Europe/Berlin');
+
+		const marketNextOpenMatchesRunNY =
+			nextOpen !== null && nextOpen.setZone('America/New_York').hasSame(scheduledRunNY, 'day');
+
 		const isTradingDay =
 			nextOpen !== null &&
 			nextClose !== null &&
-			nextOpen.setZone('America/New_York').hasSame(nowNY, 'day');
+			marketNextOpenMatchesRunNY &&
+			scheduledRunDE.hasSame(nowDE, 'day');
 
 		const minutesNow = nowNY.hour * 60 + nowNY.minute;
 
@@ -52,11 +65,7 @@ export function useBotStatus(
 			!ranToday;
 
 		const marketIsOpen =
-			isTradingDay &&
-			nextOpen !== null &&
-			nextClose !== null &&
-			nowUTC >= nextOpen &&
-			nowUTC < nextClose;
+			nextOpen !== null && nextClose !== null && nowUTC >= nextOpen && nowUTC < nextClose;
 
 		return {
 			rebalanceDaysLeft: Math.max(

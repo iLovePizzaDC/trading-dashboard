@@ -10,6 +10,7 @@ vi.mock('@/shared/constants/bot', () => ({
 	REBALANCE_DAYS: 30,
 	RUN_START: { hours: 9, minutes: 30 },
 	RUN_END: { hours: 16, minutes: 0 },
+	BOT_START_TIME_NY: { hour: 10, minute: 0 },
 }));
 
 vi.mock('@/features/header/utils/time-helper', () => ({

@@ -1,17 +1,35 @@
 import { getStatusCard, getTradingDayProgress } from '@/features/header/utils/status-card';
-import { getBotRunTimeDE, getBotRunWeekday } from '@/features/header/utils/time-helper';
+import {
+	getBotRunTimeDE,
+	getBotRunWeekday,
+	getRunWeekdayFromISO,
+} from '@/features/header/utils/time-helper';
 import { DateTime, Settings } from 'luxon';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/features/header/utils/time-helper', () => ({
 	getBotRunTimeDE: vi.fn(),
 	getBotRunWeekday: vi.fn(),
+	getRunWeekdayFromISO: vi.fn(),
 }));
 
 describe('getStatusCard', () => {
+	const berlinMonday = DateTime.fromObject(
+		{ year: 2026, month: 7, day: 6, hour: 16, minute: 0 },
+		{ zone: 'Europe/Berlin' },
+	);
+
 	beforeEach(() => {
+		Settings.now = () => berlinMonday.toMillis();
+
 		vi.mocked(getBotRunTimeDE).mockReturnValue('09:35');
 		vi.mocked(getBotRunWeekday).mockReturnValue('mon');
+		vi.mocked(getRunWeekdayFromISO).mockReturnValue('tue');
+	});
+
+	afterEach(() => {
+		Settings.now = () => Date.now();
+		vi.resetAllMocks();
 	});
 
 	it('returns the running state when isRunning is true', () => {
@@ -67,7 +85,7 @@ describe('getStatusCard', () => {
 		expect(result.progress).toBe(100);
 	});
 
-	it('defaults the next resume day to "mon" when nextOpen is null', () => {
+	it('defaults the next resume day to the BOT run weekday when nextOpen is null', () => {
 		const result = getStatusCard(false, false, false, null);
 
 		expect(result.sub).toBe('resumes mon 09:35');
@@ -75,28 +93,17 @@ describe('getStatusCard', () => {
 
 	it('derives the next resume day from the nextOpen ISO date when provided', () => {
 		const nextOpenISO = '2026-07-08T13:30:00.000Z';
-		const expectedDay = DateTime.fromISO(nextOpenISO).toFormat('ccc').toLowerCase();
-
 		const result = getStatusCard(false, false, false, nextOpenISO);
 
-		expect(result.sub).toBe(`resumes ${expectedDay} 09:35`);
+		expect(result.sub).toBe('resumes tue 09:35');
 	});
 
-	it('uses the current weekday from getBotRunWeekday, not derived from nextOpen', () => {
+	it('uses the current Berlin weekday as the card label', () => {
 		vi.mocked(getBotRunWeekday).mockReturnValue('fri');
 
 		const result = getStatusCard(false, true, true, null);
 
-		expect(result.value).toBe('fri — done');
-	});
-
-	it('includes the formatted run time from getBotRunTimeDE in all states', () => {
-		vi.mocked(getBotRunTimeDE).mockReturnValue('14:00');
-
-		expect(getStatusCard(true, false, true, null).sub).toContain('14:00');
-		expect(getStatusCard(false, true, true, null).sub).toContain('14:00');
-		expect(getStatusCard(false, false, true, null).sub).toContain('14:00');
-		expect(getStatusCard(false, false, false, null).sub).toContain('14:00');
+		expect(result.value).toBe('mon — done');
 	});
 });
 

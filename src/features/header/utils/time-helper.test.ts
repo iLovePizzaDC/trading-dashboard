@@ -7,6 +7,7 @@ import {
 	getBotRunWeekday,
 	isInRunWindow,
 	nextBusinessDay,
+	getRunWeekdayFromISO,
 } from '@/features/header/utils/time-helper';
 import { DateTime, Settings } from 'luxon';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -192,6 +193,24 @@ describe('getBotRunWeekday', () => {
 
 		expect(resultEarly).toBe(resultLate);
 		expect(resultEarly).toBe('tue');
+	});
+});
+
+describe('getRunWeekdayFromISO', () => {
+	it('computes the bot-run weekday (Berlin) for the given market next_open ISO', () => {
+		const nextOpenISO = '2026-07-06T13:30:00Z';
+		const expected = DateTime.fromISO(nextOpenISO, { setZone: true })
+			.setZone('America/New_York')
+			.set({ hour: 20, minute: 0, second: 0, millisecond: 0 })
+			.setZone('Europe/Berlin')
+			.toFormat('ccc')
+			.toLowerCase();
+
+		expect(getRunWeekdayFromISO(nextOpenISO)).toBe(expected);
+	});
+
+	it('returns "—" for an invalid ISO string', () => {
+		expect(getRunWeekdayFromISO('not-a-date')).toBe('—');
 	});
 });
 
