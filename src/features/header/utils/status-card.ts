@@ -1,4 +1,8 @@
-import { getBotRunTimeDE, getBotRunWeekday } from '@/features/header/utils/time-helper';
+import {
+	getBotRunTimeDE,
+	getBotRunWeekday,
+	getRunWeekdayFromISO,
+} from '@/features/header/utils/time-helper';
 import { DateTime } from 'luxon';
 
 export function getStatusCard(
@@ -8,26 +12,31 @@ export function getStatusCard(
 	nextOpen: string | null,
 ): { value: string; sub: string; progress: number; color: 'green' | 'amber' | 'blue' } {
 	const runTime = getBotRunTimeDE();
-	const day = getBotRunWeekday();
-	const nextDay = nextOpen ? DateTime.fromISO(nextOpen).toFormat('ccc').toLowerCase() : 'mon';
+	const berlinToday = DateTime.now().setZone('Europe/Berlin').toFormat('ccc').toLowerCase();
+	const nextRunDay = nextOpen ? getRunWeekdayFromISO(nextOpen) : getBotRunWeekday();
 
 	if (isRunning) {
 		return { value: 'running now', sub: `started at ${runTime}`, progress: 100, color: 'green' };
 	}
 	if (ranToday) {
-		return { value: `${day} — done`, sub: `ran at ${runTime}`, progress: 100, color: 'green' };
+		return {
+			value: `${berlinToday} — done`,
+			sub: `ran at ${runTime}`,
+			progress: 100,
+			color: 'green',
+		};
 	}
 	if (isTradingDay) {
 		return {
-			value: `${day} — active`,
+			value: `${berlinToday} — active`,
 			sub: `runs at ${runTime}`,
 			progress: 0,
 			color: 'green',
 		};
 	}
 	return {
-		value: `${day} — resting`,
-		sub: `resumes ${nextDay} ${runTime}`,
+		value: `${berlinToday} — resting`,
+		sub: `resumes ${nextRunDay} ${runTime}`,
 		color: 'amber',
 		progress: 100,
 	};
