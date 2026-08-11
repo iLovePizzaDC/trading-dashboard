@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.9.0...v1.10.0) (2026-08-11)
+
+
+### Features
+
+* show times bought instead of times selected ([#121](https://github.com/iLovePizzaDC/trading-dashboard/issues/121)) ([2696a48](https://github.com/iLovePizzaDC/trading-dashboard/commit/2696a48d0fc79c285ca378434d0e378fe4051f3c))
+
 ## [1.9.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.8.0...v1.9.0) (2026-07-29)
 
 
