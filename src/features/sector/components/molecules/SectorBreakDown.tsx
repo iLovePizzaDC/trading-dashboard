@@ -18,12 +18,12 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 	const { value: sortBy, setValue: setSortBy } = useFilterWithStorage({
 		storageKey: 'sector-breakdown',
 		data: trades,
-		defaultValue: 'timesSelected',
+		defaultValue: 'timesBought',
 		allValues: Object.keys(SORT_LABELS) as SortKey[],
 	});
 
 	const stats = calcSectorStats(decisions, trades);
-	const maxSelected = Math.max(...stats.map((s) => s.timesSelected), 1);
+	const maxBought = Math.max(...stats.map((s) => s.timesBought), 1);
 	const sorted = [...stats].sort((a, b) => b[sortBy] - a[sortBy]);
 
 	return (
@@ -52,12 +52,12 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 						<div className='flex-1 flex flex-col gap-0.5 min-w-0'>
 							<div className='flex items-center justify-between gap-2'>
 								<p className='text-[10px] text-white/30 truncate'>{s.sector}</p>
-								<p className='text-[10px] text-white/40 shrink-0'>{s.timesSelected}x</p>
+								<p className='text-[10px] text-white/40 shrink-0'>{s.timesBought}x</p>
 							</div>
 							<div className='overflow-hidden rounded-full bg-white/5 h-1'>
 								<div
 									className='h-full rounded-full bg-purple-400/60 transition-all duration-300'
-									style={{ width: `${(s.timesSelected / maxSelected) * 100}%` }}
+									style={{ width: `${(s.timesBought / maxBought) * 100}%` }}
 									data-testid={`sector-bar-${i}`}
 								/>
 							</div>
