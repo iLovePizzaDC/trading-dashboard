@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 function buildTrade(overrides: Partial<Trade> = {}): Trade {
 	return {
+		date: '2026-07-01',
 		symbol: 'XLK',
 		action: 'sell',
 		shares: 10,
@@ -54,12 +55,15 @@ describe('calcSectorStats', () => {
 		expect(result[0].sector).toBe('ZZZ');
 	});
 
-	it('excludes buy trades from PnL calculations', () => {
-		const trades = [buildTrade({ action: 'buy', pnl: 999 })];
+	it('includes buy trades as timesBought without contributing to PnL', () => {
+		const trades = [buildTrade({ action: 'buy', pnl: undefined })];
 
 		const result = calcSectorStats([], trades);
 
-		expect(result).toEqual([]);
+		expect(result).toHaveLength(1);
+		expect(result[0].timesBought).toBe(1);
+		expect(result[0].trades).toBe(0);
+		expect(result[0].totalPnl).toBe(0);
 	});
 
 	it('excludes sell trades with an undefined pnl', () => {
@@ -123,81 +127,84 @@ describe('calcSectorStats', () => {
 		expect(result[0].winRate).toBe(0.5);
 	});
 
-	it('returns a winRate of 0 when there are no trades for a symbol', () => {
-		const decisions = [
-			buildDecision({ candidates: [buildCandidate({ symbol: 'XLK', selected: true })] }),
-		];
+	it('returns a winRate of 0 when there are no sell trades for a symbol', () => {
+		const trades = [buildTrade({ action: 'buy', pnl: undefined })];
 
-		const result = calcSectorStats(decisions, []);
+		const result = calcSectorStats([], trades);
 
 		expect(result[0].winRate).toBe(0);
 	});
 
-	it('counts timesSelected only for selected candidates with non-null momentum', () => {
+	it('counts timesBought from buy trades, not from selected decision candidates', () => {
+		const trades = [
+			buildTrade({ action: 'buy', symbol: 'XLK', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'buy', symbol: 'XLK', date: '2026-07-02', pnl: undefined }),
+		];
 		const decisions = [
 			buildDecision({
 				candidates: [
 					buildCandidate({ symbol: 'XLK', selected: true, momentum: 0.1 }),
-					buildCandidate({ symbol: 'XLK', selected: false, momentum: 0.2 }),
-					buildCandidate({ symbol: 'XLK', selected: true, momentum: null }),
+					buildCandidate({ symbol: 'XLF', selected: true, momentum: 0.2 }),
+					buildCandidate({ symbol: 'XLF', selected: false, momentum: 0.3 }),
 				],
 			}),
 		];
 
-		const result = calcSectorStats(decisions, []);
+		const result = calcSectorStats(decisions, trades);
 
-		expect(result[0].timesSelected).toBe(1);
+		expect(result.map((r) => r.symbol)).toEqual(['XLK']);
+		expect(result[0].timesBought).toBe(2);
 	});
 
-	it('aggregates timesSelected across multiple decision entries', () => {
+	it('aggregates timesBought across multiple buy trades', () => {
+		const trades = [
+			buildTrade({ action: 'buy', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'buy', date: '2026-07-02', pnl: undefined }),
+		];
+
+		const result = calcSectorStats([], trades);
+
+		expect(result[0].timesBought).toBe(2);
+	});
+
+	it('calculates avgMomentumWhenBought from decision momentum on buy dates', () => {
+		const trades = [
+			buildTrade({ action: 'buy', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'buy', date: '2026-07-02', pnl: undefined }),
+		];
 		const decisions = [
 			buildDecision({
 				date: '2026-07-01',
-				candidates: [buildCandidate({ symbol: 'XLK', selected: true, momentum: 0.1 })],
+				candidates: [buildCandidate({ symbol: 'XLK', momentum: 0.1 })],
 			}),
 			buildDecision({
 				date: '2026-07-02',
-				candidates: [buildCandidate({ symbol: 'XLK', selected: true, momentum: 0.2 })],
+				candidates: [buildCandidate({ symbol: 'XLK', momentum: 0.3 })],
 			}),
 		];
 
-		const result = calcSectorStats(decisions, []);
+		const result = calcSectorStats(decisions, trades);
 
-		expect(result[0].timesSelected).toBe(2);
+		expect(result[0].avgMomentumWhenBought).toBeCloseTo(0.2);
 	});
 
-	it('calculates avgMomentumWhenSelected as the average of momentum values when selected', () => {
-		const decisions = [
-			buildDecision({
-				candidates: [
-					buildCandidate({ symbol: 'XLK', selected: true, momentum: 0.1 }),
-					buildCandidate({ symbol: 'XLK', selected: true, momentum: 0.3 }),
-				],
-			}),
-		];
-
-		const result = calcSectorStats(decisions, []);
-
-		expect(result[0].avgMomentumWhenSelected).toBeCloseTo(0.2);
-	});
-
-	it('returns avgMomentumWhenSelected of 0 when the symbol was never selected', () => {
-		const trades = [buildTrade({ symbol: 'XLK' })];
+	it('returns avgMomentumWhenBought of 0 when no matching decision momentum exists', () => {
+		const trades = [buildTrade({ action: 'buy', pnl: undefined })];
 
 		const result = calcSectorStats([], trades);
 
-		expect(result[0].avgMomentumWhenSelected).toBe(0);
+		expect(result[0].avgMomentumWhenBought).toBe(0);
 	});
 
-	it('returns timesSelected of 0 for a symbol that only has trades, no selections', () => {
-		const trades = [buildTrade({ symbol: 'XLK' })];
+	it('returns timesBought of 0 for a symbol that only has sells', () => {
+		const trades = [buildTrade({ action: 'sell', symbol: 'XLK', pnl: 10 })];
 
 		const result = calcSectorStats([], trades);
 
-		expect(result[0].timesSelected).toBe(0);
+		expect(result[0].timesBought).toBe(0);
 	});
 
-	it('includes a symbol from trades even if it has no matching decisions', () => {
+	it('includes a symbol from sells even if it has no buys', () => {
 		const trades = [buildTrade({ symbol: 'ZZZ' })];
 
 		const result = calcSectorStats([], trades);
@@ -205,57 +212,51 @@ describe('calcSectorStats', () => {
 		expect(result.map((r) => r.symbol)).toContain('ZZZ');
 	});
 
-	it('includes a symbol from decisions even if it has no matching trades', () => {
+	it('does not include a symbol that was only shortlisted, never bought', () => {
 		const decisions = [
 			buildDecision({ candidates: [buildCandidate({ symbol: 'ZZZ', selected: true })] }),
 		];
 
 		const result = calcSectorStats(decisions, []);
 
-		expect(result.map((r) => r.symbol)).toContain('ZZZ');
+		expect(result).toEqual([]);
 	});
 
-	it('deduplicates a symbol that appears in both trades and decisions', () => {
-		const trades = [buildTrade({ symbol: 'XLK' })];
-		const decisions = [
-			buildDecision({ candidates: [buildCandidate({ symbol: 'XLK', selected: true })] }),
+	it('deduplicates a symbol that appears in both buys and sells', () => {
+		const trades = [
+			buildTrade({ action: 'buy', symbol: 'XLK', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'sell', symbol: 'XLK', pnl: 50 }),
 		];
 
-		const result = calcSectorStats(decisions, trades);
+		const result = calcSectorStats([], trades);
 
 		expect(result).toHaveLength(1);
-		expect(result[0].timesSelected).toBe(1);
+		expect(result[0].timesBought).toBe(1);
 		expect(result[0].trades).toBe(1);
 	});
 
-	it('sorts results by timesSelected descending', () => {
-		const decisions = [
-			buildDecision({
-				candidates: [
-					buildCandidate({ symbol: 'AAA', selected: true, momentum: 0.1 }),
-					buildCandidate({ symbol: 'BBB', selected: true, momentum: 0.1 }),
-					buildCandidate({ symbol: 'BBB', selected: true, momentum: 0.2 }),
-					buildCandidate({ symbol: 'CCC', selected: true, momentum: 0.1 }),
-					buildCandidate({ symbol: 'CCC', selected: true, momentum: 0.2 }),
-					buildCandidate({ symbol: 'CCC', selected: true, momentum: 0.3 }),
-				],
-			}),
+	it('sorts results by timesBought descending', () => {
+		const trades = [
+			buildTrade({ action: 'buy', symbol: 'AAA', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'buy', symbol: 'BBB', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'buy', symbol: 'BBB', date: '2026-07-02', pnl: undefined }),
+			buildTrade({ action: 'buy', symbol: 'CCC', date: '2026-07-01', pnl: undefined }),
+			buildTrade({ action: 'buy', symbol: 'CCC', date: '2026-07-02', pnl: undefined }),
+			buildTrade({ action: 'buy', symbol: 'CCC', date: '2026-07-03', pnl: undefined }),
 		];
 
-		const result = calcSectorStats(decisions, []);
+		const result = calcSectorStats([], trades);
 
 		expect(result.map((r) => r.symbol)).toEqual(['CCC', 'BBB', 'AAA']);
 	});
 
-	it('keeps symbols with 0 timesSelected at the end when sorted', () => {
-		const trades = [buildTrade({ symbol: 'ZZZ', pnl: 10 })];
-		const decisions = [
-			buildDecision({
-				candidates: [buildCandidate({ symbol: 'XLK', selected: true, momentum: 0.1 })],
-			}),
+	it('keeps symbols with 0 timesBought at the end when sorted', () => {
+		const trades = [
+			buildTrade({ action: 'sell', symbol: 'ZZZ', pnl: 10 }),
+			buildTrade({ action: 'buy', symbol: 'XLK', date: '2026-07-01', pnl: undefined }),
 		];
 
-		const result = calcSectorStats(decisions, trades);
+		const result = calcSectorStats([], trades);
 
 		expect(result[0].symbol).toBe('XLK');
 		expect(result[1].symbol).toBe('ZZZ');

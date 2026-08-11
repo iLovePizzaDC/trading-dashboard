@@ -50,16 +50,16 @@ function buildStat(overrides: Partial<ReturnType<typeof calcSectorStats>[number]
 	return {
 		symbol: 'XLK',
 		sector: 'Technology',
-		timesSelected: 3,
+		timesBought: 3,
 		totalPnl: 100,
 		trades: 2,
 		winRate: 0.5,
-		avgMomentumWhenSelected: 0.15,
+		avgMomentumWhenBought: 0.15,
 		...overrides,
 	};
 }
 
-function mockFilterWithStorage(sortBy = 'timesSelected') {
+function mockFilterWithStorage(sortBy = 'timesBought') {
 	const setValue = vi.fn();
 	vi.mocked(useFilterWithStorage).mockReturnValue({
 		value: sortBy,
@@ -108,8 +108,8 @@ describe('<SectorBreakdown />', () => {
 			expect.objectContaining({
 				storageKey: 'sector-breakdown',
 				data: trades,
-				defaultValue: 'timesSelected',
-				allValues: ['timesSelected', 'totalPnl', 'winRate', 'avgMomentumWhenSelected'],
+				defaultValue: 'timesBought',
+				allValues: ['timesBought', 'totalPnl', 'winRate', 'avgMomentumWhenBought'],
 			}),
 		);
 	});
@@ -137,7 +137,7 @@ describe('<SectorBreakdown />', () => {
 	});
 
 	it('calls setValue with the clicked sort key', () => {
-		const { setValue } = mockFilterWithStorage('timesSelected');
+		const { setValue } = mockFilterWithStorage('timesBought');
 		vi.mocked(calcSectorStats).mockReturnValue([]);
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
@@ -162,20 +162,20 @@ describe('<SectorBreakdown />', () => {
 		expect(screen.getByText('Financials')).toBeInTheDocument();
 	});
 
-	it('shows the times-selected count', () => {
+	it('shows the times-bought count', () => {
 		mockFilterWithStorage();
-		vi.mocked(calcSectorStats).mockReturnValue([buildStat({ timesSelected: 7 })]);
+		vi.mocked(calcSectorStats).mockReturnValue([buildStat({ timesBought: 7 })]);
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
 		expect(screen.getByText('7x')).toBeInTheDocument();
 	});
 
-	it('sets the bar width relative to the max timesSelected among all stats', () => {
+	it('sets the bar width relative to the max timesBought among all stats', () => {
 		mockFilterWithStorage();
 		vi.mocked(calcSectorStats).mockReturnValue([
-			buildStat({ symbol: 'XLK', timesSelected: 4 }),
-			buildStat({ symbol: 'XLF', timesSelected: 8 }),
+			buildStat({ symbol: 'XLK', timesBought: 4 }),
+			buildStat({ symbol: 'XLF', timesBought: 8 }),
 		]);
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
@@ -185,9 +185,9 @@ describe('<SectorBreakdown />', () => {
 		expect(bars[1]).toHaveStyle({ width: '50%' });
 	});
 
-	it('uses a fallback max of 1 when all stats have 0 timesSelected (avoids divide-by-zero)', () => {
+	it('uses a fallback max of 1 when all stats have 0 timesBought (avoids divide-by-zero)', () => {
 		mockFilterWithStorage();
-		vi.mocked(calcSectorStats).mockReturnValue([buildStat({ timesSelected: 0 })]);
+		vi.mocked(calcSectorStats).mockReturnValue([buildStat({ timesBought: 0 })]);
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
@@ -227,9 +227,9 @@ describe('<SectorBreakdown />', () => {
 	it('sorts stats by the currently selected sort key, descending', () => {
 		mockFilterWithStorage('totalPnl');
 		vi.mocked(calcSectorStats).mockReturnValue([
-			buildStat({ symbol: 'AAA', totalPnl: 10, timesSelected: 5 }),
-			buildStat({ symbol: 'BBB', totalPnl: 50, timesSelected: 1 }),
-			buildStat({ symbol: 'CCC', totalPnl: 30, timesSelected: 3 }),
+			buildStat({ symbol: 'AAA', totalPnl: 10, timesBought: 5 }),
+			buildStat({ symbol: 'BBB', totalPnl: 50, timesBought: 1 }),
+			buildStat({ symbol: 'CCC', totalPnl: 30, timesBought: 3 }),
 		]);
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
@@ -238,12 +238,12 @@ describe('<SectorBreakdown />', () => {
 		expect(symbols).toEqual(['BBB', 'CCC', 'AAA']);
 	});
 
-	it('re-sorts by timesSelected when that is the active sort key', () => {
-		mockFilterWithStorage('timesSelected');
+	it('re-sorts by timesBought when that is the active sort key', () => {
+		mockFilterWithStorage('timesBought');
 		vi.mocked(calcSectorStats).mockReturnValue([
-			buildStat({ symbol: 'AAA', totalPnl: 10, timesSelected: 5 }),
-			buildStat({ symbol: 'BBB', totalPnl: 50, timesSelected: 1 }),
-			buildStat({ symbol: 'CCC', totalPnl: 30, timesSelected: 3 }),
+			buildStat({ symbol: 'AAA', totalPnl: 10, timesBought: 5 }),
+			buildStat({ symbol: 'BBB', totalPnl: 50, timesBought: 1 }),
+			buildStat({ symbol: 'CCC', totalPnl: 30, timesBought: 3 }),
 		]);
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
