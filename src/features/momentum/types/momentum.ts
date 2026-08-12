@@ -1,7 +1,7 @@
 export type MomentumSnapshot = {
 	date: string;
 	avgMomentum: number;
-	topMomentum: number;
+	topMomentum: number | null;
 	selectedCount: number;
 };
 

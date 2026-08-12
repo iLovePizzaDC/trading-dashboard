@@ -12,7 +12,13 @@ interface ITradeStatistics {
 function TradeStatistics({ data }: ITradeStatistics) {
 	const stats = computeTradeStats(data);
 
-	if (!stats) return null;
+	if (!stats) {
+		return (
+			<Card title='trade stats'>
+				<p className='text-xs text-white/30 py-2'>no closed trades yet</p>
+			</Card>
+		);
+	}
 
 	const pfColor =
 		stats.profitFactor > 1.5

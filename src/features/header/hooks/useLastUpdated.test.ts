@@ -1,11 +1,11 @@
 import { useLastUpdated } from '@/features/header/hooks/useLastUpdated';
-import { useDataVersion } from '@/shared/hooks/useDataVersion';
+import { useDataVersionContext } from '@/shared/context/DataVersionContext';
 import { renderHook } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/shared/hooks/useDataVersion', () => ({
-	useDataVersion: vi.fn(),
+vi.mock('@/shared/context/DataVersionContext', () => ({
+	useDataVersionContext: vi.fn(),
 }));
 
 function secondsFor(isoUTC: string): string {
@@ -14,19 +14,19 @@ function secondsFor(isoUTC: string): string {
 
 describe('useLastUpdated', () => {
 	beforeEach(() => {
-		vi.mocked(useDataVersion).mockReset();
+		vi.mocked(useDataVersionContext).mockReset();
 	});
 
-	it('returns null when useDataVersion returns null', () => {
-		vi.mocked(useDataVersion).mockReturnValue(null);
+	it('returns null when useDataVersionContext returns null', () => {
+		vi.mocked(useDataVersionContext).mockReturnValue(null);
 
 		const { result } = renderHook(() => useLastUpdated());
 
 		expect(result.current).toBeNull();
 	});
 
-	it('returns null when useDataVersion returns an empty string', () => {
-		vi.mocked(useDataVersion).mockReturnValue('');
+	it('returns null when useDataVersionContext returns an empty string', () => {
+		vi.mocked(useDataVersionContext).mockReturnValue('');
 
 		const { result } = renderHook(() => useLastUpdated());
 
@@ -34,7 +34,7 @@ describe('useLastUpdated', () => {
 	});
 
 	it('formats a valid unix timestamp (seconds) as Berlin time (summer, CEST)', () => {
-		vi.mocked(useDataVersion).mockReturnValue(secondsFor('2026-07-06T13:30:00.000Z'));
+		vi.mocked(useDataVersionContext).mockReturnValue(secondsFor('2026-07-06T13:30:00.000Z'));
 
 		const { result } = renderHook(() => useLastUpdated());
 
@@ -42,7 +42,7 @@ describe('useLastUpdated', () => {
 	});
 
 	it('formats using the expected "yyyy-MM-dd @ HH:mm:ss" pattern', () => {
-		vi.mocked(useDataVersion).mockReturnValue(secondsFor('2026-07-06T13:30:00.000Z'));
+		vi.mocked(useDataVersionContext).mockReturnValue(secondsFor('2026-07-06T13:30:00.000Z'));
 
 		const { result } = renderHook(() => useLastUpdated());
 
@@ -50,7 +50,7 @@ describe('useLastUpdated', () => {
 	});
 
 	it('handles winter time (CET, UTC+1) correctly', () => {
-		vi.mocked(useDataVersion).mockReturnValue(secondsFor('2026-01-15T10:00:00.000Z'));
+		vi.mocked(useDataVersionContext).mockReturnValue(secondsFor('2026-01-15T10:00:00.000Z'));
 
 		const { result } = renderHook(() => useLastUpdated());
 
@@ -58,12 +58,12 @@ describe('useLastUpdated', () => {
 	});
 
 	it('re-derives the formatted date when the version changes', () => {
-		vi.mocked(useDataVersion).mockReturnValue(secondsFor('2026-07-06T13:30:00.000Z'));
+		vi.mocked(useDataVersionContext).mockReturnValue(secondsFor('2026-07-06T13:30:00.000Z'));
 
 		const { result, rerender } = renderHook(() => useLastUpdated());
 		const first = result.current;
 
-		vi.mocked(useDataVersion).mockReturnValue(secondsFor('2026-07-08T09:00:00.000Z'));
+		vi.mocked(useDataVersionContext).mockReturnValue(secondsFor('2026-07-08T09:00:00.000Z'));
 		rerender();
 
 		expect(result.current).not.toBe(first);

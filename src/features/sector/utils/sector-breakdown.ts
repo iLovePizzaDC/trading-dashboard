@@ -3,6 +3,25 @@ import { SECTOR_MAP } from '@/shared/constants/sectors';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
 
+type DecisionMomentum = {
+	date: string;
+	bySymbol: Record<string, number | null>;
+};
+
+function momentumOnOrBefore(
+	buyDate: string,
+	symbol: string,
+	decisionsByDate: DecisionMomentum[],
+): number | null {
+	let best: number | null = null;
+	for (const entry of decisionsByDate) {
+		if (entry.date > buyDate) break;
+		const momentum = entry.bySymbol[symbol];
+		if (momentum !== null && momentum !== undefined) best = momentum;
+	}
+	return best;
+}
+
 export function calcSectorStats(decisions: DecisionEntry[], trades: Trade[]): SectorStat[] {
 	const sells = trades.filter((t) => t.action === 'sell' && t.pnl !== undefined);
 	const buys = trades.filter((t) => t.action === 'buy');
@@ -19,15 +38,12 @@ export function calcSectorStats(decisions: DecisionEntry[], trades: Trade[]): Se
 		return acc;
 	}, {});
 
-	const momentumByDateSymbol = decisions.reduce<Record<string, Record<string, number | null>>>(
-		(acc, entry) => {
-			acc[entry.date] = Object.fromEntries(
-				entry.candidates.map((c) => [c.symbol, c.momentum]),
-			);
-			return acc;
-		},
-		{},
-	);
+	const decisionsByDate: DecisionMomentum[] = [...decisions]
+		.sort((a, b) => a.date.localeCompare(b.date))
+		.map((entry) => ({
+			date: entry.date,
+			bySymbol: Object.fromEntries(entry.candidates.map((c) => [c.symbol, c.momentum])),
+		}));
 
 	const allSymbols = new Set([...Object.keys(pnlBySymbol), ...Object.keys(buyDatesBySymbol)]);
 
@@ -36,8 +52,8 @@ export function calcSectorStats(decisions: DecisionEntry[], trades: Trade[]): Se
 			const pnls = pnlBySymbol[symbol] ?? [];
 			const buyDates = buyDatesBySymbol[symbol] ?? [];
 			const momentums = buyDates
-				.map((date) => momentumByDateSymbol[date]?.[symbol])
-				.filter((m): m is number => m !== null && m !== undefined);
+				.map((date) => momentumOnOrBefore(date, symbol, decisionsByDate))
+				.filter((m): m is number => m !== null);
 			const wins = pnls.filter((p) => p > 0);
 
 			return {

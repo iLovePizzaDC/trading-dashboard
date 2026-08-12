@@ -49,6 +49,7 @@ function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 	);
 
 	const unfilteredStartValue = data[0]?.equity ?? 0;
+	const unfilteredSpyStartValue = data.find((d) => d.spy != null)?.spy ?? 0;
 	const filteredStartValue = chartData[0]?.equity ?? 0;
 	const currentValue = chartData[chartData.length - 1]?.equity ?? 0;
 
@@ -171,6 +172,7 @@ function EquityCurve({ data, deposits, decisions }: IEquityCurve) {
 								showSpy={showSpy}
 								relative={relative}
 								startValue={unfilteredStartValue}
+								spyStartValue={unfilteredSpyStartValue}
 								onHover={setHoveredValue}
 							/>
 						}

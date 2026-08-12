@@ -14,8 +14,12 @@ export function normalizeToRelative(data: EquityPoint[], relative: boolean): Cha
 
 	return data.map((d) => ({
 		date: d.date,
-		equity: relative ? (d.equity / botStart) * 100 : d.equity,
-		spy: relative && d.spy != null && spyStart != null ? (d.spy / spyStart) * 100 : (d.spy ?? null),
+		equity:
+			relative && botStart !== 0 ? (d.equity / botStart) * 100 : relative ? 100 : d.equity,
+		spy:
+			relative && d.spy != null && spyStart != null && spyStart !== 0
+				? (d.spy / spyStart) * 100
+				: (d.spy ?? null),
 	}));
 }
 
@@ -23,7 +27,11 @@ function filterByRange(chartData: ChartPoint[], range: Range): ChartPoint[] {
 	const cutoff = cutoffDate(range);
 	if (!cutoff) return chartData;
 
-	return chartData.filter((d) => DateTime.fromISO(d.date).startOf('day') >= cutoff.startOf('day'));
+	return chartData.filter(
+		(d) =>
+			DateTime.fromISO(d.date, { zone: 'America/New_York' }).startOf('day') >=
+			cutoff.startOf('day'),
+	);
 }
 
 function rebaseToFilteredStart(

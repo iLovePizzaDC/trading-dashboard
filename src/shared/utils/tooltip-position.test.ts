@@ -1,6 +1,6 @@
 import { TOOLTIP_OFFSET, VIEWPORT_PADDING } from '@/shared/constants/tooltip';
-import { describe, expect, it } from 'vitest';
 import { calculateTooltipPosition } from '@/shared/utils/tooltip-position';
+import { describe, expect, it } from 'vitest';
 
 const viewport = { width: 1000, height: 800, scrollY: 0 };
 
@@ -41,7 +41,7 @@ describe('calculateTooltipPosition', () => {
 	});
 
 	it('shifts right when the tooltip would overflow on the left', () => {
-		const anchor = rect({ left: 10, width: 20 }); // anchorCenterX = 20
+		const anchor = rect({ left: 10, width: 20 });
 		const popup = rect({ width: 200, height: 40 });
 
 		const position = calculateTooltipPosition(anchor, popup, viewport);

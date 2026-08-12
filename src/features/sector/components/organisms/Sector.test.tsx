@@ -96,7 +96,7 @@ describe('<Sector />', () => {
 		expect(screen.queryByTestId('sector-error')).not.toBeInTheDocument();
 	});
 
-	it('renders the error state when decisions data is missing (even without an error field check)', () => {
+	it('renders the error state when decisions data is missing', () => {
 		mockFetches({ decisions: { data: null, loading: false, error: null } });
 
 		render(<Sector />);
@@ -112,7 +112,29 @@ describe('<Sector />', () => {
 		expect(screen.getByTestId('sector-error')).toBeInTheDocument();
 	});
 
-	it('renders the error state even when useFetch reports an error, as long as it is surfaced through missing data', () => {
+	it('renders the error state when decisionsError is set even if stale decisions data exists', () => {
+		mockFetches({
+			decisions: { data: [buildDecision()], loading: false, error: new Error('failed') },
+		});
+
+		render(<Sector />);
+
+		expect(screen.getByTestId('sector-error')).toBeInTheDocument();
+		expect(screen.queryByTestId('sector-breakdown')).not.toBeInTheDocument();
+	});
+
+	it('renders the error state when tradesError is set even if stale trades data exists', () => {
+		mockFetches({
+			trades: { data: [buildTrade()], loading: false, error: new Error('failed') },
+		});
+
+		render(<Sector />);
+
+		expect(screen.getByTestId('sector-error')).toBeInTheDocument();
+		expect(screen.queryByTestId('sector-breakdown')).not.toBeInTheDocument();
+	});
+
+	it('renders the error state when useFetch reports an error with missing data', () => {
 		mockFetches({ decisions: { data: null, loading: false, error: new Error('failed') } });
 
 		render(<Sector />);

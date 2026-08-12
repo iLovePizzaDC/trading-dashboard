@@ -48,6 +48,7 @@ function buildTrade(overrides: Partial<Trade> = {}): Trade {
 		action: 'buy',
 		shares: 10,
 		price: 100,
+		date: '2026-07-01',
 		...overrides,
 	} as Trade;
 }

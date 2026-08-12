@@ -188,6 +188,20 @@ describe('calcSectorStats', () => {
 		expect(result[0].avgMomentumWhenBought).toBeCloseTo(0.2);
 	});
 
+	it('uses the nearest prior decision date when the buy date has no exact momentum match', () => {
+		const trades = [buildTrade({ action: 'buy', date: '2026-07-03', pnl: undefined })];
+		const decisions = [
+			buildDecision({
+				date: '2026-07-01',
+				candidates: [buildCandidate({ symbol: 'XLK', momentum: 0.2 })],
+			}),
+		];
+
+		const result = calcSectorStats(decisions, trades);
+
+		expect(result[0].avgMomentumWhenBought).toBe(0.2);
+	});
+
 	it('returns avgMomentumWhenBought of 0 when no matching decision momentum exists', () => {
 		const trades = [buildTrade({ action: 'buy', pnl: undefined })];
 

@@ -1,21 +1,26 @@
 import type { ScatterPoint } from '@/features/trades/types/scatter';
+import type { Range } from '@/shared/constants/date-range';
 import type { Trade } from '@/shared/types/trades';
+import { cutoffDate } from '@/shared/utils/date-range';
+import { matchClosedTrades } from '@/shared/utils/trade-matching';
+import { DateTime } from 'luxon';
 
 export function buildScatterData(trades: Trade[]): ScatterPoint[] {
-	const buys = trades.filter((t) => t.action === 'buy');
-	const sells = trades.filter((t) => t.action === 'sell');
+	return matchClosedTrades(trades).map(({ buy, sell, pnl }) => ({
+		symbol: sell.symbol,
+		entryPrice: buy.price,
+		exitPrice: sell.price,
+		pnl,
+		date: sell.date,
+	}));
+}
 
-	return sells
-		.map((sell) => {
-			const buy = buys.findLast((b) => b.symbol === sell.symbol && b.date <= sell.date);
-			if (!buy) return null;
-			return {
-				symbol: sell.symbol,
-				entryPrice: buy.price,
-				exitPrice: sell.price,
-				pnl: (sell.price - buy.price) * sell.shares,
-				date: sell.date,
-			};
-		})
-		.filter((p): p is ScatterPoint => p !== null);
+export function filterScatterPointsByRange(points: ScatterPoint[], range: Range): ScatterPoint[] {
+	const cutoff = cutoffDate(range);
+	if (!cutoff) return points;
+
+	return points.filter((point) => {
+		const dt = DateTime.fromISO(point.date, { zone: 'America/New_York' }).startOf('day');
+		return dt >= cutoff.startOf('day');
+	});
 }
