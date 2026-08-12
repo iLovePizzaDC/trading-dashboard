@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.10.0...v1.10.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* critical bugs ([#124](https://github.com/iLovePizzaDC/trading-dashboard/issues/124)) ([187c946](https://github.com/iLovePizzaDC/trading-dashboard/commit/187c94680432ac95ea041dac8a38304c1d6a47f6))
+* fifo in trade scatter ([d833c14](https://github.com/iLovePizzaDC/trading-dashboard/commit/d833c143293374351730138dadac8e26e8499f53))
+
 ## [1.10.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.9.0...v1.10.0) (2026-08-11)
 
 
