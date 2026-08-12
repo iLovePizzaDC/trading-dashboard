@@ -158,6 +158,30 @@ describe('<Header />', () => {
 		expect(screen.getByText('status unavailable')).toBeInTheDocument();
 	});
 
+	it('shows an error message when marketStatus fetch fails', () => {
+		mockFetches({
+			marketStatus: { data: null, loading: false, error: new Error('market failed') },
+		});
+		mockStatus();
+
+		render(<Header />);
+
+		expect(screen.getByText('status unavailable')).toBeInTheDocument();
+		expect(screen.queryByTestId('bot-status-grid')).not.toBeInTheDocument();
+	});
+
+	it('shows the skeleton while marketStatus is loading', () => {
+		mockFetches({
+			marketStatus: { data: null, loading: true, error: null },
+		});
+		mockStatus();
+
+		render(<Header />);
+
+		expect(screen.getByTestId('bot-status-skeleton')).toBeInTheDocument();
+		expect(screen.queryByTestId('bot-status-grid')).not.toBeInTheDocument();
+	});
+
 	it('shows BotStatusGrid when status is available, not loading, and no error', () => {
 		mockFetches();
 		mockStatus();
@@ -170,6 +194,15 @@ describe('<Header />', () => {
 	it('does not show BotStatusGrid when status is null', () => {
 		mockFetches();
 		vi.mocked(useBotStatus).mockReturnValue(null);
+
+		render(<Header />);
+
+		expect(screen.queryByTestId('bot-status-grid')).not.toBeInTheDocument();
+	});
+
+	it('does not show BotStatusGrid when marketStatus data is missing', () => {
+		mockFetches({ marketStatus: { data: null, loading: false, error: null } });
+		mockStatus();
 
 		render(<Header />);
 
@@ -201,17 +234,6 @@ describe('<Header />', () => {
 		const grid = screen.getByTestId('bot-status-grid');
 		expect(grid).toHaveAttribute('data-next-open', '2026-07-08T13:30:00.000Z');
 		expect(grid).toHaveAttribute('data-next-close', '2026-07-08T20:00:00.000Z');
-	});
-
-	it('passes null for nextOpen/nextClose to BotStatusGrid when marketStatus is null', () => {
-		mockFetches({ marketStatus: { data: null, loading: false, error: null } });
-		mockStatus();
-
-		render(<Header />);
-
-		const grid = screen.getByTestId('bot-status-grid');
-		expect(grid).not.toHaveAttribute('data-next-open');
-		expect(grid).not.toHaveAttribute('data-next-close');
 	});
 
 	it('passes lastUpdated to BotStatusGrid', () => {
@@ -306,6 +328,17 @@ describe('<Header />', () => {
 				'data-dot-variant',
 				'inactive',
 			);
+		});
+
+		it('is not "active" while marketStatus is still loading, even if status says trading day', () => {
+			mockFetches({
+				marketStatus: { data: null, loading: true, error: null },
+			});
+			mockStatus({ isRunning: false, isTradingDay: true });
+
+			render(<Header />);
+
+			expect(screen.getByTestId('bot-name-row')).toHaveAttribute('data-dot-variant', 'weekend');
 		});
 
 		it('is "running" when status.isRunning is true', () => {
