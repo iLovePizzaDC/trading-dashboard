@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.10.1...v1.10.2) (2026-08-12)
+
+
+### Bug Fixes
+
+* outsource sector name into tooltip ([749a70c](https://github.com/iLovePizzaDC/trading-dashboard/commit/749a70cd19758c15ad51dc5e9e5a3a01e37ee2f6))
+
 ## [1.10.1](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.10.0...v1.10.1) (2026-08-12)
 
 
