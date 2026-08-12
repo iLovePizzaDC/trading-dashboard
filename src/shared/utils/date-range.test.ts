@@ -2,7 +2,7 @@ import { cutoffDate } from '@/shared/utils/date-range';
 import { DateTime } from 'luxon';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const FIXED_NOW = DateTime.fromISO('2026-07-04T12:00:00');
+const FIXED_NOW = DateTime.fromISO('2026-07-04T12:00:00', { zone: 'America/New_York' });
 
 describe('cutoffDate', () => {
 	beforeEach(() => {

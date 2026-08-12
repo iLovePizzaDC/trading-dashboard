@@ -64,7 +64,7 @@ describe('buildScatterData', () => {
 		expect(result[0].entryPrice).toBe(100);
 	});
 
-	it('uses the most recent eligible buy (closest date) when multiple buys exist for the same symbol', () => {
+	it('uses the earliest eligible buy (FIFO) when multiple buys exist for the same symbol', () => {
 		const trades = [
 			buildTrade({ action: 'buy', symbol: 'XLK', date: '2026-07-01', price: 90 }),
 			buildTrade({ action: 'buy', symbol: 'XLK', date: '2026-07-05', price: 100 }),
@@ -73,7 +73,7 @@ describe('buildScatterData', () => {
 
 		const result = buildScatterData(trades);
 
-		expect(result[0].entryPrice).toBe(100);
+		expect(result[0].entryPrice).toBe(90);
 	});
 
 	it('does not match a buy that occurs after the most recent eligible buy but before the sell incorrectly', () => {
@@ -108,7 +108,7 @@ describe('buildScatterData', () => {
 		expect(result[0].pnl).toBe(-100);
 	});
 
-	it('allows the same buy to be reused for multiple sells of the same symbol', () => {
+	it('matches only the first sell when a single buy is available (FIFO consumes the buy)', () => {
 		const trades = [
 			buildTrade({ action: 'buy', symbol: 'XLK', price: 100, date: '2026-07-01' }),
 			buildTrade({ action: 'sell', symbol: 'XLK', price: 110, date: '2026-07-05', shares: 5 }),
@@ -117,9 +117,27 @@ describe('buildScatterData', () => {
 
 		const result = buildScatterData(trades);
 
-		expect(result).toHaveLength(2);
+		expect(result).toHaveLength(1);
 		expect(result[0].entryPrice).toBe(100);
-		expect(result[1].entryPrice).toBe(100);
+		expect(result[0].exitPrice).toBe(110);
+	});
+
+	it('prefers sell.pnl when provided instead of computing from prices', () => {
+		const trades = [
+			buildTrade({ action: 'buy', symbol: 'XLK', price: 100, date: '2026-07-01' }),
+			buildTrade({
+				action: 'sell',
+				symbol: 'XLK',
+				price: 110,
+				shares: 5,
+				date: '2026-07-10',
+				pnl: 999,
+			}),
+		];
+
+		const result = buildScatterData(trades);
+
+		expect(result[0].pnl).toBe(999);
 	});
 
 	it('processes multiple unrelated symbols independently', () => {

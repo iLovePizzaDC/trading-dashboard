@@ -6,7 +6,7 @@ import { useBotStatus } from '@/features/header/hooks/useBotStatus';
 import { useLastUpdated } from '@/features/header/hooks/useLastUpdated';
 import type { StatusDotVariant } from '@/features/header/types/status-dot';
 import { fetchLastRebalanceDate, fetchMarketStatus } from '@/shared/api/data';
-import { useDataVersion } from '@/shared/hooks/useDataVersion';
+import { useDataVersionContext } from '@/shared/context/DataVersionContext';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { useState } from 'react';
 
@@ -14,7 +14,7 @@ function Header() {
 	const { data: lastRebalance, loading, error } = useFetch(fetchLastRebalanceDate);
 	const { data: marketStatus } = useFetch(fetchMarketStatus);
 	const lastUpdated = useLastUpdated();
-	const dataVersion = useDataVersion();
+	const dataVersion = useDataVersionContext();
 	const status = useBotStatus(lastRebalance ?? null, marketStatus, dataVersion);
 
 	const [expanded, setExpanded] = useState(false);

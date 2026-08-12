@@ -163,12 +163,12 @@ describe('calcMomentumTimeline', () => {
 		expect(result[0].avgMomentum).toBe(0);
 	});
 
-	it('returns -Infinity for topMomentum when there are no candidates with valid momentum', () => {
+	it('returns null for topMomentum when there are no candidates with valid momentum', () => {
 		const decisions = [buildDecision({ candidates: [] })];
 
 		const result = calcMomentumTimeline(decisions);
 
-		expect(result[0].topMomentum).toBe(-Infinity);
+		expect(result[0].topMomentum).toBeNull();
 	});
 
 	it('handles a mix of zero and negative momentum values correctly', () => {

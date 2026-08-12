@@ -99,7 +99,7 @@ describe('<SummaryCards />', () => {
 		expect(screen.getByTestId('shell')).toHaveAttribute('data-active-tab', 'capital');
 	});
 
-	it('renders the overview metrics initially, since displayedTab starts as "overview" regardless of activeTab', () => {
+	it('renders the overview metrics initially when activeTab from storage is overview', () => {
 		mockLocalStorage('overview');
 
 		render(<SummaryCards summary={buildSummary()} />);
@@ -114,19 +114,22 @@ describe('<SummaryCards />', () => {
 		]);
 	});
 
-	it('still shows the overview tab content right after mount even if activeTab from storage is "capital"', () => {
+	it('shows the stored activeTab content immediately on mount (displayedTab initializes from activeTab)', () => {
 		mockLocalStorage('capital');
 
 		render(<SummaryCards summary={buildSummary()} />);
 
-		expect(getMetricLabels()).toContain('total return');
-		expect(getMetricLabels()).not.toContain('total invested');
+		expect(getMetricLabels()).toContain('total invested');
+		expect(getMetricLabels()).not.toContain('total return');
 	});
 
-	it('switches the displayed content to "capital" after the fade timers complete', () => {
-		mockLocalStorage('capital');
+	it('switches the displayed content to "capital" after the fade timers complete when changing tabs', () => {
+		mockLocalStorage('overview');
+		const summary = buildSummary();
+		const { rerender } = render(<SummaryCards summary={summary} />);
 
-		render(<SummaryCards summary={buildSummary()} />);
+		mockLocalStorage('capital');
+		rerender(<SummaryCards summary={summary} />);
 
 		act(() => {
 			vi.advanceTimersByTime(150);
@@ -137,9 +140,12 @@ describe('<SummaryCards />', () => {
 	});
 
 	it('applies opacity-0 during the fade-out phase (after 0ms, before 150ms)', () => {
-		mockLocalStorage('capital');
+		mockLocalStorage('overview');
+		const summary = buildSummary();
+		const { rerender } = render(<SummaryCards summary={summary} />);
 
-		render(<SummaryCards summary={buildSummary()} />);
+		mockLocalStorage('capital');
+		rerender(<SummaryCards summary={summary} />);
 
 		act(() => {
 			vi.advanceTimersByTime(0);
@@ -149,9 +155,12 @@ describe('<SummaryCards />', () => {
 	});
 
 	it('applies opacity-100 again once the fade-in completes', () => {
-		mockLocalStorage('capital');
+		mockLocalStorage('overview');
+		const summary = buildSummary();
+		const { rerender } = render(<SummaryCards summary={summary} />);
 
-		render(<SummaryCards summary={buildSummary()} />);
+		mockLocalStorage('capital');
+		rerender(<SummaryCards summary={summary} />);
 
 		act(() => {
 			vi.advanceTimersByTime(150);
@@ -225,9 +234,6 @@ describe('<SummaryCards />', () => {
 		function switchToCapital(summary: Summary) {
 			mockLocalStorage('capital');
 			render(<SummaryCards summary={summary} />);
-			act(() => {
-				vi.advanceTimersByTime(150);
-			});
 		}
 
 		it('renders the capital metrics after switching', () => {
@@ -280,9 +286,6 @@ describe('<SummaryCards />', () => {
 		function switchToPerformance(summary: Summary) {
 			mockLocalStorage('performance');
 			render(<SummaryCards summary={summary} />);
-			act(() => {
-				vi.advanceTimersByTime(150);
-			});
 		}
 
 		it('renders the Weekly Performance and Risk Metrics sections', () => {
@@ -373,10 +376,13 @@ describe('<SummaryCards />', () => {
 	});
 
 	it('clears pending fade timers on unmount', () => {
-		mockLocalStorage('capital');
+		mockLocalStorage('overview');
 		const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+		const summary = buildSummary();
 
-		const { unmount } = render(<SummaryCards summary={buildSummary()} />);
+		const { rerender, unmount } = render(<SummaryCards summary={summary} />);
+		mockLocalStorage('capital');
+		rerender(<SummaryCards summary={summary} />);
 		unmount();
 
 		expect(clearTimeoutSpy).toHaveBeenCalled();

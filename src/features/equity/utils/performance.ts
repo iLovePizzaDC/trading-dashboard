@@ -14,13 +14,19 @@ export function calcMonthlyReturns(data: EquityPoint[], deposits: Deposit[]): Mo
 
 	return Object.entries(byMonth)
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([key, points]) => {
+		.map(([key, unsorted]) => {
+			const points = [...unsorted].sort((a, b) => a.date.localeCompare(b.date));
 			const [year, month] = key.split('-').map(Number);
 			const start = points[0].equity;
 			const end = points[points.length - 1].equity;
 
 			const depositsDuringMonth = deposits
-				.filter((d) => d.date.startsWith(key) && d.date > points[0].date)
+				.filter(
+					(d) =>
+						d.date.startsWith(key) &&
+						d.date > points[0].date &&
+						d.date <= points[points.length - 1].date,
+				)
 				.reduce((sum, d) => sum + d.amount, 0);
 
 			const adjustedEnd = end - depositsDuringMonth;

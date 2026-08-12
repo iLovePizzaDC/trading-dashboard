@@ -6,12 +6,13 @@ export function calcMomentumTimeline(decisions: DecisionEntry[]): MomentumSnapsh
 		const valid = candidates.filter((c) => c.momentum !== null);
 		const selected = candidates.filter((c) => c.selected);
 		const avg = valid.reduce((sum, c) => sum + (c.momentum ?? 0), 0) / (valid.length || 1);
-		const top = Math.max(...valid.map((c) => c.momentum ?? 0));
+		const top =
+			valid.length > 0 ? Math.max(...valid.map((c) => c.momentum ?? 0)) : null;
 
 		return {
 			date,
 			avgMomentum: parseFloat((avg * 100).toFixed(2)),
-			topMomentum: parseFloat((top * 100).toFixed(2)),
+			topMomentum: top === null ? null : parseFloat((top * 100).toFixed(2)),
 			selectedCount: selected.length,
 		};
 	});

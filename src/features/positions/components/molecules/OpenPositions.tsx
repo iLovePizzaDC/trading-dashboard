@@ -20,10 +20,13 @@ const Divider = () => (
 
 function OpenPositions({ stops, trades }: IOpenPositions) {
 	const symbols = Object.keys(stops);
-	const lastBuy = trades.reduce<Record<string, Trade>>((acc, t) => {
-		if (t.action === 'buy') acc[t.symbol] = t;
-		return acc;
-	}, {});
+	const lastBuy = [...trades]
+		.filter((t) => t.action === 'buy')
+		.sort((a, b) => a.date.localeCompare(b.date))
+		.reduce<Record<string, Trade>>((acc, t) => {
+			acc[t.symbol] = t;
+			return acc;
+		}, {});
 
 	const { expanded, toggle, hasMore, hiddenCount, previewCount } = useExpandable(symbols.length, 2);
 

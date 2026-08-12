@@ -1,40 +1,57 @@
 import type { BotStatus } from '@/features/header/types/bot-status';
 import { nextBusinessDay } from '@/features/header/utils/time-helper';
-import { REBALANCE_DAYS, RUN_END, RUN_START, BOT_START_TIME_NY } from '@/shared/constants/bot';
+import { REBALANCE_DAYS, RUN_END, RUN_START } from '@/shared/constants/bot';
 import type { MarketStatus } from '@/shared/types/market.status';
 import { DateTime } from 'luxon';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+const CLOCK_TICK_MS = 30_000;
+
+function resolveIsTradingDay(marketStatus: MarketStatus | null, nowNY: DateTime): boolean {
+	if (!marketStatus) return false;
+
+	if (marketStatus.is_trading_day != null) {
+		return marketStatus.is_trading_day;
+	}
+
+	const nextOpen = marketStatus.next_open
+		? DateTime.fromISO(marketStatus.next_open, { setZone: true }).setZone('America/New_York')
+		: null;
+	const nextClose = marketStatus.next_close
+		? DateTime.fromISO(marketStatus.next_close, { setZone: true }).setZone('America/New_York')
+		: null;
+
+	return (nextOpen?.hasSame(nowNY, 'day') ?? false) || (nextClose?.hasSame(nowNY, 'day') ?? false);
+}
 
 export function useBotStatus(
 	lastRebalance: string | null,
 	marketStatus: MarketStatus | null,
 	dataVersion: string | null,
 ): BotStatus | null {
+	const [nowMs, setNowMs] = useState(() => Date.now());
+
+	useEffect(() => {
+		const id = setInterval(() => setNowMs(Date.now()), CLOCK_TICK_MS);
+		return () => clearInterval(id);
+	}, []);
+
 	return useMemo(() => {
 		if (!lastRebalance || !dataVersion) return null;
 
-		const nowNY = DateTime.now().setZone('America/New_York');
-		const nowUTC = DateTime.now().toUTC();
-
-		const scheduledRunNY = nowNY.set({
-			hour: BOT_START_TIME_NY.hour,
-			minute: BOT_START_TIME_NY.minute,
-			second: 0,
-			millisecond: 0,
-		});
+		const nowNY = DateTime.fromMillis(nowMs).setZone('America/New_York');
+		const nowUTC = DateTime.fromMillis(nowMs).toUTC();
+		const nowDE = DateTime.fromMillis(nowMs).setZone('Europe/Berlin');
 
 		const lastReb = DateTime.fromISO(lastRebalance.trim(), { zone: 'utc' });
 		const nextReb = nextBusinessDay(lastReb.plus({ days: REBALANCE_DAYS }));
 
 		const elapsedReb = Math.floor(nowUTC.diff(lastReb, 'days').days);
 
-		const nowDE = DateTime.now().setZone('Europe/Berlin');
 		const todayDE = nowDE.toFormat('yyyy-MM-dd');
-
 		const versionDateDE = DateTime.fromSeconds(Number(dataVersion))
 			.setZone('Europe/Berlin')
 			.toFormat('yyyy-MM-dd');
-
 		const ranToday = versionDateDE === todayDE;
 
 		const nextOpen = marketStatus?.next_open
@@ -45,16 +62,7 @@ export function useBotStatus(
 			? DateTime.fromISO(marketStatus.next_close, { setZone: true })
 			: null;
 
-		const scheduledRunDE = scheduledRunNY.setZone('Europe/Berlin');
-
-		const marketNextOpenMatchesRunNY =
-			nextOpen !== null && nextOpen.setZone('America/New_York').hasSame(scheduledRunNY, 'day');
-
-		const isTradingDay =
-			nextOpen !== null &&
-			nextClose !== null &&
-			marketNextOpenMatchesRunNY &&
-			scheduledRunDE.hasSame(nowDE, 'day');
+		const isTradingDay = resolveIsTradingDay(marketStatus, nowNY);
 
 		const minutesNow = nowNY.hour * 60 + nowNY.minute;
 
@@ -79,5 +87,5 @@ export function useBotStatus(
 			isTradingDay,
 			marketIsOpen,
 		};
-	}, [lastRebalance, marketStatus, dataVersion]);
+	}, [lastRebalance, marketStatus, dataVersion, nowMs]);
 }

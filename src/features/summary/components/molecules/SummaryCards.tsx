@@ -15,7 +15,7 @@ function SummaryCards({ summary }: ISummaryCards) {
 	// TODO outsource into hooks
 	const [activeTab, setActiveTab] = useLocalStorage<TabType>('summary-active-tab', 'overview');
 	const [{ displayedTab, isFading }, dispatch] = useReducer(fadeReducer, {
-		displayedTab: 'overview',
+		displayedTab: activeTab,
 		isFading: false,
 	});
 	const [height, setHeight] = useState<number | 'auto'>('auto');

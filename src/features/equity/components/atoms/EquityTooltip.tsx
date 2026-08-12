@@ -11,6 +11,7 @@ interface IEquityTooltip {
 	showSpy?: boolean;
 	relative?: boolean;
 	startValue?: number;
+	spyStartValue?: number;
 	onHover?: (value: number | null) => void;
 }
 
@@ -21,6 +22,7 @@ function EquityTooltip({
 	showSpy,
 	relative,
 	startValue = 0,
+	spyStartValue = 0,
 	onHover,
 }: IEquityTooltip) {
 	const bot = payload?.find((p: PayloadItem) => p.dataKey === 'equity')?.value ?? null;
@@ -46,7 +48,9 @@ function EquityTooltip({
 
 			{showSpy && spy != null && (
 				<p className='text-white/60'>
-					{relative ? `SPY: ${fmt(spy - 100, true)}` : `SPY: ${fmt(spy - startValue, false)}`}
+					{relative
+						? `SPY: ${fmt(spy - 100, true)}`
+						: `SPY: ${fmt(spy - spyStartValue, false)}`}
 				</p>
 			)}
 		</div>

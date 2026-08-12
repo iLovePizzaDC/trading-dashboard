@@ -1,40 +1,17 @@
 import type { ClosedTrade } from '@/features/trades/types/trade-statistics';
 import type { Trade } from '@/shared/types/trades';
+import { matchClosedTrades } from '@/shared/utils/trade-matching';
 import { DateTime } from 'luxon';
 
 export function computeTradeStats(trades: Trade[]) {
-	const sorted = [...trades].sort(
-		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-	);
+	const matched = matchClosedTrades(trades);
 
-	const openPositions = new Map<string, Trade[]>();
-	const closedTrades: ClosedTrade[] = [];
-
-	for (const t of sorted) {
-		if (t.action === 'buy') {
-			const list = openPositions.get(t.symbol) ?? [];
-			list.push(t);
-			openPositions.set(t.symbol, list);
-		}
-
-		if (t.action === 'sell') {
-			const queue = openPositions.get(t.symbol);
-
-			if (!queue || queue.length === 0) continue;
-
-			const buy = queue.shift();
-			if (!buy) continue;
-
-			const pnl = (t.price - buy.price) * t.shares;
-
-			closedTrades.push({
-				...t,
-				pnl,
-				openDate: buy.date,
-				closeDate: t.date,
-			});
-		}
-	}
+	const closedTrades: ClosedTrade[] = matched.map(({ buy, sell, pnl }) => ({
+		...sell,
+		pnl,
+		openDate: buy.date,
+		closeDate: sell.date,
+	}));
 
 	if (closedTrades.length === 0) return null;
 

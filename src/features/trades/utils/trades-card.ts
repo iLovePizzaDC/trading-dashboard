@@ -28,9 +28,11 @@ export function groupTrades(data: Trade[], stopHistory: StopHistory): TradeGroup
 		const closedPnl = entries
 			.filter((t) => t.pnl !== undefined)
 			.reduce((s, t) => s + (t.pnl ?? 0), 0);
-		const buyCount = entries.filter((t) => t.action === 'buy').length;
-		const sellCount = entries.filter((t) => t.action === 'sell').length;
-		const isOpen = buyCount > sellCount;
+		const netShares = entries.reduce(
+			(s, t) => s + (t.action === 'buy' ? t.shares : -t.shares),
+			0,
+		);
+		const isOpen = netShares > 1e-9;
 
 		const lastBuy = [...entries].filter((t) => t.action === 'buy').at(-1);
 		const currentStop =
