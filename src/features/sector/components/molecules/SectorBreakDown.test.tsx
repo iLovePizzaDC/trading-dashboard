@@ -38,6 +38,15 @@ vi.mock('@/shared/components/atoms/Dropdown', () => ({
 	),
 }));
 
+vi.mock('@/shared/components/atoms/Tooltip', () => ({
+	default: ({ children, content }: { children: React.ReactNode; content: React.ReactNode }) => (
+		<span data-testid='tooltip'>
+			{children}
+			<span data-testid='tooltip-content'>{content}</span>
+		</span>
+	),
+}));
+
 vi.mock('@/shared/hooks/useFilterWithStorage', () => ({
 	useFilterWithStorage: vi.fn(),
 }));
@@ -147,7 +156,7 @@ describe('<SectorBreakdown />', () => {
 		expect(setValue).toHaveBeenCalledWith('totalPnl');
 	});
 
-	it('renders a row for each stat with symbol and sector', () => {
+	it('renders a row for each stat with the symbol as tooltip trigger', () => {
 		mockFilterWithStorage();
 		vi.mocked(calcSectorStats).mockReturnValue([
 			buildStat({ symbol: 'XLK', sector: 'Technology' }),
@@ -156,10 +165,34 @@ describe('<SectorBreakdown />', () => {
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
-		expect(screen.getByText('XLK')).toBeInTheDocument();
-		expect(screen.getByText('Technology')).toBeInTheDocument();
-		expect(screen.getByText('XLF')).toBeInTheDocument();
-		expect(screen.getByText('Financials')).toBeInTheDocument();
+		const tooltips = screen.getAllByTestId('tooltip');
+		expect(tooltips).toHaveLength(2);
+		expect(tooltips[0]).toHaveTextContent('XLK');
+		expect(tooltips[1]).toHaveTextContent('XLF');
+	});
+
+	it('shows the sector name inside the tooltip content', () => {
+		mockFilterWithStorage();
+		vi.mocked(calcSectorStats).mockReturnValue([
+			buildStat({ symbol: 'XLK', sector: 'Technology' }),
+			buildStat({ symbol: 'XLF', sector: 'Financials' }),
+		]);
+
+		render(<SectorBreakdown decisions={[]} trades={[]} />);
+
+		const contents = screen.getAllByTestId('tooltip-content');
+		expect(contents[0]).toHaveTextContent('Technology');
+		expect(contents[1]).toHaveTextContent('Financials');
+	});
+
+	it('renders the symbol without a tooltip when sector is empty', () => {
+		mockFilterWithStorage();
+		vi.mocked(calcSectorStats).mockReturnValue([buildStat({ symbol: 'ZZZ', sector: '' })]);
+
+		render(<SectorBreakdown decisions={[]} trades={[]} />);
+
+		expect(screen.queryByTestId('tooltip')).not.toBeInTheDocument();
+		expect(screen.getByText('ZZZ')).toBeInTheDocument();
 	});
 
 	it('shows the times-bought count', () => {
@@ -234,7 +267,7 @@ describe('<SectorBreakdown />', () => {
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
-		const symbols = screen.getAllByText(/^[A-Z]{3}$/).map((el) => el.textContent);
+		const symbols = screen.getAllByTestId('tooltip').map((el) => el.childNodes[0].textContent);
 		expect(symbols).toEqual(['BBB', 'CCC', 'AAA']);
 	});
 
@@ -248,7 +281,7 @@ describe('<SectorBreakdown />', () => {
 
 		render(<SectorBreakdown decisions={[]} trades={[]} />);
 
-		const symbols = screen.getAllByText(/^[A-Z]{3}$/).map((el) => el.textContent);
+		const symbols = screen.getAllByTestId('tooltip').map((el) => el.childNodes[0].textContent);
 		expect(symbols).toEqual(['AAA', 'CCC', 'BBB']);
 	});
 

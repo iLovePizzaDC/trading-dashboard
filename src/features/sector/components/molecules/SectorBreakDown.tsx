@@ -3,6 +3,7 @@ import type { SortKey } from '@/features/sector/types/sector-breakdown';
 import { calcSectorStats } from '@/features/sector/utils/sector-breakdown';
 import Card from '@/shared/components/atoms/Card';
 import Dropdown from '@/shared/components/atoms/Dropdown';
+import Tooltip from '@/shared/components/atoms/Tooltip';
 import { useFilterWithStorage } from '@/shared/hooks/useFilterWithStorage';
 import type { DecisionEntry } from '@/shared/types/decisions';
 import type { Trade } from '@/shared/types/trades';
@@ -45,13 +46,16 @@ function SectorBreakdown({ decisions, trades }: ISectorBreakdown) {
 			<div className='space-y-2 mb-2'>
 				{sorted.map((s, i) => (
 					<div key={s.symbol} className='flex items-center gap-3'>
-						<p className='w-10 text-xs font-semibold text-white/75 tracking-widest shrink-0'>
-							{s.symbol}
+						<p className='text-left text-xs font-medium text-white'>
+							{s.sector ? (
+								<Tooltip content={<p className='flex flex-col'>{s.sector}</p>}>{s.symbol}</Tooltip>
+							) : (
+								s.symbol
+							)}
 						</p>
 
 						<div className='flex-1 flex flex-col gap-0.5 min-w-0'>
-							<div className='flex items-center justify-between gap-2'>
-								<p className='text-[10px] text-white/30 truncate'>{s.sector}</p>
+							<div className='flex items-center justify-end'>
 								<p className='text-[10px] text-white/40 shrink-0'>{s.timesBought}x</p>
 							</div>
 							<div className='overflow-hidden rounded-full bg-white/5 h-1'>
