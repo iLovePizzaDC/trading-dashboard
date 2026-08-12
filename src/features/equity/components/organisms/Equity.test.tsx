@@ -193,14 +193,12 @@ describe('<Equity />', () => {
 		expect(screen.getByTestId('equity-error')).toBeInTheDocument();
 	});
 
-	it('does not check deposits for an error, only for missing data', () => {
-		mockFetches({
-			deposits: { data: [buildDeposit()], loading: false, error: new Error('ignored') },
-		});
+	it('renders the error state when deposits has an error', () => {
+		mockFetches({ deposits: { data: null, loading: false, error: new Error('fail') } });
 
 		render(<Equity />);
 
-		expect(screen.queryByTestId('equity-error')).not.toBeInTheDocument();
+		expect(screen.getByTestId('equity-error')).toBeInTheDocument();
 	});
 
 	it('renders EquityCurve and MonthlyHeatmap with data on success', () => {

@@ -20,6 +20,7 @@ vi.mock('@/features/header/utils/time-helper', () => ({
 function setNow(isoUTC: string) {
 	const millis = DateTime.fromISO(isoUTC, { zone: 'utc' }).toMillis();
 	Settings.now = () => millis;
+	vi.spyOn(Date, 'now').mockReturnValue(millis);
 }
 
 function secondsFor(isoUTC: string): string {
@@ -28,10 +29,11 @@ function secondsFor(isoUTC: string): string {
 
 function buildMarketStatus(overrides: Partial<MarketStatus> = {}): MarketStatus {
 	return {
+		is_trading_day: true,
 		next_open: '2026-07-06T13:30:00.000Z',
 		next_close: '2026-07-06T20:00:00.000Z',
 		...overrides,
-	} as MarketStatus;
+	};
 }
 
 const NOW_UTC = '2026-07-06T14:00:00.000Z';
@@ -47,6 +49,7 @@ describe('useBotStatus', () => {
 
 	afterEach(() => {
 		Settings.now = () => Date.now();
+		vi.restoreAllMocks();
 	});
 
 	it('returns null when lastRebalance is null', () => {
@@ -127,10 +130,76 @@ describe('useBotStatus', () => {
 		expect(result.current?.isRunning).toBe(false);
 	});
 
-	it('treats isTradingDay as false when next_open falls on a different NY calendar day than now', () => {
+	it('uses marketStatus.is_trading_day when it is true', () => {
 		setNow(NOW_UTC);
 
 		const marketStatus = buildMarketStatus({
+			is_trading_day: true,
+			next_open: '2026-07-07T13:30:00.000Z',
+			next_close: '2026-07-07T20:00:00.000Z',
+		});
+
+		const { result } = renderHook(() =>
+			useBotStatus(LAST_REBALANCE, marketStatus, DATA_VERSION_NOT_RAN_TODAY),
+		);
+
+		expect(result.current?.isTradingDay).toBe(true);
+	});
+
+	it('uses marketStatus.is_trading_day when it is false', () => {
+		setNow(NOW_UTC);
+
+		const marketStatus = buildMarketStatus({
+			is_trading_day: false,
+			next_open: '2026-07-06T13:30:00.000Z',
+			next_close: '2026-07-06T20:00:00.000Z',
+		});
+
+		const { result } = renderHook(() =>
+			useBotStatus(LAST_REBALANCE, marketStatus, DATA_VERSION_NOT_RAN_TODAY),
+		);
+
+		expect(result.current?.isTradingDay).toBe(false);
+		expect(result.current?.isRunning).toBe(false);
+	});
+
+	it('falls back to next_open/next_close NY calendar day when is_trading_day is null', () => {
+		setNow(NOW_UTC);
+
+		const marketStatus = buildMarketStatus({
+			is_trading_day: null,
+			next_open: '2026-07-06T13:30:00.000Z',
+			next_close: '2026-07-06T20:00:00.000Z',
+		});
+
+		const { result } = renderHook(() =>
+			useBotStatus(LAST_REBALANCE, marketStatus, DATA_VERSION_NOT_RAN_TODAY),
+		);
+
+		expect(result.current?.isTradingDay).toBe(true);
+	});
+
+	it('treats isTradingDay as true via next_close when next_open is a different NY day and is_trading_day is null', () => {
+		setNow('2026-07-06T18:00:00.000Z');
+
+		const marketStatus = buildMarketStatus({
+			is_trading_day: null,
+			next_open: '2026-07-07T13:30:00.000Z',
+			next_close: '2026-07-06T20:00:00.000Z',
+		});
+
+		const { result } = renderHook(() =>
+			useBotStatus(LAST_REBALANCE, marketStatus, DATA_VERSION_NOT_RAN_TODAY),
+		);
+
+		expect(result.current?.isTradingDay).toBe(true);
+	});
+
+	it('treats isTradingDay as false when next_open and next_close fall on a different NY calendar day than now', () => {
+		setNow(NOW_UTC);
+
+		const marketStatus = buildMarketStatus({
+			is_trading_day: null,
 			next_open: '2026-07-07T13:30:00.000Z',
 			next_close: '2026-07-07T20:00:00.000Z',
 		});

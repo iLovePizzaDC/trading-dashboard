@@ -184,13 +184,14 @@ describe('<EquityTooltip />', () => {
 		expect(fmt).toHaveBeenCalledWith(5, true);
 	});
 
-	it('formats the SPY value relative to startValue when relative is false', () => {
+	it('formats the SPY value relative to spyStartValue when relative is false', () => {
 		render(
 			<EquityTooltip
 				active
 				relative={false}
 				showSpy
 				startValue={10000}
+				spyStartValue={10000}
 				payload={[
 					buildPayloadItem({ dataKey: 'equity', value: 10500 }),
 					buildPayloadItem({ dataKey: 'spy', value: 10300 }),
@@ -198,6 +199,7 @@ describe('<EquityTooltip />', () => {
 			/>,
 		);
 
+		expect(fmt).toHaveBeenCalledWith(500, false);
 		expect(fmt).toHaveBeenCalledWith(300, false);
 	});
 

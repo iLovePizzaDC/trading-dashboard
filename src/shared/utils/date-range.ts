@@ -2,7 +2,7 @@ import type { Range } from '@/shared/constants/date-range';
 import { DateTime } from 'luxon';
 
 export function cutoffDate(range: Range): DateTime | null {
-	const now = DateTime.now();
+	const now = DateTime.now().setZone('America/New_York');
 
 	switch (range) {
 		case '1W':

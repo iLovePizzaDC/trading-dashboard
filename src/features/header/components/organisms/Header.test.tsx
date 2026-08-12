@@ -2,7 +2,7 @@ import Header from '@/features/header/components/organisms/Header';
 import { useBotStatus } from '@/features/header/hooks/useBotStatus';
 import { useLastUpdated } from '@/features/header/hooks/useLastUpdated';
 import { fetchLastRebalanceDate, fetchMarketStatus } from '@/shared/api/data';
-import { useDataVersion } from '@/shared/hooks/useDataVersion';
+import { useDataVersionContext } from '@/shared/context/DataVersionContext';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -56,8 +56,8 @@ vi.mock('@/shared/api/data', () => ({
 	fetchMarketStatus: vi.fn(),
 }));
 
-vi.mock('@/shared/hooks/useDataVersion', () => ({
-	useDataVersion: vi.fn(),
+vi.mock('@/shared/context/DataVersionContext', () => ({
+	useDataVersionContext: vi.fn(),
 }));
 
 vi.mock('@/shared/hooks/useFetch', () => ({
@@ -100,10 +100,10 @@ describe('<Header />', () => {
 		vi.mocked(useFetch).mockReset();
 		vi.mocked(useBotStatus).mockReset();
 		vi.mocked(useLastUpdated).mockReset();
-		vi.mocked(useDataVersion).mockReset();
+		vi.mocked(useDataVersionContext).mockReset();
 
 		vi.mocked(useLastUpdated).mockReturnValue('2026-07-06 @ 15:30:00');
-		vi.mocked(useDataVersion).mockReturnValue('1783863000');
+		vi.mocked(useDataVersionContext).mockReturnValue('1783863000');
 	});
 
 	it('renders BotNameRow and DownloadDropdown', () => {

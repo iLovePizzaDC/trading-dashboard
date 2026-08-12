@@ -95,7 +95,7 @@ describe('useDataVersion', () => {
 		expect(fetchMock).toHaveBeenCalledWith('/data/last_updated.txt', { cache: 'no-store' });
 	});
 
-	it('sets version to an empty string when the response is not ok', async () => {
+	it('keeps version null when the response is not ok', async () => {
 		mockFetchOnce({ ok: false });
 
 		const { result } = renderHook(() => useDataVersion());
@@ -104,10 +104,10 @@ describe('useDataVersion', () => {
 			await flushMicrotasks();
 		});
 
-		expect(result.current).toBe('');
+		expect(result.current).toBeNull();
 	});
 
-	it('sets version to an empty string when fetch throws (network error)', async () => {
+	it('keeps version null when fetch throws (network error)', async () => {
 		mockFetchOnce('network-error');
 
 		const { result } = renderHook(() => useDataVersion());
@@ -116,7 +116,44 @@ describe('useDataVersion', () => {
 			await flushMicrotasks();
 		});
 
-		expect(result.current).toBe('');
+		expect(result.current).toBeNull();
+	});
+
+	it('keeps version null when the response body is empty', async () => {
+		mockFetchOnce({ ok: true, text: '   \n' });
+
+		const { result } = renderHook(() => useDataVersion());
+
+		await act(async () => {
+			await flushMicrotasks();
+		});
+
+		expect(result.current).toBeNull();
+	});
+
+	it('keeps the previous version when a poll fails', async () => {
+		mockFetchSequence([
+			{ ok: true, text: 'v1' },
+			{ ok: false },
+			'network-error',
+		]);
+
+		const { result } = renderHook(() => useDataVersion());
+
+		await act(async () => {
+			await flushMicrotasks();
+		});
+		expect(result.current).toBe('v1');
+
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(60_000);
+		});
+		expect(result.current).toBe('v1');
+
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(60_000);
+		});
+		expect(result.current).toBe('v1');
 	});
 
 	it('polls again after 60 seconds and updates the version if it changed', async () => {
