@@ -2,37 +2,32 @@
 
 ## [1.10.2](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.10.1...v1.10.2) (2026-08-12)
 
-
 ### Bug Fixes
 
-* outsource sector name into tooltip ([749a70c](https://github.com/iLovePizzaDC/trading-dashboard/commit/749a70cd19758c15ad51dc5e9e5a3a01e37ee2f6))
+- outsource sector name into tooltip ([749a70c](https://github.com/iLovePizzaDC/trading-dashboard/commit/749a70cd19758c15ad51dc5e9e5a3a01e37ee2f6))
 
 ## [1.10.1](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.10.0...v1.10.1) (2026-08-12)
 
-
 ### Bug Fixes
 
-* critical bugs ([#124](https://github.com/iLovePizzaDC/trading-dashboard/issues/124)) ([187c946](https://github.com/iLovePizzaDC/trading-dashboard/commit/187c94680432ac95ea041dac8a38304c1d6a47f6))
-* fifo in trade scatter ([d833c14](https://github.com/iLovePizzaDC/trading-dashboard/commit/d833c143293374351730138dadac8e26e8499f53))
+- critical bugs ([#124](https://github.com/iLovePizzaDC/trading-dashboard/issues/124)) ([187c946](https://github.com/iLovePizzaDC/trading-dashboard/commit/187c94680432ac95ea041dac8a38304c1d6a47f6))
+- fifo in trade scatter ([d833c14](https://github.com/iLovePizzaDC/trading-dashboard/commit/d833c143293374351730138dadac8e26e8499f53))
 
 ## [1.10.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.9.0...v1.10.0) (2026-08-11)
 
-
 ### Features
 
-* show times bought instead of times selected ([#121](https://github.com/iLovePizzaDC/trading-dashboard/issues/121)) ([2696a48](https://github.com/iLovePizzaDC/trading-dashboard/commit/2696a48d0fc79c285ca378434d0e378fe4051f3c))
+- show times bought instead of times selected ([#121](https://github.com/iLovePizzaDC/trading-dashboard/issues/121)) ([2696a48](https://github.com/iLovePizzaDC/trading-dashboard/commit/2696a48d0fc79c285ca378434d0e378fe4051f3c))
 
 ## [1.9.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.8.0...v1.9.0) (2026-07-29)
 
-
 ### Features
 
-* change date format ([#108](https://github.com/iLovePizzaDC/trading-dashboard/issues/108)) ([ff168b1](https://github.com/iLovePizzaDC/trading-dashboard/commit/ff168b1312a9a4c6c893e37625a3512ccd66f513))
-
+- change date format ([#108](https://github.com/iLovePizzaDC/trading-dashboard/issues/108)) ([ff168b1](https://github.com/iLovePizzaDC/trading-dashboard/commit/ff168b1312a9a4c6c893e37625a3512ccd66f513))
 
 ### Bug Fixes
 
-* use decision reason label in card ([#107](https://github.com/iLovePizzaDC/trading-dashboard/issues/107)) ([69cf887](https://github.com/iLovePizzaDC/trading-dashboard/commit/69cf887bb8f7857355e85cba26f3a013d62b8e1c))
+- use decision reason label in card ([#107](https://github.com/iLovePizzaDC/trading-dashboard/issues/107)) ([69cf887](https://github.com/iLovePizzaDC/trading-dashboard/commit/69cf887bb8f7857355e85cba26f3a013d62b8e1c))
 
 ## [1.8.0](https://github.com/iLovePizzaDC/trading-dashboard/compare/v1.7.0...v1.8.0) (2026-07-25)
 

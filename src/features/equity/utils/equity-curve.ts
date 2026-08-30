@@ -14,8 +14,7 @@ export function normalizeToRelative(data: EquityPoint[], relative: boolean): Cha
 
 	return data.map((d) => ({
 		date: d.date,
-		equity:
-			relative && botStart !== 0 ? (d.equity / botStart) * 100 : relative ? 100 : d.equity,
+		equity: relative && botStart !== 0 ? (d.equity / botStart) * 100 : relative ? 100 : d.equity,
 		spy:
 			relative && d.spy != null && spyStart != null && spyStart !== 0
 				? (d.spy / spyStart) * 100

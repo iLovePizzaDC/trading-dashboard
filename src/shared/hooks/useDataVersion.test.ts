@@ -132,11 +132,7 @@ describe('useDataVersion', () => {
 	});
 
 	it('keeps the previous version when a poll fails', async () => {
-		mockFetchSequence([
-			{ ok: true, text: 'v1' },
-			{ ok: false },
-			'network-error',
-		]);
+		mockFetchSequence([{ ok: true, text: 'v1' }, { ok: false }, 'network-error']);
 
 		const { result } = renderHook(() => useDataVersion());
 

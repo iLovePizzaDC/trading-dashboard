@@ -6,8 +6,7 @@ export function calcMomentumTimeline(decisions: DecisionEntry[]): MomentumSnapsh
 		const valid = candidates.filter((c) => c.momentum !== null);
 		const selected = candidates.filter((c) => c.selected);
 		const avg = valid.reduce((sum, c) => sum + (c.momentum ?? 0), 0) / (valid.length || 1);
-		const top =
-			valid.length > 0 ? Math.max(...valid.map((c) => c.momentum ?? 0)) : null;
+		const top = valid.length > 0 ? Math.max(...valid.map((c) => c.momentum ?? 0)) : null;
 
 		return {
 			date,

@@ -48,9 +48,7 @@ function EquityTooltip({
 
 			{showSpy && spy != null && (
 				<p className='text-white/60'>
-					{relative
-						? `SPY: ${fmt(spy - 100, true)}`
-						: `SPY: ${fmt(spy - spyStartValue, false)}`}
+					{relative ? `SPY: ${fmt(spy - 100, true)}` : `SPY: ${fmt(spy - spyStartValue, false)}`}
 				</p>
 			)}
 		</div>

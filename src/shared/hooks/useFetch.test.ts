@@ -153,10 +153,7 @@ describe('useFetch', () => {
 	it('ignores a stale response when a newer version request has already started', async () => {
 		const v1 = deferred<string>();
 		const v2 = deferred<string>();
-		const fetcher = vi
-			.fn()
-			.mockReturnValueOnce(v1.promise)
-			.mockReturnValueOnce(v2.promise);
+		const fetcher = vi.fn().mockReturnValueOnce(v1.promise).mockReturnValueOnce(v2.promise);
 
 		const { result, rerender } = renderHook(
 			({ version }) => {
