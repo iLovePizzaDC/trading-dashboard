@@ -16,7 +16,11 @@ function Equity() {
 		loading: spyEquityLoading,
 		error: spyEquityError,
 	} = useFetch(fetchSpyEquity);
-	const { data: deposits, loading: depositsLoading, error: depositsError } = useFetch(fetchDeposits);
+	const {
+		data: deposits,
+		loading: depositsLoading,
+		error: depositsError,
+	} = useFetch(fetchDeposits);
 	const {
 		data: decisions,
 		loading: decisionsLoading,
